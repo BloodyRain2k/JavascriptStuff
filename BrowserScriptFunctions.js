@@ -32,8 +32,7 @@ function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value);
 function modLocalObject(key, defVal, func) {
     let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); };
     if (!func) { console.warn(`modLocalObject: no function for '${key}'`); return obj; } let result = func(obj);
-    if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj;
-}
+    if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
 
 function wait(func, delay = 500) { return window.setTimeout(func, delay); }
 
