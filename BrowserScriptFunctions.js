@@ -8,9 +8,8 @@ function qs(selector, root) { return qsa(selector, root)[0]; }
 function setDefaults(target, defaults, level = 0) {
     console.debug(">", level, target, defaults);
     if (typeof(defaults) != typeof{}) { console.debug(`${level}: returning value:`, defaults); return defaults; }
-    if ("forEach" in defaults) {
-        console.debug(`${level}: iterating:`, defaults); defaults.forEach(elm => { if (target.indexOf(elm) == -1) { target.push(elm); } }); return target;
-    }
+    if ("forEach" in defaults) { console.debug(`${level}: iterating:`, defaults);
+                                defaults.forEach(elm => { if (target.indexOf(elm) == -1) { target.push(elm); } }); return target; }
     for (var key in defaults) {
         if (target[key] == undefined) { console.debug(`${level}: creating '${key}' with value:`, defaults[key]); target[key] = defaults[key]; }
         else if (typeof(defaults[key]) == typeof{}) {
@@ -29,8 +28,8 @@ function getLocalObject(key) { var str = localStorage[key]; return str ? functio
 function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
 function modLocalObject(key, defVal, func) {
     let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); };
-    if (!func) { console.warn(`modLocalObject: no function for '${key}'`); return obj; }
-    let result = func(obj); if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj;
+    if (!func) { console.warn(`modLocalObject: no function for '${key}'`); return obj; } let result = func(obj);
+    if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj;
 }
 
 function wait(func, delay = 500) { return window.setTimeout(func, delay); }
