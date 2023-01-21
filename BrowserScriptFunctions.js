@@ -2,8 +2,14 @@
 
 function xp(find, root) { let result = []; let elems = document.evaluate(find.replace(/\{([\w-_]+)=([^}]+)\}/, `contains(concat(' ',normalize-space(@$1),' '),' $2 ')`), root || document, null, XPathResult.ANY_TYPE, null);
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(elem); } return result; }
-function qsa(selector, root) { if (selector.startsWith("/")) { return xp(selector, root); } return (root || document).querySelectorAll(selector); }
+function qsa(selector, root) { return Array.from((root || document).querySelectorAll(selector)); }
 function qs(selector, root) { return qsa(selector, root)[0]; }
+function waitForElem(selector, root) { return new Promise(resolve => {
+    let elem = qs(selector, root); if (elem) { return resolve(elem); }
+    const observer = new MutationObserver(mutations => {
+        let obsElem = qs(selector, root); if (obsElem) { resolve(obsElem); observer.disconnect(); }
+    }); observer.observe(root || document.body, { childList: true, subtree: true });
+}); }
 
 function setDefaults(target, defaults, level = 0) {
     console.debug(">", level, target, defaults);
