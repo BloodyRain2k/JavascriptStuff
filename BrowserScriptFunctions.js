@@ -7,20 +7,20 @@ function qs(selector, root) { return qsa(selector, root)[0]; }
 
 function setDefaults(target, defaults, level = 0) {
     console.debug(">", level, target, defaults);
-    if (typeof(defaults) != typeof{}) {
-        console.debug(`${level}: returning value:`, defaults); return defaults;
-    }
+    if (typeof(defaults) != typeof{}) { console.debug(`${level}: returning value:`, defaults); return defaults; }
     if ("forEach" in defaults) {
         console.debug(`${level}: iterating:`, defaults); defaults.forEach(elm => { if (target.indexOf(elm) == -1) { target.push(elm); } }); return target;
     }
     for (var key in defaults) {
-        if (target[key] == undefined) {
-            console.debug(`${level}: creating '${key}' with value:`, defaults[key]); target[key] = defaults[key];
-        }
+        if (target[key] == undefined) { console.debug(`${level}: creating '${key}' with value:`, defaults[key]); target[key] = defaults[key]; }
         else if (typeof(defaults[key]) == typeof{}) {
             console.debug(`${level}: defaulting '${key}' with value:`, defaults[key]); target[key] = setDefaults(target[key], defaults[key], level + 1);
         }
-        else { console.error("error", key); }
+        else if (typeof(defaults[key]) == typeof(target[key])) {} // nothing to do there
+        else if (typeof(defaults[key]) != typeof(target[key])) {
+            console.error(`warning, default type doesn't match actual type for key '${key}: '${typeof(defaults[key])}' vs '${typeof(target[key])}'`, defaults[key], target[key]);
+        }
+        else { console.error("error", key); debugger; }
     }
     return target;
 }
