@@ -8,25 +8,10 @@ function waitForElem(selector, root) { return new Promise(resolve => { let elem 
     const observer = new MutationObserver(() => { let obsElem = qs(selector, root); if (obsElem) { resolve(obsElem); observer.disconnect(); } });
     observer.observe(root || document.body, { childList: true, subtree: true }); }); }
 
-function setDefaults(target, defaults, level = 0) {
-    console.debug(">", level, target, defaults);
-    if (typeof(defaults) != typeof{}) { console.debug(`${level}: returning value:`, defaults); return defaults; }
-    if ("forEach" in defaults) { console.debug(`${level}: iterating:`, defaults);
-                                defaults.forEach(elm => { if (target.indexOf(elm) == -1) { target.push(elm); } }); return target; }
-    for (var key in defaults) {
-        if (target[key] == undefined) { console.debug(`${level}: creating '${key}' with value:`, defaults[key]); target[key] = defaults[key]; }
-        else if (typeof(defaults[key]) == typeof{}) {
-            console.debug(`${level}: defaulting '${key}' with value:`, defaults[key]); target[key] = setDefaults(target[key], defaults[key], level + 1);
-        }
-        else if (typeof(defaults[key]) == typeof(target[key])) {} // nothing to do there
-        else if (typeof(defaults[key]) != typeof(target[key])) {
-            console.error(`warning, default type doesn't match actual type for key '${key}: '${typeof(defaults[key])}' vs '${typeof(target[key])}'`, defaults[key], target[key]);
-        }
-        else { console.error("error", key); debugger; }
-    }
-    return target;
-}
-
+function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != typeof {} || typeof(target) == typeof(undefined)) { return target || defaults; }
+    if (typeof(target) != typeof(defaults) || ("forEach" in target) != ("forEach" in defaults)) { return target; } if ("forEach" in defaults) {
+    defaults.forEach(arr => { if (target.indexOf(arr) == -1) target.push(arr); }); return target; } for (var key in defaults) {
+    target[key] = setDefaults(target[key], defaults[key], level + 1); } return { ...defaults, ...target }; }
 function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
 function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
 function modLocalObject(key, defVal, func) {
