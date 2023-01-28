@@ -2,11 +2,13 @@
 
 function xp(find, root) { let result = []; let elems = document.evaluate(find.replace(/\{([\w-_]+)=([^}]+)\}/, `contains(concat(' ',normalize-space(@$1),' '),' $2 ')`), root || document, null, XPathResult.ANY_TYPE, null);
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(elem); } return result; }
-function qsa(selector, root) { return Array.from((root || document).querySelectorAll(selector)); }
-function qs(selector, root) { return qsa(selector, root)[0]; }
-function waitForElem(selector, root) { return new Promise(resolve => { let elem = qs(selector, root); if (elem) { return resolve(elem); }
-    const observer = new MutationObserver(() => { let obsElem = qs(selector, root); if (obsElem) { resolve(obsElem); observer.disconnect(); } });
-    observer.observe(root || document.body, { childList: true, subtree: true }); }); }
+function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)); }
+function qs(selector, root) { return (root || document.body || document).querySelector(selector); }
+function waitForElem(selector, root, timeout = 30000) { root ??= document.body || document; let observer, timeoutId = -1; const promise = new Promise((resolve, reject) => {
+    let elem = qs(selector, root); if (elem) { return resolve(elem); } observer = new MutationObserver(() => { let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId);
+    observer.disconnect(); resolve(obsElem); }; }); observer.observe(root, { childList: true, subtree: true }); timeoutId = window.setTimeout(() => { observer.disconnect();
+    console.error(`waitForElem: couldn't find '${selector}' after ${timeout} ms in `, root); reject({ selector, root, timeout }); }, timeout); }); if (observer) promise.observer = observer;
+    if (timeout > 0) promise.timeoutId = timeoutId; promise.maxDelay = timeout; return promise; }
 
 function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != typeof {} || typeof(target) == typeof(undefined)) { return target || defaults; }
     if (typeof(target) != typeof(defaults) || ("forEach" in target) != ("forEach" in defaults)) { return target; } if ("forEach" in defaults) {
