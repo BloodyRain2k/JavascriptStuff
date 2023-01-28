@@ -10,12 +10,12 @@ function waitForElem(selector, root, timeout = 30000) { root ??= document.body |
     console.error(`waitForElem: couldn't find '${selector}' after ${timeout} ms in `, root); reject({ selector, root, timeout }); }, timeout); }); if (observer) promise.observer = observer;
     if (timeout > 0) promise.timeoutId = timeoutId; promise.maxDelay = timeout; return promise; }
 
+function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
+function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
 function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != typeof {} || typeof(target) == typeof(undefined)) { return target || defaults; }
     if (typeof(target) != typeof(defaults) || ("forEach" in target) != ("forEach" in defaults)) { return target; } if ("forEach" in defaults) {
     defaults.forEach(arr => { if (target.indexOf(arr) == -1) target.push(arr); }); return target; } for (var key in defaults) {
     target[key] = setDefaults(target[key], defaults[key], level + 1); } return { ...defaults, ...target }; }
-function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
-function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
 function modLocalObject(key, defVal, func) { let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modLocalObject: no function for '${key}'`);
     return obj; } let result = func(obj); if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
 
