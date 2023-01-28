@@ -16,27 +16,17 @@ function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != type
     target[key] = setDefaults(target[key], defaults[key], level + 1); } return { ...defaults, ...target }; }
 function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
 function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
-function modLocalObject(key, defVal, func) {
-    let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); };
-    if (!func) { console.warn(`modLocalObject: no function for '${key}'`); return obj; } let result = func(obj);
-    if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
+function modLocalObject(key, defVal, func) { let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modLocalObject: no function for '${key}'`);
+    return obj; } let result = func(obj); if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
 
 function wait(func, delay = 500) { return window.setTimeout(func, delay); }
+function toHash(s) { let h = 0; s = "" + s; if (s.length == 0) return h; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; } return h; }
 
-function toHash(str) { let hash = 0; str = str.toString(); if (str.length == 0) return hash;
-                      for (let i = 0; i < str.length; i++) { let char = str.charCodeAt(i); hash = ((hash << 5) - hash) + char; hash = hash & hash; } return hash; }
+function getHttp(obj, async = true) { var http = new XMLHttpRequest(); http.open(obj.method || "GET", obj.url, async); for (let hName in (obj.headers || {})) { http.setRequestHeader(hName, obj.headers[hName]); }
+    if (async) { http.timeout = obj.timeout || 5000; } if (obj.onload) { http.onload = () => obj.onload(http); } if (obj.onerror) { http.onerror = () => obj.onerror(http); }
+    if (obj.tag) { http.tag = obj.tag; } /*console.log(obj);*/ http.send(obj.data); return http; }
 
-function getHttp(obj, async = true) {
-    var http = new XMLHttpRequest();
-    http.open(obj.method || "GET", obj.url, async);
-    for (let hName in (obj.headers || {})) { http.setRequestHeader(hName, obj.headers[hName]); }
-    if (async) { http.timeout = obj.timeout || 5000; }
-    if (obj.onload) { http.onload = () => obj.onload(http); }
-    if (obj.onerror) { http.onerror = () => obj.onerror(http); }
-    if (obj.tag) { http.tag = obj.tag; }
-    //console.log(obj);
-    http.send(obj.data);
-    return http;
-}
+function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url; }; let a = document.createElement("a"); a.href = url; let evt = document.createEvent("MouseEvents");
+    evt.initMouseEvent("click", true, true, this, 0, 0, 0, 0, 0, true, false, false, false, 0, null); document.body.appendChild(a); a.dispatchEvent(evt); document.body.removeChild(a); }
 
 // #endregion //
