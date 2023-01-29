@@ -1,14 +1,14 @@
 // #region < functions > //
 
-function xp(find, root) { let result = []; let elems = document.evaluate(find.replace(/\{([\w-_]+)=([^}]+)\}/, `contains(concat(' ',normalize-space(@$1),' '),' $2 ')`), root || document, null, XPathResult.ANY_TYPE, null);
-    while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(elem); } return result; }
-function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)); }
-function qs(selector, root) { return (root || document.body || document).querySelector(selector); }
+function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
+function xp(find, root) { let result = []; let elems = document.evaluate(find.replace(/\{([\w-_]+)=([^}]+)\}/, `contains(concat(' ',normalize-space(@$1),' '),' $2 ')`), root || document.body || document, null, XPathResult.ANY_TYPE, null);
+    while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(addSelectors(elem)); } return result; }
+function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)).map(elm => addSelectors(elm)); }
+function qs(selector, root) { return addSelectors((root || document.body || document).querySelector(selector)); }
 function waitForElem(selector, root, timeout = 30000) { root ??= document.body || document; let observer, timeoutId = -1; const promise = new Promise((resolve, reject) => {
     let elem = qs(selector, root); if (elem) { return resolve(elem); } observer = new MutationObserver(() => { let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId);
     observer.disconnect(); resolve(obsElem); }; }); observer.observe(root, { childList: true, subtree: true }); timeoutId = window.setTimeout(() => { observer.disconnect();
-    console.error(`waitForElem: couldn't find '${selector}' after ${timeout} ms in `, root); reject({ selector, root, timeout }); }, timeout); }); if (observer) promise.observer = observer;
-    if (timeout > 0) promise.timeoutId = timeoutId; promise.maxDelay = timeout; return promise; }
+    reject({ selector, root, timeout }); }, timeout); }); if (observer) promise.observer = observer; if (timeout > 0) promise.timeoutId = timeoutId; promise.maxDelay = timeout; return promise; }
 
 function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
 function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
