@@ -10,6 +10,7 @@ function waitForElem(selector, root, timeout = 30000) { if (typeof(root) == "num
     let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId); observer.disconnect(); resolve(obsElem); }; });
     observer.observe(root, { childList: true, subtree: true }); timeoutId = window.setTimeout(() => { observer.disconnect(); reject({ selector, root, timeout }); }, timeout); });
     if (observer) { promise.observer = observer; }; if (timeout > 0) { promise.timeoutId = timeoutId; }; promise.maxDelay = timeout; return promise; }
+function wait(func, delay = 500) { return window.setTimeout(func, delay); }
 
 function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
 function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
@@ -20,7 +21,6 @@ function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != type
 function modLocalObject(key, defVal, func) { let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modLocalObject: no function for '${key}'`);
     return obj; } let result = func(obj); if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
 
-function wait(func, delay = 500) { return window.setTimeout(func, delay); }
 function toHash(s) { let h = 0; s = "" + s; if (s.length == 0) return h; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; } return h; }
 
 function getHttp(obj, async = true) { var http = new XMLHttpRequest(); http.open(obj.method || "GET", obj.url, async); for (let hName in (obj.headers || {})) { http.setRequestHeader(hName, obj.headers[hName]); }
@@ -35,5 +35,5 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 let observer = new MutationObserver(mutation);
 function watch(target, options) { observer.observe(target, options); console.log("watch added:", target, options); }
 function mutation(mutations, observer) {
-    console.log(getCurrentID(), mutations, observer);
+    console.log(mutations, observer);
 }
