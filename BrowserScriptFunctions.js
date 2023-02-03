@@ -33,7 +33,7 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 // #endregion //
 
 let observer = new MutationObserver(mutation);
-function watch(target, options) { observer.observe(target, options); console.log("watch added:", target, options); }
+function watch(target, options) { if (typeof(target) == "string") { target = qs(target); }; if (!target) { return; }; observer.observe(target, options); console.log("watch added:", target, options); }
 function mutation(mutations, observer) {
     console.log(mutations, observer);
 }
