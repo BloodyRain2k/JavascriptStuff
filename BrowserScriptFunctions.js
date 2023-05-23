@@ -1,4 +1,4 @@
-// #region < functions > //
+// #region < helpers > //
 
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
 function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{([\w-_]+)=['"]?([^}]+?)['"]?\}/g, "contains(concat(' ',normalize-space(@$1),' '),' $2 ')"); try { elems = document.evaluate(sel,
@@ -40,7 +40,21 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 
 // #endregion //
 
+/// < variables > ///
+
 const observer = newObserver(mutation);
+let wlh, checkId = window.setInterval(check, 500);
+
+/// < functions > ///
+
 function mutation(mutations, observer) {
     console.log(mutations, observer); // remove this as soon as possible, it can cause memory leaking
+}
+
+function newUrl() {
+    wlh = window.location.href;
+}
+
+function check() {
+    if (wlh != window.location.href) { newUrl(); }
 }
