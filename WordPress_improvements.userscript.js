@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WordPress improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.0.2
+// @version      0.3.0.3
 // @description  try to take over the world!
 // @author       BK
 // @match        */wp-login.php*
@@ -61,8 +61,8 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 const observer = newObserver(mutation);
 const naggers = [
     "#acf-field-group-pro-features", ".updraft-ad-container", ".wp-mail-smtp-review-notice",
-    "//*[@id='updraft-dashnotice' and .//*[starts-with(text(), 'Thank you for installing')]]",
-    "//*[{class=yoast-notification} and .//*{class=yoast-button-upsell}]",
+    "//*[ @id='updraft-dashnotice' and .//*[starts-with(text(), 'Thank you for installing')] ]",
+    "//*[ {class=yoast-notification} and .//*[{class=yoast-button-upsell}] ]",
 ];
 let wlh, checkId = window.setInterval(check, 500);
 let wpEdit = "/wp-admin/post.php?action=edit&post=";
