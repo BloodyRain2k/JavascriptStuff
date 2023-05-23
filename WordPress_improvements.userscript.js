@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WordPress improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.0.3
+// @version      0.3.0.4
 // @description  try to take over the world!
 // @author       BK
 // @match        */wp-login.php*
@@ -9,8 +9,8 @@
 // @noframes
 // @grant        GM_addStyle
 // @grant        GM_registerMenuCommand
-// @updateURL    https://raw.githubusercontent.com/BloodyRain2k/JavascriptStuff/main/WordPress_improvements.userscript
-// @downloadURL  https://raw.githubusercontent.com/BloodyRain2k/JavascriptStuff/main/WordPress_improvements.userscript
+// @updateURL    https://raw.githubusercontent.com/BloodyRain2k/JavascriptStuff/main/WordPress_improvements.userscript.js
+// @downloadURL  https://raw.githubusercontent.com/BloodyRain2k/JavascriptStuff/main/WordPress_improvements.userscript.js
 // ==/UserScript==
 
 // #region < helpers > //
