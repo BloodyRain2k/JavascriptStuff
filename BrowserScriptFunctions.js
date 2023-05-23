@@ -40,7 +40,7 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 
 // #endregion //
 
-let observer = newObserver(mutation);
+const observer = newObserver(mutation);
 function mutation(mutations, observer) {
     console.log(mutations, observer); // remove this as soon as possible, it can cause memory leaking
 }
