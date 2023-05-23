@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WordPress improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.0.5
+// @version      0.3.0.6
 // @description  try to take over the world!
 // @author       BK
 // @match        */wp-login.php*
@@ -114,7 +114,10 @@ function newUrl() {
         }
     }
 
-    naggers.forEach(nag_sel => waitForElem(nag_sel).then(nag_elem => nag_elem.style.display = "none"));
+    naggers.forEach(nag_sel => waitForElem(nag_sel).then(nag_elem => {
+        console.log("hiding:", nag_sel, nag_elem);
+        nag_elem.style.display = "none";
+    }));
 }
 
 function hideLockedElements() {
