@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <pre></pre>
+    <script type="text/javascript">
+      const pre = document.querySelector("pre");
+      const print = (...txts) => {
+        pre.textContent += txts.join("\t") + "\n";
+      };
+      print(
+        `${window.visualViewport.width} x ${window.visualViewport.height}`,
+        `${window.innerWidth} x ${window.innerHeight}`,
+      }
+    </script>
+  </body>
+</html>
