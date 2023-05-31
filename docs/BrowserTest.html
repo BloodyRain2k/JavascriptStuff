@@ -13,10 +13,8 @@
       const print = (...txts) => {
         pre.textContent += txts.join("\t") + "\n";
       };
-      print(
-        `${window.visualViewport.width} x ${window.visualViewport.height}`,
-        `${window.innerWidth} x ${window.innerHeight}`,
-      );
+      print(`${window.visualViewport.width} x ${window.visualViewport.height}`);
+      print(`${window.innerWidth} x ${window.innerHeight}`);
     </script>
   </body>
 </html>
