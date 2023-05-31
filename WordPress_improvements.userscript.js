@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WordPress improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.0.6
+// @version      0.3.1.0
 // @description  try to take over the world!
 // @author       BK
 // @match        */wp-login.php*
@@ -28,6 +28,7 @@ function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "num
 const observers = [];
 function newObserver(func) { if (!func) { return console.error("no observer function"); }; const observer = new MutationObserver(func); observer.function = func; observer.trigger = function(){ func([], this); }; observer.watching = [];
     observer.cleanup = function(){ this.disconnect(); this.watching = this.watching.filter(wtch => wtch.target.xp("ancestor::body")[0]); this.watching.forEach(wtch => this.observe(wtch.target, wtch.options)); }; return observer; }
+// subtree: observe child elements too // childList: changes to .childNodes // attributes: duh // attributeFilter: [attrs] // attributeOldValue: duh // characterData: text // characterDataOldValue: duh //
 function watch(target, options, func) { if (typeof(target) == "string") { target = qs(target); }; if (!target) { return console.error("watch target doesn't exist:", target); };
     if (func && typeof(func) != "function") { return console.error("no valid watch function:", func); }; const obs = (func ? newObserver(func) : observer); obs.observe(target, options);
     if (obs.watching.find(watching => watching.target == target && watching. options)) { console.log("not adding twice:", { target, options }); }
@@ -64,12 +65,17 @@ const naggers = [
 ];
 let wlh, checkId = window.setInterval(check, 500);
 let wpEdit = "/wp-admin/post.php?action=edit&post=";
-let packagesToCheck;
+let packagesToCheck, lastEditable, previewFrame;
 
 /// < functions > ///
 
 function mutation(mutations, observer) {
-    console.log(mutations, observer); // remove this as soon as possible, it can cause memory leaking
+    // console.log(mutations); // remove this as soon as possible, it can cause memory leaking
+    for (const mut of mutations) {
+        if (mut.target.id == "elementor-panel-header-title") {
+            return showEditableSize();
+        }
+    }
 }
 
 function newUrl() {
@@ -118,6 +124,17 @@ function newUrl() {
         console.log("hiding:", nag_sel, nag_elem);
         nag_elem.style.display = "none";
     }));
+
+    if (wlh.search(/action=elementor/i) > -1) {
+        observer.cleanup();
+        waitForElem("#elementor-preview-iframe")
+            .then(ifrm => previewFrame = ifrm)
+            .catch(err => previewFrame = null);
+        // ifrm.contentWindow.visualViewport
+        waitForElem("#elementor-panel-header-title")
+            .then(title => watch(title, { subtree: 0, childList: 1, characterData: 0 }));
+        // waitForElem(".elementor-panel-navigation").then(nav => watch(nav, { subtree: 0, childList: 1, characterData: 0 }));
+    }
 }
 
 function hideLockedElements() {
@@ -142,6 +159,23 @@ function hideLockedElements() {
     }
 
     return elements.length;
+}
+
+function showEditableSize() {
+    if (!previewFrame) { return; }
+    const elem = qs(".elementor-edit-area-active .elementor-element-editable", previewFrame.contentDocument);
+    // console.log({ elem, previewFrame });
+    if (!elem) { return; }
+    let elemSize = qs("#elementor-controls > #element-size");
+    if (!elemSize) {
+        elemSize = document.createElement("div");
+        elemSize.id = "element-size";
+        elemSize.classList.add("elementor-control-type-section");
+        const elemCtrl = qs("#elementor-controls");
+        elemCtrl.insertBefore(elemSize, elemCtrl.children[0]);
+    }
+    const viewport = previewFrame.contentWindow.visualViewport;
+    elemSize.textContent = `${elem.clientWidth} x ${elem.clientHeight}   -   [${viewport.width} x ${viewport.height}]`;
 }
 
 function setupPostHighlights() {
@@ -211,13 +245,15 @@ GM_registerMenuCommand("Select pages / posts with enabled comments", selectComme
 GM_addStyle(
 `.wpml-highlight { background-color: #c552 !important; }
 .wpml-package-ok { background-color: #8f82; }
-.wpml-package-bad { background-color: #f882; }`);
+.wpml-package-bad { background-color: #f882; }
+#element-size { text-align: center; margin-top: -0.75em; margin-bottom: 0.33em; }`);
 
 function check() {
     if (wlh != window.location.href) { newUrl(); }
 
     if (wlh.search(/action=elementor/i) > -1) {
         hideLockedElements();
+        // showEditableSize();
         return;
     }
 
