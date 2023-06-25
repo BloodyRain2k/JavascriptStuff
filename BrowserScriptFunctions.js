@@ -5,7 +5,7 @@ function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{
     root || document.body || document, null, XPathResult.ANY_TYPE, null); } catch (ex) { console.error("xp exception:", { ex, selector, sel }); return; }; // class match: `{class=<className>}`
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(addSelectors(elem)); } return result; }
 function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)).map(elm => addSelectors(elm)); }
-function qs(selector, root) { return addSelectors((root || document.body || document).querySelector(selector)); }
+function qs(selector, root) { return selector.search(/^\/|\.\//) == -1 ? addSelectors((root || document.body || document).querySelector(selector)) : xp(selector, root)[0]; }
 function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "number") { timeout = root; root = null; }; root ??= document.body || document; let observer, timeoutId = -1;
     const promise = new Promise((resolve, reject) => { let elem = qs(selector, root); if (elem) { return resolve(elem, selector, root); }; observer = new MutationObserver(() => {
     let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId); observer.disconnect(); resolve(obsElem, selector, root); }; });
