@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Music improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.1
+// @version      0.2
 // @description  try to take over the world!
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/watch?v=*
@@ -13,7 +13,7 @@ function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{
     root || document.body || document, null, XPathResult.ANY_TYPE, null); } catch (ex) { console.error("xp exception:", { ex, selector, sel }); return; }; // class match: `{class=<className>}`
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(addSelectors(elem)); } return result; }
 function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)).map(elm => addSelectors(elm)); }
-function qs(selector, root) { return addSelectors(selector.search(/^[\./]/) == -1 ? (root || document.body || document).querySelector(selector) : xp(selector, root)[0]); }
+function qs(selector, root) { return addSelectors(selector.search(/^\/|^\.\//) == -1 ? (root || document.body || document).querySelector(selector) : xp(selector, root)[0]); }
 function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "number") { timeout = root; root = null; }; root ??= document.body || document; let observer, timeoutId = -1;
     const promise = new Promise((resolve, reject) => { let elem = qs(selector, root); if (elem) { return resolve(elem); }; observer = new MutationObserver(() => {
     let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId); observer.disconnect(); resolve(obsElem); }; });
@@ -48,10 +48,20 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 
 // variables //
 
+const titleBlacklist = [
+    /\[live\]$/i,
+];
+
+const keyHistory = "TrackHistory", historyLimitHours = 3;
+const historyDiffLimit = historyLimitHours * (3600 * 1000);
+const maxPastQueue = 5;
+
 const xpSelTrack = ".//ytmusic-player-queue-item[@selected]";
+const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state='playing' or @play-button-state='paused']";
 const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='items']";
+
 let wlh, checkId = window.setInterval(check, 500);
-let queue, menu;
+let queue;
 
 // functions //
 
@@ -61,6 +71,42 @@ function mutation(mutations, observer) {
 
 function getTracks() { return queue.xp(".//ytmusic-player-queue-item"); }
 function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
+function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
+function openFirstTrackMenu() { queue.xp(".//ytmusic-player-queue-item[1]//button")[0].click(); }
+function removeTrack(queuedTrack) {
+    qs("button", queuedTrack).click();
+
+    return waitForElem(xpMenu).then(menu => {
+        return waitForElem(".//yt-formatted-string[text()='Remove from queue']", menu);
+    }).then(remove => {
+        remove.click();
+    });
+}
+
+function trimQueue(history) {
+    waitForElem(xpPlayingTrack, queue).then(playing => {
+        const tracks = getTracks();
+        const index = tracks.indexOf(playing);
+        console.log("trim:", index, "/", tracks.length);
+        if (index > maxPastQueue) {
+            return removeTrack(tracks[0]).then(() => {
+                wait(() => trimQueue());
+            });
+        }
+        for (let i = index + 1; i < tracks.length; i++) {
+            const track = tracks[i];
+            console.log(i, track);
+            const title = qs(".song-title", track).innerText;
+            const uploader = qs(".byline", track).innerText;
+            const blacklisted = titleBlacklist.some(black => black.search(black) > -1);
+            if (blacklisted || history.find(entry => entry.title == title && entry.uploader == uploader)) {
+                return removeTrack(track).then(() => {
+                    wait(() => trimQueue());
+                });
+            }
+        }
+    });
+}
 
 function urlChanged() {
     wlh = window.location.href;
@@ -68,24 +114,61 @@ function urlChanged() {
     waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]").then(contents => {
         queue = contents;
         const tracks = getTracks();
-        console.log(tracks);
+        // console.log(tracks);
         return waitForElem(xpSelTrack, queue);
     }).then(track => {
         const selected = getSelectedTrack();
         const index = getTracks().indexOf(selected);
-        console.log(selected, index);
-        if (index > -1) {
-            const button = selected.xp(".//button")[0];
-            button.click();
-            waitForElem(xpMenu).then(dropmenu => {
-                menu = dropmenu;
-                console.log(menu);
-                button.click();
-            });
-        }
-        else {
+        const title = selected.qs(".song-title").innerText;
+        const uploader = selected.qs(".byline").innerText;
+        console.log(selected, index, title);
+
+        if (index == -1) {
             throw "Couldn't find current track";
         }
+        if (!title) {
+            throw "Couldn't find track title";
+        }
+        if (!uploader) {
+            throw "Couldn't find track uploader";
+        }
+
+        let history = getLocalObject(keyHistory);
+        const now = new Date();
+        console.log("loaded history:", { ...history });
+        try {
+            history = history.filter(entry => {
+                // console.log(entry);
+                const nameDiff = entry.title != title;
+                // console.log({ nameDiff });
+                const timeDiff = (now.getTime() - new Date(entry.date).getTime());
+                // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
+                const entryOk = nameDiff && timeDiff < historyDiffLimit;
+                // console.log({ entry, entryOk });
+                return entryOk;
+            });
+        }
+        catch (err) {
+            console.error(err);
+        }
+        history.push({
+            title: title,
+            uploader: uploader,
+            date: now.toJSON(),
+            id: wlh.match(/v=([\w_]+)/i)[1],
+        });
+        console.log("saved history:", { ...history });
+        setLocalObject(keyHistory, history);
+
+        // const button = selected.xp(".//button")[0];
+        // button.click();
+        // waitForElem(xpMenu).then(dropmenu => {
+        //     menu = dropmenu;
+        //     console.log("menu:", menu);
+        //     button.click();
+        // });
+
+        trimQueue(history);
     });
 }
 
