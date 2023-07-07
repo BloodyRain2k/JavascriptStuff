@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Music improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.3.2
 // @description  try to take over the world!
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/watch?v=*
@@ -73,7 +73,13 @@ function mutation(mutations, observer) {
 function getTracks() { return queue.xp(".//ytmusic-player-queue-item"); }
 function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
 function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
+function getTrackData(queuedTrack) {
+    const title = queuedTrack.qs(".song-title").innerText;
+    const uploader = queuedTrack.qs(".byline").innerText;
+    return { title, uploader, id: queuedTrack.__data.data.videoId };
+}
 function openFirstTrackMenu() { queue.xp(".//ytmusic-player-queue-item[1]//button")[0].click(); }
+
 function removeTrack(queuedTrack) {
     qs("button", queuedTrack).click();
 
@@ -86,25 +92,32 @@ function removeTrack(queuedTrack) {
 
 function trimQueue() {
     waitForElem(xpPlayingTrack, queue).then(playing => {
-        const history = getLocalObject(keyHistory);
+        const history = getLocalObject(keyHistory) || [];
+        const blacklist = getLocalObject(keyBlacklist) || [];
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index, "/", tracks.length);
         if (index > maxPastQueue) {
             return removeTrack(tracks[0]).then(() => {
-                wait(() => trimQueue());
+                wait(() => trimQueue(), 20);
             });
         }
+        console.log({ blacklist });
         for (let i = index + 1; i < tracks.length; i++) {
             const track = tracks[i];
-            // console.log(i, track);
-            const title = qs(".song-title", track).innerText;
-            const uploader = qs(".byline", track).innerText;
-            const blacklisted = titleBlacklist.some(black => title.search(black) > -1);
-            if (blacklisted || history.find(entry => entry.title == title && entry.uploader == uploader)) {
-                console.log(`removing track '${title}' by '${uploader}' from queue because it's in the history`);
+            const data = getTrackData(track);
+            // console.log(i, track, data);
+            const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
+                || blacklist.some(black => black.title == data.title);
+            if (blacklisted || history.find(entry => entry.title == data.title && entry.uploader == data.uploader)) {
+                if (blacklisted) {
+                    console.log(`removing track '${data.title}' because it's blacklisted`);
+                }
+                else {
+                    console.log(`removing track '${data.title}' by '${data.uploader}' from queue because it's in the history`);
+                }
                 return removeTrack(track).then(() => {
-                    wait(() => trimQueue());
+                    wait(() => trimQueue(), 20);
                 });
             }
             if (!track.onclick) {
@@ -114,23 +127,34 @@ function trimQueue() {
     });
 }
 
-function getTrackData(queuedTrack) {
-    const title = queuedTrack.qs(".song-title").innerText;
-    const uploader = queuedTrack.qs(".byline").innerText;
-    return { title, uploader };
-}
-
 function handleClick(evt) {
-    const track = xp("ancestor::ytmusic-player-queue-item", evt.target)[0];
+    const track = xp("ancestor-or-self::ytmusic-player-queue-item", evt.target)[0];
     if (!evt.altKey || !track) { return; }
     const data = getTrackData(track);
     if (!data || !data.title || !data.uploader) {
         throw { message: "Couldn't fetch track data", data };
     }
+    const now = new Date();
+
+    if (evt.ctrlKey) {
+        console.log(
+            `added '${data.title}' to blacklist:`,
+            modLocalObject(keyBlacklist, [], history => {
+                history.push({ ...data, date: now.toJSON() });
+                return true;
+            })
+        );
+        track.style.backgroundColor = "#422";
+        wait(() => {
+            track.style.backgroundColor = null;
+            removeTrack(track);
+        }, 1000);
+        return false;
+    }
+
     removeTrack(track).then(() => {
         console.log(
             modLocalObject(keyHistory, [], history => {
-                const now = new Date()
                 history.push({ ...data, skipped: true, date: now.toJSON() });
                 return true;
             })
@@ -147,11 +171,12 @@ function urlChanged() {
         // console.log(tracks);
         return waitForElem(xpSelTrack, queue);
     }).then(track => {
+        const loggedIn = qs("a.sign-in-link") == null;
         const tracks = getTracks();
         const selected = getSelectedTrack();
         const index = tracks.indexOf(selected);
         const trackData = getTrackData(selected);
-        console.log(selected, index, trackData.title);
+        console.log("logged in:", loggedIn, selected, index, trackData.title);
 
         if (index == -1) {
             throw "Couldn't find current track";
@@ -182,13 +207,37 @@ function urlChanged() {
             console.error(err);
         }
         history.push({
-            title: trackData.title,
-            uploader: trackData.uploader,
+            ...trackData,
             date: now.toJSON(),
-            id: wlh.match(/v=([\w_]+)/i)[1],
         });
         console.log("saved history:", { ...history });
         setLocalObject(keyHistory, history);
+
+        const likeBtn = qs(".middle-controls-buttons #button-shape-like");
+        const dislikeBtn = qs(".middle-controls-buttons #button-shape-dislike");
+        if (!dislikeBtn.onclick) {
+            dislikeBtn.onclick = (evt) => {
+                const dis_track = getSelectedTrack();
+                const data = getTrackData(dis_track);
+                console.log("dislike:", loggedIn, dis_track, data);
+
+                handleClick({
+                    altKey: true,
+                    ctrlKey: true,
+                    target: dis_track,
+                });
+
+                if (!loggedIn) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation();
+                    waitForElem("ytmusic-modal-with-title-and-button-renderer").then(popup => {
+                        popup.style.display = "none";
+                    });
+                    return false;
+                }
+            };
+        }
 
         // const button = selected.xp(".//button")[0];
         // button.click();
