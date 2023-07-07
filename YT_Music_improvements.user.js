@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Music improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  try to take over the world!
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/watch?v=*
@@ -52,7 +52,8 @@ const titleBlacklist = [
     /\[live\]$/i,
 ];
 
-const keyHistory = "TrackHistory", historyLimitHours = 3;
+const keyBlacklist = "TrackBlacklist";
+const keyHistory = "TrackHistory", historyLimitHours = 24;
 const historyDiffLimit = historyLimitHours * (3600 * 1000);
 const maxPastQueue = 5;
 
@@ -83,8 +84,9 @@ function removeTrack(queuedTrack) {
     });
 }
 
-function trimQueue(history) {
+function trimQueue() {
     waitForElem(xpPlayingTrack, queue).then(playing => {
+        const history = getLocalObject(keyHistory);
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index, "/", tracks.length);
@@ -95,16 +97,44 @@ function trimQueue(history) {
         }
         for (let i = index + 1; i < tracks.length; i++) {
             const track = tracks[i];
-            console.log(i, track);
+            // console.log(i, track);
             const title = qs(".song-title", track).innerText;
             const uploader = qs(".byline", track).innerText;
-            const blacklisted = titleBlacklist.some(black => black.search(black) > -1);
+            const blacklisted = titleBlacklist.some(black => title.search(black) > -1);
             if (blacklisted || history.find(entry => entry.title == title && entry.uploader == uploader)) {
+                console.log(`removing track '${title}' by '${uploader}' from queue because it's in the history`);
                 return removeTrack(track).then(() => {
                     wait(() => trimQueue());
                 });
             }
+            if (!track.onclick) {
+                track.onclick = handleClick;
+            }
         }
+    });
+}
+
+function getTrackData(queuedTrack) {
+    const title = queuedTrack.qs(".song-title").innerText;
+    const uploader = queuedTrack.qs(".byline").innerText;
+    return { title, uploader };
+}
+
+function handleClick(evt) {
+    const track = xp("ancestor::ytmusic-player-queue-item", evt.target)[0];
+    if (!evt.altKey || !track) { return; }
+    const data = getTrackData(track);
+    if (!data || !data.title || !data.uploader) {
+        throw { message: "Couldn't fetch track data", data };
+    }
+    removeTrack(track).then(() => {
+        console.log(
+            modLocalObject(keyHistory, [], history => {
+                const now = new Date()
+                history.push({ ...data, skipped: true, date: now.toJSON() });
+                return true;
+            })
+        );
     });
 }
 
@@ -113,33 +143,33 @@ function urlChanged() {
 
     waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]").then(contents => {
         queue = contents;
-        const tracks = getTracks();
+        // const tracks = getTracks();
         // console.log(tracks);
         return waitForElem(xpSelTrack, queue);
     }).then(track => {
+        const tracks = getTracks();
         const selected = getSelectedTrack();
-        const index = getTracks().indexOf(selected);
-        const title = selected.qs(".song-title").innerText;
-        const uploader = selected.qs(".byline").innerText;
-        console.log(selected, index, title);
+        const index = tracks.indexOf(selected);
+        const trackData = getTrackData(selected);
+        console.log(selected, index, trackData.title);
 
         if (index == -1) {
             throw "Couldn't find current track";
         }
-        if (!title) {
+        if (!trackData.title) {
             throw "Couldn't find track title";
         }
-        if (!uploader) {
+        if (!trackData.uploader) {
             throw "Couldn't find track uploader";
         }
 
         let history = getLocalObject(keyHistory);
         const now = new Date();
-        console.log("loaded history:", { ...history });
+        // console.log("loaded history:", { ...history });
         try {
             history = history.filter(entry => {
                 // console.log(entry);
-                const nameDiff = entry.title != title;
+                const nameDiff = entry.title != trackData.title;
                 // console.log({ nameDiff });
                 const timeDiff = (now.getTime() - new Date(entry.date).getTime());
                 // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
@@ -152,8 +182,8 @@ function urlChanged() {
             console.error(err);
         }
         history.push({
-            title: title,
-            uploader: uploader,
+            title: trackData.title,
+            uploader: trackData.uploader,
             date: now.toJSON(),
             id: wlh.match(/v=([\w_]+)/i)[1],
         });
@@ -168,7 +198,7 @@ function urlChanged() {
         //     button.click();
         // });
 
-        trimQueue(history);
+        trimQueue();
     });
 }
 
