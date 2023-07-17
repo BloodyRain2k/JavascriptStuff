@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         YT Music improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.2
+// @version      0.3.3
 // @description  try to take over the world!
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/watch?v=*
@@ -52,10 +52,10 @@ const titleBlacklist = [
     /\[live\]$/i,
 ];
 
-const keyBlacklist = "TrackBlacklist";
+const keyBlacklist = "TrackBlacklist", keyFavorites = "TrackFavorites";
 const keyHistory = "TrackHistory", historyLimitHours = 24;
 const historyDiffLimit = historyLimitHours * (3600 * 1000);
-const maxPastQueue = 5;
+const maxPastQueue = 3, blacklistDelay = 750;
 
 const xpSelTrack = ".//ytmusic-player-queue-item[@selected]";
 const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state='playing' or @play-button-state='paused']";
@@ -93,7 +93,6 @@ function removeTrack(queuedTrack) {
 function trimQueue() {
     waitForElem(xpPlayingTrack, queue).then(playing => {
         const history = getLocalObject(keyHistory) || [];
-        const blacklist = getLocalObject(keyBlacklist) || [];
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index, "/", tracks.length);
@@ -102,9 +101,13 @@ function trimQueue() {
                 wait(() => trimQueue(), 20);
             });
         }
+        const blacklist = getLocalObject(keyBlacklist) || [];
         console.log({ blacklist });
         for (let i = index + 1; i < tracks.length; i++) {
             const track = tracks[i];
+            if (!track.onclick) {
+                track.onclick = handleClick;
+            }
             const data = getTrackData(track);
             // console.log(i, track, data);
             const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
@@ -119,9 +122,6 @@ function trimQueue() {
                 return removeTrack(track).then(() => {
                     wait(() => trimQueue(), 20);
                 });
-            }
-            if (!track.onclick) {
-                track.onclick = handleClick;
             }
         }
     });
@@ -148,7 +148,7 @@ function handleClick(evt) {
         wait(() => {
             track.style.backgroundColor = null;
             removeTrack(track);
-        }, 1000);
+        }, blacklistDelay);
         return false;
     }
 
@@ -164,6 +164,9 @@ function handleClick(evt) {
 
 function urlChanged() {
     wlh = window.location.href;
+
+    // waitForElem("").then(notif => {
+    // });
 
     waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]").then(contents => {
         queue = contents;
@@ -188,7 +191,7 @@ function urlChanged() {
             throw "Couldn't find track uploader";
         }
 
-        let history = getLocalObject(keyHistory);
+        let history = getLocalObject(keyHistory) || [];
         const now = new Date();
         // console.log("loaded history:", { ...history });
         try {
@@ -214,6 +217,8 @@ function urlChanged() {
         setLocalObject(keyHistory, history);
 
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
+
+
         const dislikeBtn = qs(".middle-controls-buttons #button-shape-dislike");
         if (!dislikeBtn.onclick) {
             dislikeBtn.onclick = (evt) => {
