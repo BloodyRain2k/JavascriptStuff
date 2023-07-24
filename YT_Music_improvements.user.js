@@ -1,12 +1,18 @@
 // ==UserScript==
 // @name         YT Music improvements
+// @version      0.3.4
 // @namespace    http://tampermonkey.net/
-// @version      0.3.3
-// @description  try to take over the world!
+// @description
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/watch?v=*
 // @grant        none
 // ==/UserScript==
+
+/* Functions:
+remove from queue:       Ctrl + Click Track
+add to history:           Alt + Click Track
+add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike"
+*/
 
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
 function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{([\w-_]+)=['"]?([^}]+?)['"]?\}/g, "contains(concat(' ',normalize-space(@$1),' '),' $2 ')"); try { elems = document.evaluate(sel,
@@ -90,6 +96,33 @@ function removeTrack(queuedTrack) {
     });
 }
 
+function addTrackToHistory(data) {
+    let history = getLocalObject(keyHistory) || [];
+    const now = new Date();
+    // console.log("loaded history:", { ...history });
+    try {
+        history = history.filter(entry => {
+            // console.log(entry);
+            const nameDiff = entry.title != data.title;
+            // console.log({ nameDiff });
+            const timeDiff = (now.getTime() - new Date(entry.date).getTime());
+            // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
+            const entryOk = nameDiff && timeDiff < historyDiffLimit;
+            // console.log({ entry, entryOk });
+            return entryOk;
+        });
+    }
+    catch (err) {
+        console.error(err);
+    }
+    history.push({
+        ...data,
+        date: now.toJSON(),
+    });
+    console.log("saved history:", { ...history });
+    setLocalObject(keyHistory, history);
+}
+
 function trimQueue() {
     waitForElem(xpPlayingTrack, queue).then(playing => {
         const history = getLocalObject(keyHistory) || [];
@@ -102,11 +135,16 @@ function trimQueue() {
             });
         }
         const blacklist = getLocalObject(keyBlacklist) || [];
-        console.log({ blacklist });
+        console.log("blacklist:", blacklist);
         for (let i = index + 1; i < tracks.length; i++) {
             const track = tracks[i];
             if (!track.onclick) {
                 track.onclick = handleClick;
+            }
+            if (track.openPopupBehavior && !track.openPopupBehavior.openPopup) {
+                track.openPopupBehavior.openPopup = (evt) => {
+                    console.log(evt);
+                };
             }
             const data = getTrackData(track);
             // console.log(i, track, data);
@@ -128,37 +166,41 @@ function trimQueue() {
 }
 
 function handleClick(evt) {
+    const alt = evt.altKey, ctrl = evt.ctrlKey;
     const track = xp("ancestor-or-self::ytmusic-player-queue-item", evt.target)[0];
-    if (!evt.altKey || !track) { return; }
+    console.log("click:", track);
+    if (!alt && !ctrl || !track) { return; }
+
     const data = getTrackData(track);
     if (!data || !data.title || !data.uploader) {
         throw { message: "Couldn't fetch track data", data };
     }
     const now = new Date();
 
-    if (evt.ctrlKey) {
+    if (ctrl && alt) {
         console.log(
             `added '${data.title}' to blacklist:`,
-            modLocalObject(keyBlacklist, [], history => {
-                history.push({ ...data, date: now.toJSON() });
+            modLocalObject(keyBlacklist, [], blacklist => {
+                blacklist.push({ ...data, date: now.toJSON() });
                 return true;
             })
         );
         track.style.backgroundColor = "#422";
+
         wait(() => {
             track.style.backgroundColor = null;
             removeTrack(track);
         }, blacklistDelay);
+
         return false;
     }
 
+    // either Ctrl + Click or Alt + Click were done
     removeTrack(track).then(() => {
-        console.log(
-            modLocalObject(keyHistory, [], history => {
-                history.push({ ...data, skipped: true, date: now.toJSON() });
-                return true;
-            })
-        );
+        if (!alt) { return; }
+
+        data.skipped = true;
+        addTrackToHistory(data);
     });
 }
 
@@ -190,31 +232,7 @@ function urlChanged() {
         if (!trackData.uploader) {
             throw "Couldn't find track uploader";
         }
-
-        let history = getLocalObject(keyHistory) || [];
-        const now = new Date();
-        // console.log("loaded history:", { ...history });
-        try {
-            history = history.filter(entry => {
-                // console.log(entry);
-                const nameDiff = entry.title != trackData.title;
-                // console.log({ nameDiff });
-                const timeDiff = (now.getTime() - new Date(entry.date).getTime());
-                // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
-                const entryOk = nameDiff && timeDiff < historyDiffLimit;
-                // console.log({ entry, entryOk });
-                return entryOk;
-            });
-        }
-        catch (err) {
-            console.error(err);
-        }
-        history.push({
-            ...trackData,
-            date: now.toJSON(),
-        });
-        console.log("saved history:", { ...history });
-        setLocalObject(keyHistory, history);
+        addTrackToHistory(trackData);
 
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
 
