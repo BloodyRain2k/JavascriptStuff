@@ -1,10 +1,11 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.4
+// @version      0.3.5
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/watch?v=*
+// @match        https://music.youtube.com/playlist?v=*
 // @grant        none
 // ==/UserScript==
 
@@ -68,7 +69,7 @@ const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state='playing
 const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='items']";
 
 let wlh, checkId = window.setInterval(check, 500);
-let queue;
+let queue, trimPromise;
 
 // functions //
 
@@ -76,7 +77,8 @@ observers.push(newObserver(mutation));
 function mutation(mutations, observer) {
 }
 
-function getTracks() { return queue.xp(".//ytmusic-player-queue-item"); }
+function getTracks() { return queue.xp(".//ytmusic-player-queue-item|//*[@id='automix-contents']/ytmusic-player-queue-item"); }
+function getAllTracks() { return xp("//ytmusic-player-queue-item"); }
 function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
 function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
 function getTrackData(queuedTrack) {
@@ -90,9 +92,15 @@ function removeTrack(queuedTrack) {
     qs("button", queuedTrack).click();
 
     return waitForElem(xpMenu).then(menu => {
+        console.log("menu:", menu);
         return waitForElem(".//yt-formatted-string[text()='Remove from queue']", menu);
     }).then(remove => {
+        console.log("remove:", remove);
         remove.click();
+        wait(() => {
+            console.log("trim awaited");
+            trimQueue();
+        }, 5);
     });
 }
 
@@ -124,29 +132,34 @@ function addTrackToHistory(data) {
 }
 
 function trimQueue() {
-    waitForElem(xpPlayingTrack, queue).then(playing => {
+    if (trimPromise) { return; }
+
+    trimPromise = waitForElem(xpPlayingTrack, queue).then(playing => {
         const history = getLocalObject(keyHistory) || [];
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
-        console.log("trim:", index, "/", tracks.length);
+        console.log("trim:", index + 1, "/", tracks.length);
         if (index > maxPastQueue) {
+            trimPromise = null;
             return removeTrack(tracks[0]).then(() => {
-                wait(() => trimQueue(), 20);
+                // wait(() => trimQueue(), 20);
             });
         }
         const blacklist = getLocalObject(keyBlacklist) || [];
         console.log("blacklist:", blacklist);
+        const handlers = [];
         for (let i = index + 1; i < tracks.length; i++) {
             const track = tracks[i];
+            const data = getTrackData(track);
             if (!track.onclick) {
                 track.onclick = handleClick;
+                handlers.push({ idx: i, title: data.title, track });
             }
             if (track.openPopupBehavior && !track.openPopupBehavior.openPopup) {
                 track.openPopupBehavior.openPopup = (evt) => {
                     console.log(evt);
                 };
             }
-            const data = getTrackData(track);
             // console.log(i, track, data);
             const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
                 || blacklist.some(black => black.title == data.title);
@@ -157,11 +170,14 @@ function trimQueue() {
                 else {
                     console.log(`removing track '${data.title}' by '${data.uploader}' from queue because it's in the history`);
                 }
+                trimPromise = null;
                 return removeTrack(track).then(() => {
-                    wait(() => trimQueue(), 20);
+                    // wait(() => trimQueue(), 20);
                 });
             }
         }
+        // console.log("handlers:", handlers);
+        trimPromise = null;
     });
 }
 
@@ -270,7 +286,13 @@ function urlChanged() {
         //     button.click();
         // });
 
-        trimQueue();
+        waitForElem("#automix-contents ytmusic-player-queue-item", 2000)
+            .catch(() => null)
+            .then(automix => {
+
+            // console.log("automix:", automix);
+            trimQueue();
+        });
     });
 }
 
