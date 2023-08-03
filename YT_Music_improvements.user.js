@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.5
+// @version      0.3.6
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -223,8 +223,9 @@ function handleClick(evt) {
 function urlChanged() {
     wlh = window.location.href;
 
-    // waitForElem("").then(notif => {
-    // });
+    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?')]]//yt-button-shape").then(button => {
+        button.click();
+    });
 
     waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]").then(contents => {
         queue = contents;
