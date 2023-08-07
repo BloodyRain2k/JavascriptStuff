@@ -1,9 +1,10 @@
 // ==UserScript==
 // @name         WordPress improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.1.0
+// @version      0.3.1.1
 // @description  try to take over the world!
 // @author       BK
+// @run-at       document-start
 // @match        */wp-login.php*
 // @match        */wp-admin/*
 // @noframes
@@ -59,7 +60,7 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 
 const observer = newObserver(mutation);
 const naggers = [
-    "#acf-field-group-pro-features", ".updraft-ad-container", ".wp-mail-smtp-review-notice",
+    "#acf-field-group-pro-features,#tmpl-acf-field-group-pro-features", ".updraft-ad-container", ".wp-mail-smtp-review-notice", ".pa-new-feature-notice",
     "//*[ @id='updraft-dashnotice' and .//*[starts-with(text(), 'Thank you for installing')] ]",
     "//*[ {class=yoast-notification} and .//*[{class=yoast-button-upsell}] ]",
 ];
@@ -81,14 +82,13 @@ function mutation(mutations, observer) {
 function newUrl() {
     wlh = window.location.href;
 
-    if (wlh.search(/wp-login/i) > -1) {
-        waitForElem("#rememberme").then(rem => {
-            if (!rem.checked) {
-                console.log(rem);
-                rem.click();
-            }
-        });
-    }
+    waitForElem("#loginform").then(form => {
+        const rem = form.qs("#rememberme");
+        console.log(rem);
+        if (!rem.checked) {
+            rem.click();
+        }
+    });
 
     if (wlh.search(/page=wpml-package-management/i) > -1) {
         // if (packagesToCheck != null) { return; }
