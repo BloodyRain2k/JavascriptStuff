@@ -1,26 +1,30 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.6
+// @version      0.3.7
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
-// @match        https://music.youtube.com/watch?v=*
-// @match        https://music.youtube.com/playlist?v=*
-// @grant        none
+// @match        https://music.youtube.com/*
+// @grant        GM_addStyle
 // ==/UserScript==
 
 /* Functions:
 remove from queue:       Ctrl + Click Track
 add to history:           Alt + Click Track
 add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike"
+add to favorites:  Click "Like"
 */
 
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
+/** @returns {HTMLElement[]} */
 function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{([\w-_]+)=['"]?([^}]+?)['"]?\}/g, "contains(concat(' ',normalize-space(@$1),' '),' $2 ')"); try { elems = document.evaluate(sel,
     root || document.body || document, null, XPathResult.ANY_TYPE, null); } catch (ex) { console.error("xp exception:", { ex, selector, sel }); return; }; // class match: `{class=<className>}`
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(addSelectors(elem)); } return result; }
+/** @returns {HTMLElement[]} */
 function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)).map(elm => addSelectors(elm)); }
+/** @returns {HTMLElement} */
 function qs(selector, root) { return addSelectors(selector.search(/^\/|^\.\//) == -1 ? (root || document.body || document).querySelector(selector) : xp(selector, root)[0]); }
+/** @returns {Promise<HTMLElement>} */
 function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "number") { timeout = root; root = null; }; root ??= document.body || document; let observer, timeoutId = -1;
     const promise = new Promise((resolve, reject) => { let elem = qs(selector, root); if (elem) { return resolve(elem); }; observer = new MutationObserver(() => {
     let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId); observer.disconnect(); resolve(obsElem); }; });
@@ -55,12 +59,19 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 
 // variables //
 
+if (GM_addStyle) {
+    GM_addStyle(`.fav-added: { color: #8f2; }`);
+}
+else {
+    console.error("GM_addStyle not available");
+}
+
 const titleBlacklist = [
     /\[live\]$/i,
 ];
 
 const keyBlacklist = "TrackBlacklist", keyFavorites = "TrackFavorites";
-const keyHistory = "TrackHistory", historyLimitHours = 24;
+const keyHistory = "TrackHistory", historyLimitHours = 48;
 const historyDiffLimit = historyLimitHours * (3600 * 1000);
 const maxPastQueue = 3, blacklistDelay = 750;
 
@@ -88,20 +99,18 @@ function getTrackData(queuedTrack) {
 }
 function openFirstTrackMenu() { queue.xp(".//ytmusic-player-queue-item[1]//button")[0].click(); }
 
-function removeTrack(queuedTrack) {
+async function removeTrack(queuedTrack) {
     qs("button", queuedTrack).click();
 
-    return waitForElem(xpMenu).then(menu => {
-        console.log("menu:", menu);
-        return waitForElem(".//yt-formatted-string[text()='Remove from queue']", menu);
-    }).then(remove => {
-        console.log("remove:", remove);
-        remove.click();
-        wait(() => {
-            console.log("trim awaited");
-            trimQueue();
-        }, 5);
-    });
+    const menu = await waitForElem(xpMenu);
+    console.log("menu:", menu);
+    const remove = await waitForElem(".//yt-formatted-string[text()='Remove from queue']", menu);
+    console.log("remove:", remove);
+    remove.click();
+    wait(() => {
+        console.log("trim awaited");
+        trimQueue();
+    }, 5);
 }
 
 function addTrackToHistory(data) {
@@ -127,23 +136,40 @@ function addTrackToHistory(data) {
         ...data,
         date: now.toJSON(),
     });
-    console.log("saved history:", { ...history });
     setLocalObject(keyHistory, history);
+    console.log("saved history:", { ...history });
+}
+
+function addTrackToFavorites(data) {
+    let favorites = getLocalObject(keyFavorites) || [];
+    console.log("loaded favorites:", { ...favorites });
+    if (favorites.find(fav => fav.title == data.title && fav.uploader == data. uploader)) {
+        console.log("already in favorites:", data);
+        return;
+    }
+
+    const now = new Date();
+    favorites.push({
+        ...data,
+        date: now.toJSON(),
+    });
+    setLocalObject(keyFavorites, favorites);
+    console.log("saved favorites:", { ...favorites });
 }
 
 function trimQueue() {
     if (trimPromise) { return; }
 
-    trimPromise = waitForElem(xpPlayingTrack, queue).then(playing => {
+    trimPromise = waitForElem(xpPlayingTrack, queue)
+    .then(playing => {
         const history = getLocalObject(keyHistory) || [];
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index + 1, "/", tracks.length);
         if (index > maxPastQueue) {
             trimPromise = null;
-            return removeTrack(tracks[0]).then(() => {
-                // wait(() => trimQueue(), 20);
-            });
+            return removeTrack(tracks[0])
+                // .then(() => { wait(() => trimQueue(), 20); });
         }
         const blacklist = getLocalObject(keyBlacklist) || [];
         console.log("blacklist:", blacklist);
@@ -171,9 +197,8 @@ function trimQueue() {
                     console.log(`removing track '${data.title}' by '${data.uploader}' from queue because it's in the history`);
                 }
                 trimPromise = null;
-                return removeTrack(track).then(() => {
-                    // wait(() => trimQueue(), 20);
-                });
+                return removeTrack(track)
+                    // .then(() => { wait(() => trimQueue(), 20); });
             }
         }
         // console.log("handlers:", handlers);
@@ -223,11 +248,13 @@ function handleClick(evt) {
 function urlChanged() {
     wlh = window.location.href;
 
-    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?')]]//yt-button-shape").then(button => {
+    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?')]]//yt-button-shape")
+    .then(button => {
         button.click();
     });
 
-    waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]").then(contents => {
+    waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]")
+    .then(contents => {
         queue = contents;
         // const tracks = getTracks();
         // console.log(tracks);
@@ -252,14 +279,39 @@ function urlChanged() {
         addTrackToHistory(trackData);
 
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
+        if (!likeBtn.onclick) {
+            likeBtn.onclick = (evt) => {
+                const like_track = getSelectedTrack();
+                const trkData = getTrackData(like_track);
+                console.log("like:", loggedIn, like_track, trkData);
 
+                addTrackToFavorites(trkData);
+                likeBtn.classList.add("fav-added");
+                likeBtn.firstChild.style.color = "#8f2";
+
+                if (!loggedIn) {
+                    evt.preventDefault();
+                    evt.stopPropagation();
+                    evt.stopImmediatePropagation();
+                    waitForElem("ytmusic-modal-with-title-and-button-renderer")
+                    .then(popup => {
+                        popup.style.display = "none";
+                    });
+                    return false;
+                }
+            };
+        }
+        else {
+            likeBtn.classList.remove("fav-added");            
+            likeBtn.firstChild.style.color = null;
+        }
 
         const dislikeBtn = qs(".middle-controls-buttons #button-shape-dislike");
         if (!dislikeBtn.onclick) {
             dislikeBtn.onclick = (evt) => {
                 const dis_track = getSelectedTrack();
-                const data = getTrackData(dis_track);
-                console.log("dislike:", loggedIn, dis_track, data);
+                const trkData = getTrackData(dis_track);
+                console.log("dislike:", loggedIn, dis_track, trkData);
 
                 handleClick({
                     altKey: true,
@@ -271,7 +323,8 @@ function urlChanged() {
                     evt.preventDefault();
                     evt.stopPropagation();
                     evt.stopImmediatePropagation();
-                    waitForElem("ytmusic-modal-with-title-and-button-renderer").then(popup => {
+                    waitForElem("ytmusic-modal-with-title-and-button-renderer")
+                    .then(popup => {
                         popup.style.display = "none";
                     });
                     return false;
@@ -288,9 +341,8 @@ function urlChanged() {
         // });
 
         waitForElem("#automix-contents ytmusic-player-queue-item", 2000)
-            .catch(() => null)
-            .then(automix => {
-
+        .catch(() => null)
+        .then(automix => {
             // console.log("automix:", automix);
             trimQueue();
         });
