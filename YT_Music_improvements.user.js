@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7
+// @version      0.3.7.1
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -88,7 +88,20 @@ observers.push(newObserver(mutation));
 function mutation(mutations, observer) {
 }
 
-function getTracks() { return queue.xp(".//ytmusic-player-queue-item|//*[@id='automix-contents']/ytmusic-player-queue-item"); }
+function getTracks() {
+    const tracks = queue.xp(".//ytmusic-player-queue-item|//*[@id='automix-contents']/ytmusic-player-queue-item");
+    const remove = [];
+    tracks.forEach(track => {
+        if (track.qs(".song-title[is-empty]")) {
+            remove.push(track);
+        }
+    });
+    remove.forEach(track => {
+        tracks.remove(track);
+        track.parentNode.removeChild(track);
+    });
+    return tracks;
+}
 function getAllTracks() { return xp("//ytmusic-player-queue-item"); }
 function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
 function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
@@ -202,6 +215,10 @@ function trimQueue() {
             }
         }
         // console.log("handlers:", handlers);
+        trimPromise = null;
+    })
+    .catch(err => {
+        console.error({ message: "trimQueue() ERROR:", err });
         trimPromise = null;
     });
 }
