@@ -15,6 +15,7 @@ function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "num
 const observers = [];
 function newObserver(func) { if (!func) { return console.error("no observer function"); }; const observer = new MutationObserver(func); observer.function = func; observer.trigger = function(){ func([], this); }; observer.watching = [];
     observer.cleanup = function(){ this.disconnect(); this.watching = this.watching.filter(wtch => wtch.target.xp("ancestor::body")[0]); this.watching.forEach(wtch => this.observe(wtch.target, wtch.options)); }; return observer; }
+// subtree: observe child elements too // childList: changes to .childNodes // attributes: duh // attributeFilter: [attrs] // attributeOldValue: duh // characterData: text // characterDataOldValue: duh //
 function watch(target, options, func) { if (typeof(target) == "string") { target = qs(target); }; if (!target) { return; }; if (func && typeof(func) != "function") { return console.error("no watch function:", func); };
     const obs = (func ? newObserver(func) : observer); obs.observe(target, options); if (obs.watching.find(watching => watching.target == target && watching. options)) { console.log("not adding twice:", { target, options }); }
     else { obs.watching.push({ target, options }); console.log("watch added:", target, options, obs); } if (options.trigger) { obs.trigger(); }; }
