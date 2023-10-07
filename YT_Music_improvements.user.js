@@ -89,7 +89,7 @@ function mutation(mutations, observer) {
 }
 
 function getTracks() {
-    const tracks = queue.xp(".//ytmusic-player-queue-item|//*[@id='automix-contents']/ytmusic-player-queue-item");
+    const tracks = queue.xp(".//ytmusic-player-queue-item"); // |//*[@id='automix-contents']/ytmusic-player-queue-item");
     const remove = [];
     tracks.forEach(track => {
         if (track.qs(".song-title[is-empty]")) {
@@ -270,7 +270,7 @@ function urlChanged() {
         button.click();
     });
 
-    waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]")
+    waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]/..")
     .then(contents => {
         queue = contents;
         // const tracks = getTracks();
