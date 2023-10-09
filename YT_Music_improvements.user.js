@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.2
+// @version      0.3.7.3
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -73,7 +73,7 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 // variables //
 
 if (GM_addStyle) {
-    GM_addStyle(`.fav-added: { color: #8f2; }`);
+    GM_addStyle(`[id].fav-added > button { color: #8f2; }`);
 }
 else {
     console.error("GM_addStyle not available");
@@ -97,8 +97,8 @@ let queue, trimPromise;
 
 // functions //
 
-observers.push(newObserver(mutation));
-function mutation(mutations, observer) {
+observers.push(newObserver(onMutation));
+function onMutation(mutations, observer) {
 }
 
 function getTracks() {
@@ -172,16 +172,16 @@ function isTrackFavorite(/** @type {TrackData} */ trkData, likeBtn = null) {
     // console.debug("favorites:", [...favorites]);
     
     if (favorites.some(fav => fav.title == trkData.title && fav.uploader == trkData.uploader)) {
-        if (likeBtn) {
-            likeBtn.firstChild.style.color = "#8f2";
-        }
+        // if (likeBtn) {
+        //     likeBtn.firstChild.style.color = "#8f2";
+        // }
         likeBtn?.classList.add("fav-added");
         return true;
     }
     
-    if (likeBtn) {
-        likeBtn.firstChild.style.color = null;
-    }
+    // if (likeBtn) {
+    //     likeBtn.firstChild.style.color = null;
+    // }
     likeBtn?.classList.remove("fav-added");
     return false;
 }
