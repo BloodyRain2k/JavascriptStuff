@@ -1,19 +1,24 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.1
+// @version      0.3.7.2
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
 // @match        https://music.youtube.com/*
 // @grant        GM_addStyle
+// @grant        GM_setValue
+// @grant        GM_getValue
 // ==/UserScript==
 
 /* Functions:
 remove from queue:       Ctrl + Click Track
 add to history:           Alt + Click Track
-add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike"
-add to favorites:  Click "Like"
+add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike" (MMB when logged in)
+add to favorites:                             Click "Like"    (MMB when logged in)
 */
+
+function loadObj(key) { const str = GM_getValue(key); /* console.debug(`getVal '${key}':`, str); */ return str; };
+function saveObj(key, value) { GM_setValue(key, value); }
 
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
 /** @returns {HTMLElement[]} */
@@ -38,14 +43,12 @@ function watch(target, options, func) { if (typeof(target) == "string") { target
     const obs = (func ? newObserver(func) : observers[0]); obs.observe(target, options); if (obs.watching.find(watching => watching.target == target && watching. options)) { console.log("not adding twice:", { target, options }); }
     else { obs.watching.push({ target, options }); console.log("watch added:", target, options, obs); } if (options.trigger) { obs.trigger(); }; }
 
-function getLocalObject(key) { var str = localStorage[key]; return str ? function() { try { return JSON.parse(str); } catch (e) { return undefined; } }() : undefined; }
-function setLocalObject(key, value) { localStorage[key] = JSON.stringify(value); }
 function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != typeof {} || typeof(target) == typeof(undefined)) { return target || defaults; }
     if (typeof(target) != typeof(defaults) || ("forEach" in target) != ("forEach" in defaults)) { return target; } if ("forEach" in defaults) {
     defaults.forEach(arr => { if (target.indexOf(arr) == -1) target.push(arr); }); return target; } for (var key in defaults) {
     target[key] = setDefaults(target[key], defaults[key], level + 1); } return { ...defaults, ...target }; }
-function modLocalObject(key, defVal, func) { let obj = getLocalObject(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modLocalObject: no function for '${key}'`);
-    return obj; } let result = func(obj); if (result === true) { setLocalObject(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
+function modLocalObject(key, defVal, func) { let obj = loadObj(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modLocalObject: no function for '${key}'`);
+    return obj; } let result = func(obj); if (result === true) { saveObj(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
 
 function wait(func, delay = 500) { return window.setTimeout(func, delay); }
 function toHash(s) { let h = 0; s = "" + s; if (s.length == 0) return h; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; } return h; }
@@ -56,6 +59,16 @@ function getHttp(obj, async = true) { var http = new XMLHttpRequest(); http.open
 
 function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url; }; let a = document.createElement("a"); a.href = url; let evt = document.createEvent("MouseEvents");
     evt.initMouseEvent("click", true, true, this, 0, 0, 0, 0, 0, true, false, false, false, 0, null); document.body.appendChild(a); a.dispatchEvent(evt); document.body.removeChild(a); }
+
+// #region types //
+/**
+ * @typedef TrackData
+ * @type {object}
+ * @property {string} title
+ * @property {string} uploader
+ * @property {string} id
+ */
+// #endregion types //
 
 // variables //
 
@@ -105,6 +118,7 @@ function getTracks() {
 function getAllTracks() { return xp("//ytmusic-player-queue-item"); }
 function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
 function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
+/** @returns {TrackData} */
 function getTrackData(queuedTrack) {
     const title = queuedTrack.qs(".song-title").innerText;
     const uploader = queuedTrack.qs(".byline").innerText;
@@ -116,24 +130,24 @@ async function removeTrack(queuedTrack) {
     qs("button", queuedTrack).click();
 
     const menu = await waitForElem(xpMenu);
-    console.log("menu:", menu);
+    // console.log("menu:", menu);
     const remove = await waitForElem(".//yt-formatted-string[text()='Remove from queue']", menu);
-    console.log("remove:", remove);
+    // console.log("remove:", remove);
     remove.click();
     wait(() => {
-        console.log("trim awaited");
+        // console.log("trim awaited");
         trimQueue();
     }, 5);
 }
 
-function addTrackToHistory(data) {
-    let history = getLocalObject(keyHistory) || [];
+function addTrackToHistory(/** @type {TrackData} */ trkData) {
+    let history = loadObj(keyHistory) || [];
     const now = new Date();
     // console.log("loaded history:", { ...history });
     try {
         history = history.filter(entry => {
             // console.log(entry);
-            const nameDiff = entry.title != data.title;
+            const nameDiff = entry.title != trkData.title;
             // console.log({ nameDiff });
             const timeDiff = (now.getTime() - new Date(entry.date).getTime());
             // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
@@ -146,28 +160,45 @@ function addTrackToHistory(data) {
         console.error(err);
     }
     history.push({
-        ...data,
+        ...trkData,
         date: now.toJSON(),
     });
-    setLocalObject(keyHistory, history);
+    saveObj(keyHistory, history);
     console.log("saved history:", { ...history });
 }
 
-function addTrackToFavorites(data) {
-    let favorites = getLocalObject(keyFavorites) || [];
-    console.log("loaded favorites:", { ...favorites });
-    if (favorites.find(fav => fav.title == data.title && fav.uploader == data. uploader)) {
-        console.log("already in favorites:", data);
+function isTrackFavorite(/** @type {TrackData} */ trkData, likeBtn = null) {
+    const favorites = loadObj(keyFavorites) || [];
+    // console.debug("favorites:", [...favorites]);
+    
+    if (favorites.some(fav => fav.title == trkData.title && fav.uploader == trkData.uploader)) {
+        if (likeBtn) {
+            likeBtn.firstChild.style.color = "#8f2";
+        }
+        likeBtn?.classList.add("fav-added");
+        return true;
+    }
+    
+    if (likeBtn) {
+        likeBtn.firstChild.style.color = null;
+    }
+    likeBtn?.classList.remove("fav-added");
+    return false;
+}
+
+function addTrackToFavorites(/** @type {TrackData} */ trkData) {
+    if (isTrackFavorite(trkData)) {
+        console.log("already in favorites:", trkData);
         return;
     }
-
+    const favorites = loadObj(keyFavorites) || [];
     const now = new Date();
     favorites.push({
-        ...data,
+        ...trkData,
         date: now.toJSON(),
     });
-    setLocalObject(keyFavorites, favorites);
-    console.log("saved favorites:", { ...favorites });
+    saveObj(keyFavorites, favorites);
+    console.log("saved favorites:", [...favorites]);
 }
 
 function trimQueue() {
@@ -175,7 +206,7 @@ function trimQueue() {
 
     trimPromise = waitForElem(xpPlayingTrack, queue)
     .then(playing => {
-        const history = getLocalObject(keyHistory) || [];
+        const history = loadObj(keyHistory) || [];
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index + 1, "/", tracks.length);
@@ -184,8 +215,8 @@ function trimQueue() {
             return removeTrack(tracks[0])
                 // .then(() => { wait(() => trimQueue(), 20); });
         }
-        const blacklist = getLocalObject(keyBlacklist) || [];
-        console.log("blacklist:", blacklist);
+        const blacklist = loadObj(keyBlacklist) || [];
+        // console.debug("blacklist:", blacklist);
         const handlers = [];
         for (let i = index + 1; i < tracks.length; i++) {
             const track = tracks[i];
@@ -245,12 +276,15 @@ function handleClick(evt) {
         );
         track.style.backgroundColor = "#422";
 
-        wait(() => {
-            track.style.backgroundColor = null;
-            removeTrack(track);
-        }, blacklistDelay);
-
-        return false;
+        // don't remove the track from the playlist when logged in
+        if (evt.skip == false) {
+            wait(() => {
+                track.style.backgroundColor = null;
+                removeTrack(track);
+            }, blacklistDelay);
+            
+            return false;
+        }
     }
 
     // either Ctrl + Click or Alt + Click were done
@@ -296,16 +330,22 @@ function urlChanged() {
         addTrackToHistory(trackData);
 
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
-        if (!likeBtn.onclick) {
-            likeBtn.onclick = (evt) => {
+        if (!likeBtn.onmousedown) {
+            likeBtn.onmousedown = (evt) => {
+                if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
+                    return;
+                }
                 const like_track = getSelectedTrack();
                 const trkData = getTrackData(like_track);
-                console.log("like:", loggedIn, like_track, trkData);
+                console.log("logged in:", loggedIn, evt.button, "/ like:", like_track, trkData, likeBtn);
 
+                if (likeBtn.getAttribute("aria-pressed")?.toLowerCase() == "true" && evt.button == 0) {
+                    return;
+                }
+                
                 addTrackToFavorites(trkData);
-                likeBtn.classList.add("fav-added");
-                likeBtn.firstChild.style.color = "#8f2";
-
+                isTrackFavorite(trkData, likeBtn);
+                
                 if (!loggedIn) {
                     evt.preventDefault();
                     evt.stopPropagation();
@@ -318,14 +358,14 @@ function urlChanged() {
                 }
             };
         }
-        else {
-            likeBtn.classList.remove("fav-added");            
-            likeBtn.firstChild.style.color = null;
-        }
+        console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
 
         const dislikeBtn = qs(".middle-controls-buttons #button-shape-dislike");
-        if (!dislikeBtn.onclick) {
-            dislikeBtn.onclick = (evt) => {
+        if (!dislikeBtn.onmousedown) {
+            dislikeBtn.onmousedown = (evt) => {
+                if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
+                    return;
+                }
                 const dis_track = getSelectedTrack();
                 const trkData = getTrackData(dis_track);
                 console.log("dislike:", loggedIn, dis_track, trkData);
@@ -334,6 +374,7 @@ function urlChanged() {
                     altKey: true,
                     ctrlKey: true,
                     target: dis_track,
+                    skip: !loggedIn,
                 });
 
                 if (!loggedIn) {
