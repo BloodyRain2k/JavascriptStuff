@@ -17,9 +17,6 @@ add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike" (MMB when logged i
 add to favorites:                             Click "Like"    (MMB when logged in)
 */
 
-function loadObj(key) { const str = GM_getValue(key); /* console.debug(`getVal '${key}':`, str); */ return str; };
-function saveObj(key, value) { GM_setValue(key, value); }
-
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
 /** @returns {HTMLElement[]} */
 function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{([\w-_]+)=['"]?([^}]+?)['"]?\}/g, "contains(concat(' ',normalize-space(@$1),' '),' $2 ')"); try { elems = document.evaluate(sel,
@@ -43,12 +40,14 @@ function watch(target, options, func) { if (typeof(target) == "string") { target
     const obs = (func ? newObserver(func) : observers[0]); obs.observe(target, options); if (obs.watching.find(watching => watching.target == target && watching. options)) { console.log("not adding twice:", { target, options }); }
     else { obs.watching.push({ target, options }); console.log("watch added:", target, options, obs); } if (options.trigger) { obs.trigger(); }; }
 
+function loadObj(key) { const str = GM_getValue(key); /* console.debug(`getVal '${key}':`, str); */ return str; };
+function saveObj(key, value) { GM_setValue(key, value); }
 function setDefaults(target, defaults, level = 0) { if (typeof(defaults) != typeof {} || typeof(target) == typeof(undefined)) { return target || defaults; }
     if (typeof(target) != typeof(defaults) || ("forEach" in target) != ("forEach" in defaults)) { return target; } if ("forEach" in defaults) {
     defaults.forEach(arr => { if (target.indexOf(arr) == -1) target.push(arr); }); return target; } for (var key in defaults) {
     target[key] = setDefaults(target[key], defaults[key], level + 1); } return { ...defaults, ...target }; }
-function modLocalObject(key, defVal, func) { let obj = loadObj(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modLocalObject: no function for '${key}'`);
-    return obj; } let result = func(obj); if (result === true) { saveObj(key, obj); } else { console[result === false ? "warn" : "error"](`modLocalObject: '${key}' not saved`); } return obj; }
+function modObj(key, defVal, func) { let obj = loadObj(key); if (obj == null) { obj = defVal; } else { obj = setDefaults(obj, defVal); }; if (!func) { console.warn(`modObj: no function for '${key}'`);
+    return obj; } let result = func(obj); if (result === true) { saveObj(key, obj); } else { console[result === false ? "warn" : "error"](`modObj: '${key}' not saved`); } return obj; }
 
 function wait(func, delay = 500) { return window.setTimeout(func, delay); }
 function toHash(s) { let h = 0; s = "" + s; if (s.length == 0) return h; for (let i = 0; i < s.length; i++) { h = ((h << 5) - h) + s.charCodeAt(i); h = h & h; } return h; }
@@ -269,7 +268,7 @@ function handleClick(evt) {
     if (ctrl && alt) {
         console.log(
             `added '${data.title}' to blacklist:`,
-            modLocalObject(keyBlacklist, [], blacklist => {
+            modObj(keyBlacklist, [], blacklist => {
                 blacklist.push({ ...data, date: now.toJSON() });
                 return true;
             })
@@ -299,7 +298,7 @@ function handleClick(evt) {
 function urlChanged() {
     wlh = window.location.href;
 
-    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?')]]//yt-button-shape")
+    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]//yt-button-shape")
     .then(button => {
         button.click();
     });
@@ -356,6 +355,12 @@ function urlChanged() {
                     });
                     return false;
                 }
+                else {
+                    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Saved to liked music')]]//yt-button-shape")
+                    .then(button => {
+                        button.click();
+                    });
+                }
             };
         }
         console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
@@ -363,9 +368,9 @@ function urlChanged() {
         const dislikeBtn = qs(".middle-controls-buttons #button-shape-dislike");
         if (!dislikeBtn.onmousedown) {
             dislikeBtn.onmousedown = (evt) => {
-                if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
-                    return;
-                }
+                // if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
+                //     return;
+                // }
                 const dis_track = getSelectedTrack();
                 const trkData = getTrackData(dis_track);
                 console.log("dislike:", loggedIn, dis_track, trkData);
