@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         WordPress improvements
 // @namespace    http://tampermonkey.net/
-// @version      0.3.1.1
+// @version      0.3.1.3
 // @description  try to take over the world!
 // @author       BK
 // @run-at       document-start
@@ -64,6 +64,7 @@ const naggers = [
     "//*[ @id='updraft-dashnotice' and .//*[starts-with(text(), 'Thank you for installing')] ]",
     "//*[ {class=yoast-notification} and .//*[{class=yoast-button-upsell}] ]",
 ];
+const hideNaggers = false;
 let wlh, checkId = window.setInterval(check, 500);
 let wpEdit = "/wp-admin/post.php?action=edit&post=";
 let packagesToCheck, lastEditable, previewFrame;
@@ -119,11 +120,13 @@ function newUrl() {
             }
         }
     }
-
-    naggers.forEach(nag_sel => waitForElem(nag_sel).then(nag_elem => {
-        console.log("hiding:", nag_sel, nag_elem);
-        nag_elem.style.display = "none";
-    }));
+    
+    if (hideNaggers) {
+        naggers.forEach(nag_sel => waitForElem(nag_sel).then(nag_elem => {
+            console.log("hiding:", nag_sel, nag_elem);
+            nag_elem.style.display = "none";
+        }));
+    }
 
     if (wlh.search(/action=elementor/i) > -1) {
         observer.cleanup();
@@ -138,13 +141,15 @@ function newUrl() {
 }
 
 function hideLockedElements() {
+    if (!hideNaggers) { return false; }
+    
     let elements = xp("//div[contains(@class, 'elementor-element-wrapper')][.//i[contains(@class,'eicon-lock')]]");
     if (elements.length == 0) { return false; }
 
     let containers = [];
     for (var e of elements) {
         let c = (xp("ancestor-or-self::div[contains(@class,'elementor-panel-category')][@id]", e) || [])[0];
-        if (containers.indexOf(c) < 0) {
+        if (c && containers.indexOf(c) < 0) {
             containers.push(c);
             // console.log(c);
         }
@@ -152,6 +157,7 @@ function hideLockedElements() {
         e.parentNode.removeChild(e);
     }
     for (var c of containers) {
+        if (!c) { continue; }
         let wrappers = qsa(".elementor-element-wrapper", c);
         if (wrappers.length == 0) {
             c.parentNode.removeChild(c);
@@ -172,6 +178,10 @@ function showEditableSize() {
         elemSize.id = "element-size";
         elemSize.classList.add("elementor-control-type-section");
         const elemCtrl = qs("#elementor-controls");
+        if (!elemCtrl) {
+            // element selected, probably inserting a Widget at the moment
+            return;
+        }
         elemCtrl.insertBefore(elemSize, elemCtrl.children[0]);
     }
     const viewport = previewFrame.contentWindow.visualViewport;
@@ -246,7 +256,8 @@ GM_addStyle(
 `.wpml-highlight { background-color: #c552 !important; }
 .wpml-package-ok { background-color: #8f82; }
 .wpml-package-bad { background-color: #f882; }
-#element-size { text-align: center; margin-top: -0.75em; margin-bottom: 0.33em; }`);
+#element-size { text-align: center; margin-top: -0.75em; margin-bottom: 0.33em; }`
+);
 
 function check() {
     if (wlh != window.location.href) { newUrl(); }
