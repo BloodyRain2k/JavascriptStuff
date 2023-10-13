@@ -1,11 +1,10 @@
 // ==UserScript==
 // @name         WPML Assist
 // @namespace    http://tampermonkey.net/
-// @version      0.1.1
+// @version      0.1.2
 // @description  try to take over the world!
 // @author       You
 // @match        https://e.ate.wpml.org/dashboard?id=*
-// @match        https://e.ate.wpml.org//dashboard?id=*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=wpml.org
 // @grant        none
 // @noframes
