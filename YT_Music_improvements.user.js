@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.3
+// @version      0.3.7.4
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -36,8 +36,8 @@ function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "num
 const observers = [];
 function newObserver(func) { if (!func) { return console.error("no observer function"); }; const observer = new MutationObserver(func); observer.function = func; observer.trigger = function(){ func([], this); }; observer.watching = [];
     observer.cleanup = function(){ this.disconnect(); this.watching = this.watching.filter(wtch => wtch.target.xp("ancestor::body")[0]); this.watching.forEach(wtch => this.observe(wtch.target, wtch.options)); }; return observer; }
-function watch(target, options, func) { if (typeof(target) == "string") { target = qs(target); }; if (!target) { return; }; if (func && typeof(func) != "function") { return console.error("no watch function:", func); };
-    const obs = (func ? newObserver(func) : observers[0]); obs.observe(target, options); if (obs.watching.find(watching => watching.target == target && watching. options)) { console.log("not adding twice:", { target, options }); }
+function watch(target, /**@type {MutationObserverInit}*/options, func) { if (typeof(target) == "string") { target = qs(target); }; if (!target) { return; }; if (func && typeof(func) != "function") { return console.error("no watch function:", func); };
+    const obs = /**@type {MutationObserver}*/(func ? newObserver(func) : observers[0]); obs.observe(target, options); if (obs.watching.find(watching => watching.target == target && watching. options)) { console.log("not adding twice:", { target, options }); }
     else { obs.watching.push({ target, options }); console.log("watch added:", target, options, obs); } if (options.trigger) { obs.trigger(); }; }
 
 function loadObj(key) { const str = GM_getValue(key); /* console.debug(`getVal '${key}':`, str); */ return str; };
@@ -97,7 +97,14 @@ let queue, trimPromise;
 // functions //
 
 observers.push(newObserver(onMutation));
-function onMutation(mutations, observer) {
+function onMutation(/**@type {MutationRecord[]}*/mutations, observer) {
+    if (mutations.some(mut => mut.target.id == "chips")) {
+        waitForElem("#chips > ytmusic-chip-cloud-chip-renderer[is-selected]:not([should-show-loading-chip])")
+            .then(chip => trimQueue());
+        return;
+    }
+    
+    console.log(mutations);
 }
 
 function getTracks() {
@@ -139,7 +146,7 @@ async function removeTrack(queuedTrack) {
     }, 5);
 }
 
-function addTrackToHistory(/** @type {TrackData} */ trkData) {
+function addTrackToHistory(/**@type {TrackData}*/ trkData) {
     let history = loadObj(keyHistory) || [];
     const now = new Date();
     // console.log("loaded history:", { ...history });
@@ -166,7 +173,7 @@ function addTrackToHistory(/** @type {TrackData} */ trkData) {
     console.log("saved history:", { ...history });
 }
 
-function isTrackFavorite(/** @type {TrackData} */ trkData, likeBtn = null) {
+function isTrackFavorite(/**@type {TrackData}*/ trkData, likeBtn = null) {
     const favorites = loadObj(keyFavorites) || [];
     // console.debug("favorites:", [...favorites]);
     
@@ -185,7 +192,7 @@ function isTrackFavorite(/** @type {TrackData} */ trkData, likeBtn = null) {
     return false;
 }
 
-function addTrackToFavorites(/** @type {TrackData} */ trkData) {
+function addTrackToFavorites(/**@type {TrackData}*/ trkData) {
     if (isTrackFavorite(trkData)) {
         console.log("already in favorites:", trkData);
         return;
@@ -295,12 +302,22 @@ function handleClick(evt) {
     });
 }
 
+function xpToastByMessage(/**@type {string|[string]}*/ messages) {
+    if (typeof(messages) == "string") {
+        messages = [messages];
+    }
+    return `//tp-yt-paper-toast[.//yt-formatted-string[${messages.map(msg => `contains(text(),'${msg}')`).join(" or ")}]]`;
+}
+const xpToastWatchingLiked = xpToastByMessage(["Still watching?", "Saved to liked music"]);
+const xpToastLiked = xpToastByMessage("Saved to liked music");
+console.log([xpToastWatchingLiked, xpToastLiked]);
+
 function urlChanged() {
     wlh = window.location.href;
 
-    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]//yt-button-shape")
-    .then(button => {
-        button.click();
+    // waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]")
+    waitForElem(xpToastWatchingLiked).then(() => {
+        xp(xpToastWatchingLiked + "//*[@id='close-button']").forEach(button => button.click());
     });
 
     waitForElem("//*[{class='ytmusic-tab-renderer'}]//*[@id='contents' and .//ytmusic-player-queue-item]/..")
@@ -308,6 +325,9 @@ function urlChanged() {
         queue = contents;
         // const tracks = getTracks();
         // console.log(tracks);
+        waitForElem("#steering-chips > #chips").then(steering => {
+            watch(steering, { childList: 1 });
+        });
         return waitForElem(xpSelTrack, queue);
     }).then(track => {
         const loggedIn = qs("a.sign-in-link") == null;
@@ -356,9 +376,10 @@ function urlChanged() {
                     return false;
                 }
                 else {
-                    waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Saved to liked music')]]//yt-button-shape")
-                    .then(button => {
-                        button.click();
+                    console.debug("discarding 'Liked' notification");
+                    waitForElem(xpToastLiked)
+                    .then(() => {
+                        xp(xpToastLiked + "//*[@id='close-button']").forEach(button => button.click());
                     });
                 }
             };
