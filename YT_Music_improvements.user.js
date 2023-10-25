@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.4
+// @version      0.3.7.5
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -99,8 +99,6 @@ let queue, trimPromise;
 observers.push(newObserver(onMutation));
 function onMutation(/**@type {MutationRecord[]}*/mutations, observer) {
     if (mutations.some(mut => mut.target.id == "chips")) {
-        waitForElem("#chips > ytmusic-chip-cloud-chip-renderer[is-selected]:not([should-show-loading-chip])")
-            .then(chip => trimQueue());
         return;
     }
     
@@ -302,6 +300,11 @@ function handleClick(evt) {
     });
 }
 
+function newSteering() {
+    waitForElem("#chips > ytmusic-chip-cloud-chip-renderer[is-selected]:not([should-show-loading-chip])")
+    .then(() => trimQueue());
+};
+
 function xpToastByMessage(/**@type {string|[string]}*/ messages) {
     if (typeof(messages) == "string") {
         messages = [messages];
@@ -315,6 +318,15 @@ console.log([xpToastWatchingLiked, xpToastLiked]);
 function urlChanged() {
     wlh = window.location.href;
 
+    waitForElem("#steering-chips > #chips:not([waiting])").then(() => {
+        qsa("#steering-chips > #chips:not([waiting])").forEach(chip => {
+            if (chip.onclick) { return; }
+            chip.onclick = newSteering;
+            chip.setAttribute("waiting", "");
+            console.debug("added 'onclick' to:", chip);
+        });
+    });
+    
     // waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]")
     waitForElem(xpToastWatchingLiked).then(() => {
         xp(xpToastWatchingLiked + "//*[@id='close-button']").forEach(button => button.click());
@@ -325,9 +337,6 @@ function urlChanged() {
         queue = contents;
         // const tracks = getTracks();
         // console.log(tracks);
-        waitForElem("#steering-chips > #chips").then(steering => {
-            watch(steering, { childList: 1 });
-        });
         return waitForElem(xpSelTrack, queue);
     }).then(track => {
         const loggedIn = qs("a.sign-in-link") == null;
