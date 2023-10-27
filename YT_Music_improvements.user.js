@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.5
+// @version      0.3.7.6
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -17,16 +17,17 @@ add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike" (MMB when logged i
 add to favorites:                             Click "Like"    (MMB when logged in)
 */
 
+/** @returns {HTMLElement2} */
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
-/** @returns {HTMLElement[]} */
+/** @-returns {HTMLElement[]} */
 function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{([\w-_]+)=['"]?([^}]+?)['"]?\}/g, "contains(concat(' ',normalize-space(@$1),' '),' $2 ')"); try { elems = document.evaluate(sel,
     root || document.body || document, null, XPathResult.ANY_TYPE, null); } catch (ex) { console.error("xp exception:", { ex, selector, sel }); return; }; // class match: `{class=<className>}`
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(addSelectors(elem)); } return result; }
-/** @returns {HTMLElement[]} */
+/** @-returns {HTMLElement[]} */
 function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)).map(elm => addSelectors(elm)); }
-/** @returns {HTMLElement} */
+/** @-returns {HTMLElement} */
 function qs(selector, root) { return addSelectors(selector.search(/^\/|^\.\//) == -1 ? (root || document.body || document).querySelector(selector) : xp(selector, root)[0]); }
-/** @returns {Promise<HTMLElement>} */
+/** @returns {Promise<HTMLElement2>} */
 function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "number") { timeout = root; root = null; }; root ??= document.body || document; let observer, timeoutId = -1;
     const promise = new Promise((resolve, reject) => { let elem = qs(selector, root); if (elem) { return resolve(elem); }; observer = new MutationObserver(() => {
     let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId); observer.disconnect(); resolve(obsElem); }; });
@@ -67,6 +68,14 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
  * @property {string} uploader
  * @property {string} id
  */
+
+/**
+ * @typedef HTMLElement2
+ * @type {object && HTMLElement}
+ * @property {(selector:string) => HTMLElement2} qs
+ * @property {(selector:string) => HTMLElement2[]} qsa
+ * @property {(selector:string) => HTMLElement2[]} xp
+ */
 // #endregion types //
 
 // variables //
@@ -92,7 +101,7 @@ const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state='playing
 const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='items']";
 
 let wlh, checkId = window.setInterval(check, 500);
-let queue, trimPromise;
+let /**@type {HTMLElement2}*/queue, trimPromise;
 
 // functions //
 
@@ -219,6 +228,7 @@ function trimQueue() {
             return removeTrack(tracks[0])
                 // .then(() => { wait(() => trimQueue(), 20); });
         }
+        const automix = queue.qs("#automix-contents");
         const blacklist = loadObj(keyBlacklist) || [];
         // console.debug("blacklist:", blacklist);
         const handlers = [];
@@ -233,6 +243,9 @@ function trimQueue() {
                 track.openPopupBehavior.openPopup = (evt) => {
                     console.log(evt);
                 };
+            }
+            if (automix && track.xp("ancestor::*[@id='queue' and ./*[@id='contents']]")[0]) {
+                continue;
             }
             // console.log(i, track, data);
             const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
