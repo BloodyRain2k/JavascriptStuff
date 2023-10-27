@@ -244,7 +244,8 @@ function trimQueue() {
                     console.log(evt);
                 };
             }
-            if (automix && track.xp("ancestor::*[@id='queue' and ./*[@id='contents']]")[0]) {
+            if (automix && track.xp("ancestor::*[@id='queue']")[0]) {
+                console.debug("skipping filtering for:", track);
                 continue;
             }
             // console.log(i, track, data);
