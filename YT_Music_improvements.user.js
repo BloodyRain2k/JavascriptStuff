@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.9
+// @version      0.3.7.10
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -162,20 +162,34 @@ function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
 function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
 /** @returns {TrackData} */
 function getTrackData(queuedTrack) {
-    const title = queuedTrack.qs(".song-title").innerText;
-    const uploader = queuedTrack.qs(".byline").innerText;
-    return { title, uploader, id: queuedTrack.__data.data.videoId };
+    const title = queuedTrack.__data?.data?.title?.runs[0]?.text || queuedTrack.qs(".song-title").innerText;
+    const uploader = queuedTrack.__data?.data?.shortBylineText?.runs[0]?.text || queuedTrack.qs(".byline").innerText;
+    const id = queuedTrack.__data.data.videoId || queuedTrack.qs(".thumbnail img[src]").src.match(/\/vi\/(\w+)\//i)[1];
+    return { title, uploader, id };
 }
 function openFirstTrackMenu() { queue.xp(".//ytmusic-player-queue-item[1]//button")[0].click(); }
 
 async function removeTrack(queuedTrack) {
+    const trkData = getTrackData(queuedTrack);
+    console.debug("removing:", trkData);
+    
     qs("button", queuedTrack).click();
-
     const menu = await waitForElem(xpMenu);
+    
     // console.log("menu:", menu);
-    const remove = await waitForElem(".//yt-formatted-string[text()='Remove from queue']", menu);
-    console.warn("remove:", queuedTrack, queuedTrack.qs("[title]").title);
-    remove.click();
+    const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//yt-formatted-string[text()='Remove from queue']]", menu);
+    console.warn("remove:", queuedTrack.qs("[title]").title, queuedTrack, remove.__data, remove);
+    if (remove.__data.data.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
+        queuedTrack.style.backgroundColor = null;
+        remove.click();
+    }
+    else {
+        console.error("queuedTrack changed:", trkData, queuedTrack.__data, queuedTrack);
+        const menu = remove.xp("ancestor::tp-yt-iron-dropdown[{class='ytmusic-popup-container'}]");
+        menu.setAttribute("aria-hidden", true);
+        menu.removeAttribute("focus");
+    }
+    
     wait(() => {
         // console.log("trim awaited");
         trimQueue();
@@ -316,7 +330,7 @@ function handleClick(evt) {
 
     if (ctrl && alt) {
         console.log(
-            `added '${data.title}' to blacklist:`,
+            `added '${data.title}' by '${data.uploader}' to blacklist:`,
             modObj(keyBlacklist, [], blacklist => {
                 blacklist.push({ ...data, date: now.toJSON() });
                 return true;
@@ -325,7 +339,7 @@ function handleClick(evt) {
         track.style.backgroundColor = "#422";
 
         // don't remove the track from the playlist when logged in
-        if (evt.skip == false) {
+        if (evt.loggedIn == false) {
             wait(() => {
                 track.style.backgroundColor = null;
                 removeTrack(track);
@@ -425,7 +439,7 @@ function urlChanged() {
                 }
                 const like_track = getSelectedTrack();
                 const trkData = getTrackData(like_track);
-                console.log("logged in:", loggedIn, evt.button, "/ like:", like_track, trkData, likeBtn);
+                console.log("logged in:", { loggedIn, button: evt.button, like_track, trkData, likeBtn });
 
                 if (likeBtn.getAttribute("aria-pressed")?.toLowerCase() == "true" && evt.button == 0) {
                     return;
@@ -461,13 +475,13 @@ function urlChanged() {
                 // }
                 const dis_track = getSelectedTrack();
                 const trkData = getTrackData(dis_track);
-                console.log("dislike:", loggedIn, dis_track, trkData);
+                console.log("dislike:", { loggedIn, dis_track, trkData });
 
                 handleClick({
                     altKey: true,
                     ctrlKey: true,
                     target: dis_track,
-                    skip: !loggedIn,
+                    loggedIn,
                 });
 
                 if (!loggedIn) {
