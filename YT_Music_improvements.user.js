@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.11
+// @version      0.3.7.12
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -375,7 +375,7 @@ function xpToastByMessage(/**@type {string|[string]}*/ messages) {
     if (typeof(messages) == "string") {
         messages = [messages];
     }
-    return `//tp-yt-paper-toast[.//yt-formatted-string[${messages.map(msg => `contains(text(),'${msg}')`).join(" or ")}]]`;
+    return `//tp-yt-paper-toast[not(@aria-hidden='true') and .//yt-formatted-string[${messages.map(msg => `contains(text(),'${msg}')`).join(" or ")}]]`;
 }
 const xpToastWatchingLiked = xpToastByMessage(["Still watching?", "Saved to liked music"]);
 const xpToastLiked = xpToastByMessage("Saved to liked music");
