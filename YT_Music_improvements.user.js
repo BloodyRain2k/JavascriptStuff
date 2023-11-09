@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.10
+// @version      0.3.7.11
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -178,7 +178,7 @@ async function removeTrack(queuedTrack) {
     
     // console.log("menu:", menu);
     const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//yt-formatted-string[text()='Remove from queue']]", menu);
-    console.warn("remove:", queuedTrack.qs("[title]").title, queuedTrack, remove.__data, remove);
+    console.warn("remove:", { title: queuedTrack.qs("[title]").title, queuedTrack, data: remove.__data, remove });
     if (remove.__data.data.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
         queuedTrack.style.backgroundColor = null;
         remove.click();
@@ -258,7 +258,10 @@ function addTrackToFavorites(/**@type {TrackData}*/ trkData) {
 }
 
 function trimQueue() {
-    if (trimPromise) { return; }
+    if (trimPromise) {
+        console.warn("previous TrimPromise still active");
+        return;
+    }
 
     trimPromise = waitForElem(xpPlayingTrack, queue)
     .then(playing => {
@@ -267,7 +270,7 @@ function trimQueue() {
         const index = tracks.indexOf(playing);
         console.log("trim:", index + 1, "/", tracks.length);
         if (index > maxPastQueue) {
-            trimPromise = null;
+            // trimPromise = null;
             return removeTrack(tracks[0])
                 // .then(() => { wait(() => trimQueue(), 20); });
         }
@@ -302,12 +305,17 @@ function trimQueue() {
                 else {
                     console.log(`removing track '${data.title}' because it's in the history`, { data, trackQueue });
                 }
-                trimPromise = null;
+                // trimPromise = null;
                 return removeTrack(track)
                     // .then(() => { wait(() => trimQueue(), 20); });
             }
         }
         // console.log("handlers:", handlers);
+        // trimPromise = null;
+    })
+    .then((result) => {
+        // the trimPromise returned, so we can clear it's ref
+        console.debug("TrimPromise returned:", result);
         trimPromise = null;
     })
     .catch(err => {
@@ -409,6 +417,7 @@ function urlChanged() {
     .then(selected => {
         const loggedIn = qs("a.sign-in-link") == null;
         const tracks = getTracks();
+        tracks.forEach(trk => trk.style.backgroundColor = null);
         // const selected = getSelectedTrack();
         const index = tracks.indexOf(selected);
         const trackData = getTrackData(selected);
