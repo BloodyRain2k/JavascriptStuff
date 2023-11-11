@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.12
+// @version      0.3.7.12.1
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -184,7 +184,7 @@ async function removeTrack(queuedTrack) {
         remove.click();
     }
     else {
-        console.error("queuedTrack changed:", trkData, queuedTrack.__data, queuedTrack);
+        console.error("queuedTrack changed:", trkData, queuedTrack.__data, remove.__data, remove.__data.data.serviceEndpoint, queuedTrack, remove);
         const menu = remove.xp("ancestor::tp-yt-iron-dropdown[{class='ytmusic-popup-container'}]");
         menu.setAttribute("aria-hidden", true);
         menu.removeAttribute("focus");
