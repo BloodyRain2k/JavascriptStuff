@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.12.1
+// @version      0.3.7.13
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
