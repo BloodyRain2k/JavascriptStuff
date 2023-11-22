@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.12.1
+// @version      0.3.7.13
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -173,28 +173,35 @@ async function removeTrack(queuedTrack) {
     const trkData = getTrackData(queuedTrack);
     console.debug("removing:", trkData);
     
-    qs("button", queuedTrack).click();
-    const menu = await waitForElem(xpMenu);
-    
-    // console.log("menu:", menu);
-    const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//yt-formatted-string[text()='Remove from queue']]", menu);
-    console.warn("remove:", { title: queuedTrack.qs("[title]").title, queuedTrack, data: remove.__data, remove });
-    if (remove.__data.data.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
-        queuedTrack.style.backgroundColor = null;
-        remove.click();
+    try {
+        qs("button", queuedTrack).click();
+        const menu = await waitForElem(xpMenu);
+        
+        // console.log("menu:", menu);
+        const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//yt-formatted-string[text()='Remove from queue']]", menu);
+        console.warn("remove:", { title: queuedTrack.qs("[title]").title, queuedTrack, data: remove.__data, remove });
+        if (remove.__data.data.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
+            queuedTrack.style.backgroundColor = null;
+            remove.click();
+        }
+        else {
+            console.error("queuedTrack changed:", trkData, queuedTrack.__data, remove.__data, remove.__data.data.serviceEndpoint, queuedTrack, remove);
+            const menu = remove.xp("ancestor::tp-yt-iron-dropdown[{class='ytmusic-popup-container'}]");
+            menu.setAttribute("aria-hidden", true);
+            menu.removeAttribute("focus");
+        }
+        
+        wait(() => {
+            // console.log("trim awaited");
+            trimQueue();
+        }, 5);
+        
+        return `"${trkData.title}" removed from queue`;
     }
-    else {
-        console.error("queuedTrack changed:", trkData, queuedTrack.__data, remove.__data, remove.__data.data.serviceEndpoint, queuedTrack, remove);
-        const menu = remove.xp("ancestor::tp-yt-iron-dropdown[{class='ytmusic-popup-container'}]");
-        menu.setAttribute("aria-hidden", true);
-        menu.removeAttribute("focus");
-    }
-    
-    wait(() => {
-        // console.log("trim awaited");
-        trimQueue();
-    }, 5);
-}
+    catch (err) {
+        console.error("removeTrack:", err);
+        return;
+    }}
 
 function addTrackToHistory(/**@type {TrackData}*/ trkData) {
     let history = loadObj(keyHistory) || [];
@@ -306,8 +313,8 @@ function trimQueue() {
                     console.log(`removing track '${data.title}' because it's in the history`, { data, trackQueue });
                 }
                 // trimPromise = null;
-                return removeTrack(track)
-                    // .then(() => { wait(() => trimQueue(), 20); });
+                const removed = removeTrack(track);
+                if (removed) { return removed; }
             }
         }
         // console.log("handlers:", handlers);
@@ -358,9 +365,8 @@ function handleClick(evt) {
     }
 
     // either Ctrl + Click or Alt + Click were done
-    removeTrack(track).then(() => {
-        if (!alt) { return; }
-
+    removeTrack(track).then((removed) => {
+        if (!removed || !alt) { return; }
         data.skipped = true;
         addTrackToHistory(data);
     });
