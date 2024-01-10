@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.13
+// @version      0.3.7.15
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -8,6 +8,7 @@
 // @grant        GM_addStyle
 // @grant        GM_setValue
 // @grant        GM_getValue
+// @grant        GM_xmlhttpRequest
 // ==/UserScript==
 
 /* Functions:
@@ -64,9 +65,10 @@ function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url;
 /**
  * @typedef TrackData
  * @type {object}
+ * @property {string} id
  * @property {string} title
  * @property {string} uploader
- * @property {string} id
+ * @property {string} channel
  */
 
 /**
@@ -87,6 +89,7 @@ else {
     console.error("GM_addStyle not available");
 }
 
+const server = `http://192.168.178.26:2505/youtube`;
 const titleBlacklist = [
     /\[live\]$/i,
 ];
@@ -102,7 +105,8 @@ const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='ite
 const xpTrackQueue = "ancestor::*[{class='ytmusic-player-queue'}]";
 
 let wlh, checkId = window.setInterval(check, 500);
-let /**@type {HTMLElement2}*/queue, /**@type {HTMLElement2}*/playingTitle, trimPromise;
+let /**@type {HTMLElement2}*/queue, /**@type {HTMLElement2}*/playingTitle, beeped = false, trimPromise;
+let curTrack, curTime, playButton, playStarted = false;
 
 const beep = new Audio(
     "data:audio/wav;base64,//uQRAAAAWMSLwUIYAAsYkXgoQwAEaYLWfkWgAI0wWs/ItAAAGDgYtAgAyN+QWaAAihwMWm4G8QQRDiMcCBcH3Cc+CDv/7xA4Tvh9Rz/y8QADBwMWgQAZG/ILNAARQ4GLTcDeIIIhxGOBAuD7hOfBB3/94gcJ3w+o5/5eIAIAAAVwWgQ"
@@ -132,17 +136,65 @@ beep.volume = 0.01;
 
 // functions //
 
+function sendData(type, data) {
+    GM_xmlhttpRequest({
+        url: server + `?music=${type}`,
+        method: "POST",
+        headers: {
+            'content-type': 'application/json',
+        },
+        data: JSON.stringify(data),
+    });
+}
+
+function timeToSeconds(timeStr) {
+    let seconds = 0;
+    if (timeStr.indexOf('/') > -1) {
+        timeStr = timeStr.split('/')[0];
+    }
+    timeStr.split(':').reverse().forEach((t,i) => seconds += (60 ** i) * parseInt(t));
+    return seconds;
+}
+
 observers.push(newObserver(onMutation));
 function onMutation(/**@type {MutationRecord[]}*/mutations, observer) {
-    if (mutations.some(mut => mut.target == playingTitle)) {
-        console.debug("beep");
+    if (!beeped && mutations.some(mut => mut.target == playingTitle)) {
+        console.debug("beep", { curTrack, curTime });
+        if (curTime > 0 && curTime <= timeToSeconds(curTrack.duration) * 0.99) {
+            sendData('history', {
+                ...curTrack,
+                skipped_at: curTime,
+            });
+        }
         beep.play();
+        // beeped = true;
         return;
     }
     
-    console.log(mutations);
+    if (mutations.some(mut => mut.target == playButton)) {
+        onPlayPause();
+        return;
+    };
+    
+    console.debug('mutations:', mutations);
 }
 
+function isPlaying() { return playButton?.title == 'Pause'; }
+function onPlayPause(evt) {
+    console.info('isPlaying:', isPlaying());
+    if (!playStarted && isPlaying()) {
+        const trackData = getTrackData(getPlayingTrack());
+        if (!trackData) {
+            console.debug(`track data not ready yet`);
+            waitForElem(xpPlayingTrack, () => {
+                console.debug(`sending awaited track data`);
+                addTrackToHistory(getTrackData(getPlayingTrack()));
+            });
+            return;
+        }
+        addTrackToHistory(trackData);
+    }
+}
 function getTracks() {
     const tracks = queue.xp(".//ytmusic-player-queue-item"); // |//*[@id='automix-contents']/ytmusic-player-queue-item");
     const remove = [];
@@ -158,15 +210,22 @@ function getTracks() {
     return tracks;
 }
 function getAllTracks() { return xp("//ytmusic-player-queue-item"); }
-function getSelectedTrack() { return queue.xp(xpSelTrack)[0]; }
-function getPlayingTrack() { return queue.xp(xpPlayingTrack)[0]; }
+function getSelectedTrack() { return queue?.xp?.(xpSelTrack)?.[0]; }
+function getPlayingTrack() { return queue?.xp?.(xpPlayingTrack)?.[0]; }
 /** @returns {TrackData} */
 function getTrackData(queuedTrack) {
-    const title = queuedTrack.__data?.data?.title?.runs[0]?.text || queuedTrack.qs(".song-title").innerText;
-    const uploader = queuedTrack.__data?.data?.shortBylineText?.runs[0]?.text || queuedTrack.qs(".byline").innerText;
-    const id = queuedTrack.__data.data.videoId || queuedTrack.qs(".thumbnail img[src]").src.match(/\/vi\/(\w+)\//i)[1];
-    return { title, uploader, id };
+    if (!queuedTrack) {
+        return;
+    }
+    return {
+        id: queuedTrack.__data.data.videoId || queuedTrack.qs(".thumbnail img[src]").src.match(/\/vi\/(\w+)\//i)[1],
+        title: queuedTrack.__data?.data?.title?.runs[0]?.text || queuedTrack.qs(".song-title").innerText,
+        uploader: queuedTrack.__data?.data?.shortBylineText?.runs[0]?.text || queuedTrack.qs(".byline").innerText,
+        duration: queuedTrack.__data?.data?.lengthText?.runs[0]?.text || queuedTrack.qs(".duration").title,
+        channel: queuedTrack.__data?.data?.longBylineText?.runs[0]?.navigationEndpoint?.browseEndpoint?.browseId,
+    };
 }
+
 function openFirstTrackMenu() { queue.xp(".//ytmusic-player-queue-item[1]//button")[0].click(); }
 
 async function removeTrack(queuedTrack) {
@@ -199,9 +258,10 @@ async function removeTrack(queuedTrack) {
         return `"${trkData.title}" removed from queue`;
     }
     catch (err) {
-        console.error("removeTrack:", err);
+        console.warn("removeTrack:", err);
         return;
-    }}
+    }
+}
 
 function addTrackToHistory(/**@type {TrackData}*/ trkData) {
     let history = loadObj(keyHistory) || [];
@@ -222,12 +282,14 @@ function addTrackToHistory(/**@type {TrackData}*/ trkData) {
     catch (err) {
         console.error(err);
     }
-    history.push({
+    const data = {
         ...trkData,
         date: now.toJSON(),
-    });
+    };
+    history.push(data);
     saveObj(keyHistory, history);
     console.log("saved history:", { ...history });
+    sendData('history', data);
 }
 
 function isTrackFavorite(/**@type {TrackData}*/ trkData, likeBtn = null) {
@@ -390,10 +452,27 @@ console.log([xpToastWatchingLiked, xpToastLiked]);
 function urlChanged() {
     wlh = window.location.href;
     
+    playStarted = beeped = false;
     waitForElem(".content-info-wrapper > yt-formatted-string.title").then(playing => {
         watch(playing, { attributeFilter: ["title"] });
         playingTitle = playing;
     });
+    
+    waitForElem('tp-yt-paper-icon-button#play-pause-button').then(button => {
+        watch(button, { attributeFilter: ['title'] });
+        playButton = button;
+        // if (!playButton.onclick) {
+        //     playButton.onclick = onPlayPause;
+        // }
+    });
+    
+    // waitForElem('ytmusic-player-bar .time-info').then(time => {
+    //     watch(time, { characterData: 1, characterDataOldValue: 1, childList: 1 });
+    //     if (false) {
+    //         curTrack = getPlayingTrack();
+    //         curTime = qs('ytmusic-player-bar .time-info')?.textContent;
+    //     }
+    // });
     
     waitForElem("#steering-chips > #chips:not([waiting])", 5000)
     .catch(err => { console.log("no unaltered `#chips` found", err); })
@@ -438,8 +517,10 @@ function urlChanged() {
         if (!trackData.uploader) {
             throw "Couldn't find track uploader";
         }
-        addTrackToHistory(trackData);
-
+        // if (isPlaying()) {
+        //     addTrackToHistory(trackData);
+        // }
+        
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
         if (!likeBtn.onmousedown) {
             likeBtn.onmousedown = (evt) => {
@@ -531,4 +612,10 @@ function urlChanged() {
 
 function check() {
     if (window.location.href != wlh) { urlChanged(); }
+    
+    curTrack = getTrackData(getPlayingTrack());
+    curTime = qs('ytmusic-player-bar .time-info')?.textContent;
+    if (curTime) {
+        curTime = timeToSeconds(curTime.split('/')[0]);
+    }
 }
