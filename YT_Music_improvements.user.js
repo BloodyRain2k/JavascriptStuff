@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.15
+// @version      0.3.7.16
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -9,6 +9,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
+// @connect      192.168.178.26
 // ==/UserScript==
 
 /* Functions:
@@ -137,14 +138,27 @@ beep.volume = 0.01;
 // functions //
 
 function sendData(type, data) {
+    const url = server + `?music=${type}`;
+    console.debug('sending data to server:', url, data);
     GM_xmlhttpRequest({
-        url: server + `?music=${type}`,
+        url,
         method: "POST",
         headers: {
             'content-type': 'application/json',
         },
         data: JSON.stringify(data),
+        onload: resp => {
+            let json = {};
+            try {
+                json = JSON.parse(resp.responseText);
+                console.info('server response:', resp, json);
+            }
+            catch {
+                console.warn('server response not JSON:', resp, resp.responseText);
+            }
+        },
     });
+    console.debug('data should be sent now');
 }
 
 function timeToSeconds(timeStr) {
@@ -186,7 +200,7 @@ function onPlayPause(evt) {
         const trackData = getTrackData(getPlayingTrack());
         if (!trackData) {
             console.debug(`track data not ready yet`);
-            waitForElem(xpPlayingTrack, () => {
+            waitForElem(xpPlayingTrack).then(() => {
                 console.debug(`sending awaited track data`);
                 addTrackToHistory(getTrackData(getPlayingTrack()));
             });
@@ -517,9 +531,8 @@ function urlChanged() {
         if (!trackData.uploader) {
             throw "Couldn't find track uploader";
         }
-        // if (isPlaying()) {
-        //     addTrackToHistory(trackData);
-        // }
+        console.debug('url changed, calling "onPlayPause()"');
+        onPlayPause();
         
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
         if (!likeBtn.onmousedown) {
