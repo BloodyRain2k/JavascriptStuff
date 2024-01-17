@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.15
+// @version      0.3.7.17
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -9,6 +9,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
+// @connect      192.168.178.26
 // ==/UserScript==
 
 /* Functions:
@@ -89,7 +90,14 @@ else {
     console.error("GM_addStyle not available");
 }
 
+let serverAlive = false;
 const server = `http://192.168.178.26:2505/youtube`;
+const cache = {
+    /**@type {{[track_id:string]:Date}}*/
+    history: {},
+    blacklist: {},
+    favorites: {},
+};
 const titleBlacklist = [
     /\[live\]$/i,
 ];
@@ -137,15 +145,58 @@ beep.volume = 0.01;
 // functions //
 
 function sendData(type, data) {
-    GM_xmlhttpRequest({
-        url: server + `?music=${type}`,
-        method: "POST",
-        headers: {
-            'content-type': 'application/json',
-        },
-        data: JSON.stringify(data),
+    return new Promise((resolve, reject) => {
+        const url = server + `?music=${type}`;
+        console.debug('sending data to server:', url, data);
+        GM_xmlhttpRequest({
+            url,
+            method: "POST",
+            headers: {
+                'content-type': 'application/json',
+            },
+            data: JSON.stringify(data),
+            onload: (resp) => {
+                let json = null;
+                try {
+                    json = JSON.parse(resp.responseText);
+                    console.info('server response:', resp, json);
+                }
+                catch {
+                    console.warn('server response not JSON:', resp, resp.responseText);
+                }
+                resolve(json || resp.responseText);
+            },
+            onerror: (resp) => { reject(resp); }
+        });
+        console.debug('data should be sent now');
     });
 }
+sendData('history&age_hours=1').then((resp) => {
+    if (resp.results) {
+        serverAlive = true;
+        console.info('server is alive \\(^.^)/');
+    }
+    else {
+        console.warn('server doesn\'t seem to be alive');
+    }
+});
+
+function fetchHistory() {
+    return sendData(`history&age_hours=${historyLimitHours}`).then((resp) => {
+        for (const res of resp.results || []) {
+            const res_date = new Date(res.datetime);
+            if (!cache.history[res.track_id] || cache.history[res.track_id] < res_date) {
+                cache.history[res.track_id] = res_date;
+            }
+            else {
+                console.debug(`known history entry:`, res);
+            }
+        }
+        
+        return cache.history;
+    });
+}
+
 
 function timeToSeconds(timeStr) {
     let seconds = 0;
@@ -186,7 +237,7 @@ function onPlayPause(evt) {
         const trackData = getTrackData(getPlayingTrack());
         if (!trackData) {
             console.debug(`track data not ready yet`);
-            waitForElem(xpPlayingTrack, () => {
+            waitForElem(xpPlayingTrack).then(() => {
                 console.debug(`sending awaited track data`);
                 addTrackToHistory(getTrackData(getPlayingTrack()));
             });
@@ -217,12 +268,13 @@ function getTrackData(queuedTrack) {
     if (!queuedTrack) {
         return;
     }
+    const data = (queuedTrack.__data || /* queuedTrack.__CE_shadowRoot.templateInfo.nodeList[0].__dataHost */queuedTrack.inst.__data)?.data;
     return {
-        id: queuedTrack.__data.data.videoId || queuedTrack.qs(".thumbnail img[src]").src.match(/\/vi\/(\w+)\//i)[1],
-        title: queuedTrack.__data?.data?.title?.runs[0]?.text || queuedTrack.qs(".song-title").innerText,
-        uploader: queuedTrack.__data?.data?.shortBylineText?.runs[0]?.text || queuedTrack.qs(".byline").innerText,
-        duration: queuedTrack.__data?.data?.lengthText?.runs[0]?.text || queuedTrack.qs(".duration").title,
-        channel: queuedTrack.__data?.data?.longBylineText?.runs[0]?.navigationEndpoint?.browseEndpoint?.browseId,
+        id: data?.videoId || queuedTrack.qs(".thumbnail-overlay").__dataHost.__data.data.videoId,//queuedTrack.qs(".thumbnail img[src]").src.match(/\/vi\/(\w+)\//i)?.[1],
+        title: data?.title?.runs[0]?.text || queuedTrack.qs(".song-title").innerText,
+        uploader: data?.shortBylineText?.runs[0]?.text || queuedTrack.qs(".byline").innerText,
+        duration: data?.lengthText?.runs[0]?.text || queuedTrack.qs(".duration").title,
+        channel: data?.longBylineText?.runs[0]?.navigationEndpoint?.browseEndpoint?.browseId,
     };
 }
 
@@ -238,13 +290,14 @@ async function removeTrack(queuedTrack) {
         
         // console.log("menu:", menu);
         const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//yt-formatted-string[text()='Remove from queue']]", menu);
+        const remData = (remove.__data || remove.inst.__data).data;
         console.warn("remove:", { title: queuedTrack.qs("[title]").title, queuedTrack, data: remove.__data, remove });
-        if (remove.__data.data.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
+        if (remData.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
             queuedTrack.style.backgroundColor = null;
             remove.click();
         }
         else {
-            console.error("queuedTrack changed:", trkData, queuedTrack.__data, remove.__data, remove.__data.data.serviceEndpoint, queuedTrack, remove);
+            console.error("queuedTrack changed:", trkData, queuedTrack.__data || queuedTrack.inst.__data, remData, remData.serviceEndpoint, queuedTrack, remove);
             const menu = remove.xp("ancestor::tp-yt-iron-dropdown[{class='ytmusic-popup-container'}]");
             menu.setAttribute("aria-hidden", true);
             menu.removeAttribute("focus");
@@ -264,32 +317,38 @@ async function removeTrack(queuedTrack) {
 }
 
 function addTrackToHistory(/**@type {TrackData}*/ trkData) {
-    let history = loadObj(keyHistory) || [];
     const now = new Date();
-    // console.log("loaded history:", { ...history });
-    try {
-        history = history.filter(entry => {
-            // console.log(entry);
-            const nameDiff = entry.title != trkData.title;
-            // console.log({ nameDiff });
-            const timeDiff = (now.getTime() - new Date(entry.date).getTime());
-            // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
-            const entryOk = nameDiff && timeDiff < historyDiffLimit;
-            // console.log({ entry, entryOk });
-            return entryOk;
-        });
-    }
-    catch (err) {
-        console.error(err);
-    }
     const data = {
         ...trkData,
         date: now.toJSON(),
     };
-    history.push(data);
-    saveObj(keyHistory, history);
-    console.log("saved history:", { ...history });
-    sendData('history', data);
+    sendData('history', data).then((resp) => {
+        if (resp.status == 200) {
+            return;
+        }
+        console.warn(`could not add track to server history, falling back to storage`);
+        
+        let history = loadObj(keyHistory) || [];
+        // console.log("loaded history:", { ...history });
+        try {
+            history = history.filter(entry => {
+                // console.log(entry);
+                const nameDiff = entry.title != trkData.title;
+                // console.log({ nameDiff });
+                const timeDiff = (now.getTime() - new Date(entry.date).getTime());
+                // console.log({ timeDiff, historyDiffLimit, result: timeDiff < historyDiffLimit});
+                const entryOk = nameDiff && timeDiff < historyDiffLimit;
+                // console.log({ entry, entryOk });
+                return entryOk;
+            });
+        }
+        catch (err) {
+            console.error(err);
+        }
+        history.push(data);
+        saveObj(keyHistory, history);
+        console.log("saved history:", { ...history });
+    });
 }
 
 function isTrackFavorite(/**@type {TrackData}*/ trkData, likeBtn = null) {
@@ -324,6 +383,18 @@ function addTrackToFavorites(/**@type {TrackData}*/ trkData) {
     });
     saveObj(keyFavorites, favorites);
     console.log("saved favorites:", [...favorites]);
+}
+
+function isTrackBlacklisted(/**@type {TrackData}*/ trkData) {
+    
+}
+
+function isTrackRecent(/**@type {TrackData}*/ trkData) {
+    const trkTime = cache.history[trkData.id];
+    if (!trkTime) {
+        return false;
+    }
+    return +new Date() - historyDiffLimit <= +trkTime;
 }
 
 function trimQueue() {
@@ -367,7 +438,8 @@ function trimQueue() {
             // console.log(i, track, data);
             const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
                 || blacklist.some(black => black.title == data.title);
-            if (blacklisted || history.find(entry => entry.title == data.title && entry.uploader == data.uploader)) {
+            const isRecent = isTrackRecent(data)
+            if (blacklisted || isRecent) {
                 if (blacklisted) {
                     console.log(`removing track '${data.title}' because it's blacklisted`, { data, trackQueue });
                 }
@@ -451,8 +523,10 @@ console.log([xpToastWatchingLiked, xpToastLiked]);
 
 function urlChanged() {
     wlh = window.location.href;
-    
     playStarted = beeped = false;
+    
+    fetchHistory().then(hist => console.debug('fetched history:', hist));
+    
     waitForElem(".content-info-wrapper > yt-formatted-string.title").then(playing => {
         watch(playing, { attributeFilter: ["title"] });
         playingTitle = playing;
@@ -517,9 +591,8 @@ function urlChanged() {
         if (!trackData.uploader) {
             throw "Couldn't find track uploader";
         }
-        // if (isPlaying()) {
-        //     addTrackToHistory(trackData);
-        // }
+        console.debug('url changed, calling "onPlayPause()"');
+        onPlayPause();
         
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
         if (!likeBtn.onmousedown) {
