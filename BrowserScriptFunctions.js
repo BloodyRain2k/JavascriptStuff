@@ -50,6 +50,7 @@ let wlh, checkId = window.setInterval(check, 500);
 
 /// < functions > ///
 
+observers.push(newObserver(onMutation));
 function onMutation(mutations, observer) {
     console.log(mutations, observer); // remove this as soon as possible as it can cause memory leaking
 }
