@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.17
+// @version      0.3.7.18
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -140,7 +140,7 @@ const beep = new Audio(
     + "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAU291bmRib3kuZGUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMjAwNGh0dHA6Ly93d3cuc291bmRib3kuZGUAAAAAAAAAACU="
 );
 // beep.loop = true;
-beep.volume = 0.01;
+beep.volume = 0.001;
 
 // functions //
 
@@ -150,9 +150,9 @@ function sendData(type, data) {
         console.debug('sending data to server:', url, data);
         GM_xmlhttpRequest({
             url,
-            method: "POST",
+            method: data ? "POST" : "GET",
             headers: {
-                'content-type': 'application/json',
+                'content-type': data ? 'application/json' : undefined,
             },
             data: JSON.stringify(data),
             onload: (resp) => {
@@ -181,7 +181,7 @@ sendData('history&age_hours=1').then((resp) => {
     }
 });
 
-function fetchHistory() {
+async function fetchHistory() {
     return sendData(`history&age_hours=${historyLimitHours}`).then((resp) => {
         for (const res of resp.results || []) {
             const res_date = new Date(res.datetime);
@@ -189,7 +189,7 @@ function fetchHistory() {
                 cache.history[res.track_id] = res_date;
             }
             else {
-                console.debug(`known history entry:`, res);
+                // console.debug(`known history entry:`, res);
             }
         }
         
@@ -323,7 +323,7 @@ function addTrackToHistory(/**@type {TrackData}*/ trkData) {
         date: now.toJSON(),
     };
     sendData('history', data).then((resp) => {
-        if (resp.status == 200) {
+        if (resp /* .status == 200 */) {
             return;
         }
         console.warn(`could not add track to server history, falling back to storage`);
