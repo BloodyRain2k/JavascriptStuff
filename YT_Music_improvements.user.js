@@ -19,17 +19,33 @@ add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike" (MMB when logged i
 add to favorites:                             Click "Like"    (MMB when logged in)
 */
 
-/** @returns {HTMLElement2} */
+// #region types //
+/**
+ * @typedef TrackData
+ * @type {object}
+ * @property {string} id
+ * @property {string} title
+ * @property {string} uploader
+ * @property {string} channel
+ */
+
+/**
+ * @typedef QueryElement
+ * @type {object}
+ * @property {(selector:string) => (HTMLElement & QueryElement)} qs
+ * @property {(selector:string) => (HTMLElement & QueryElement)[]} qsa
+ * @property {(selector:string) => (HTMLElement & QueryElement)[]} xp
+ */
+// #endregion types //
+
+/** @returns {HTMLElement & QueryElement | undefined} */
 function addSelectors(elem) { if (!elem) return; elem.xp = (sel) => xp(sel, elem); elem.qsa = (sel) => qsa(sel, elem); elem.qs = (sel) => qs(sel, elem); return elem; };
-/** @-returns {HTMLElement[]} */
 function xp(selector, root) { let result = [], elems, sel = selector.replace(/\{@?([\w-_]+)=['"]?([^}]+?)['"]?\}/g, "contains(concat(' ',normalize-space(@$1),' '),' $2 ')"); try { elems = document.evaluate(sel,
     root || document.body || document, null, XPathResult.ANY_TYPE, null); } catch (ex) { console.error("xp exception:", { ex, selector, sel }); return; }; // class match: `{class=<className>}`
     while (!elems.invalidIteratorState) { let elem = elems.iterateNext(); if (elem == null) { break; } result.push(addSelectors(elem)); } return result; }
-/** @-returns {HTMLElement[]} */
 function qsa(selector, root) { return Array.from((root || document.body || document).querySelectorAll(selector)).map(elm => addSelectors(elm)); }
-/** @-returns {HTMLElement} */
 function qs(selector, root) { return addSelectors(selector.search(/^\/|^\.\//) == -1 ? (root || document.body || document).querySelector(selector) : xp(selector, root)[0]); }
-/** @returns {Promise<HTMLElement2>} */
+/** @returns {Promise<HTMLElement & QueryElement>} */
 function waitForElem(selector, root, timeout = 15000) { if (typeof(root) == "number") { timeout = root; root = null; }; root ??= document.body || document; let observer, timeoutId = -1;
     const promise = new Promise((resolve, reject) => { let elem = qs(selector, root); if (elem) { return resolve(elem); }; observer = new MutationObserver(() => {
     let obsElem = qs(selector, root); if (obsElem) { window.clearTimeout(timeoutId); observer.disconnect(); resolve(obsElem); }; });
@@ -61,25 +77,6 @@ function getHttp(obj, async = true) { var http = new XMLHttpRequest(); http.open
 
 function openNewTab(url){ if (!url.startsWith("http")) { url = "https://" + url; }; let a = document.createElement("a"); a.href = url; let evt = document.createEvent("MouseEvents");
     evt.initMouseEvent("click", true, true, this, 0, 0, 0, 0, 0, true, false, false, false, 0, null); document.body.appendChild(a); a.dispatchEvent(evt); document.body.removeChild(a); }
-
-// #region types //
-/**
- * @typedef TrackData
- * @type {object}
- * @property {string} id
- * @property {string} title
- * @property {string} uploader
- * @property {string} channel
- */
-
-/**
- * @typedef HTMLElement2
- * @type {object && HTMLElement}
- * @property {(selector:string) => HTMLElement2} qs
- * @property {(selector:string) => HTMLElement2[]} qsa
- * @property {(selector:string) => HTMLElement2[]} xp
- */
-// #endregion types //
 
 // variables //
 
@@ -113,7 +110,7 @@ const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='ite
 const xpTrackQueue = "ancestor::*[{class='ytmusic-player-queue'}]";
 
 let wlh, checkId = window.setInterval(check, 500);
-let /**@type {HTMLElement2}*/queue, /**@type {HTMLElement2}*/playingTitle, beeped = false, trimPromise;
+let /**@type {QueryElement}*/queue, /**@type {QueryElement}*/playingTitle, beeped = false, trimPromise;
 let curTrack, curTime, playButton, playStarted = false;
 
 const beep = new Audio(
