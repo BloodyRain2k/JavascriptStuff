@@ -172,7 +172,7 @@ function sendData(type, data) {
     });
 }
 sendData('history&age_hours=1').then((resp) => {
-    if (resp.results) {
+    if (resp.rows) {
         serverAlive = true;
         console.info('server is alive \\(^.^)/');
     }
@@ -183,7 +183,8 @@ sendData('history&age_hours=1').then((resp) => {
 
 async function fetchHistory() {
     return sendData(`history&age_hours=${historyLimitHours}`).then((resp) => {
-        for (const res of resp.results || []) {
+        if (resp.rows) {
+            for (const res of resp.rows || []) {
             const res_date = new Date(res.datetime);
             if (!cache.history[res.track_id] || cache.history[res.track_id] < res_date) {
                 cache.history[res.track_id] = res_date;
@@ -192,8 +193,25 @@ async function fetchHistory() {
                 // console.debug(`known history entry:`, res);
             }
         }
-        
+        }
         return cache.history;
+    });
+}
+
+async function fetchBlacklist() {
+    return sendData(`blacklist`).then((resp) => {
+        if (resp.rows) {
+            for (const res of resp.rows || []) {
+                const res_date = new Date(res.datetime);
+                if (!cache.blacklist[res.track_id] || cache.blacklist[res.track_id] < res_date) {
+                    cache.blacklist[res.track_id] = res_date;
+                }
+                else {
+                    // console.debug(`known blacklist entry:`, res);
+                }
+            }
+        }
+        return cache.blacklist;
     });
 }
 
@@ -352,10 +370,11 @@ function addTrackToHistory(/**@type {TrackData}*/ trkData) {
 }
 
 function isTrackFavorite(/**@type {TrackData}*/ trkData, likeBtn = null) {
-    const favorites = loadObj(keyFavorites) || [];
+    // const favorites = loadObj(keyFavorites) || [];
     // console.debug("favorites:", [...favorites]);
     
-    if (favorites.some(fav => fav.title == trkData.title && fav.uploader == trkData.uploader)) {
+    // if (favorites.some(fav => fav.title == trkData.title && fav.uploader == trkData.uploader)) {
+    if (cache.favorites[trkData.id]) {
         // if (likeBtn) {
         //     likeBtn.firstChild.style.color = "#8f2";
         // }
@@ -386,15 +405,27 @@ function addTrackToFavorites(/**@type {TrackData}*/ trkData) {
 }
 
 function isTrackBlacklisted(/**@type {TrackData}*/ trkData) {
-    
+    return cache.blacklist[trkData.id] || titleBlacklist.some(tb => trkData.title.search(tb) > -1);
 }
+window.isTrackBlacklisted = isTrackBlacklisted;
+    
+async function addTrackToBlacklist(/**@type {TrackData}*/ trkData) {
+    const resp = await (sendData(`blacklist`, { id: trkData.id }));
+    if (resp.rows) {
+        console.debug(`added "${trkData.id}" to blacklist:`, resp, trkData);
+        return true;
+}
+    console.debug(`failed to add "${trkData.id}" to blacklist:`, resp, trkData);
+    return false;
+}
+window.addTrackToBlacklist = addTrackToBlacklist;
 
 function isTrackRecent(/**@type {TrackData}*/ trkData) {
     const trkTime = cache.history[trkData.id];
     if (!trkTime) {
         return false;
     }
-    return +new Date() - historyDiffLimit <= +trkTime;
+    return new Date().getTime() - historyDiffLimit <= trkTime.getTime();
 }
 
 function trimQueue() {
@@ -405,7 +436,7 @@ function trimQueue() {
 
     trimPromise = waitForElem(xpPlayingTrack, queue)
     .then(playing => {
-        const history = loadObj(keyHistory) || [];
+        // const history = loadObj(keyHistory) || [];
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index + 1, "/", tracks.length);
@@ -415,7 +446,7 @@ function trimQueue() {
                 // .then(() => { wait(() => trimQueue(), 20); });
         }
         const automix = queue.qs("#automix-contents")?.children?.length > 0;
-        const blacklist = loadObj(keyBlacklist) || [];
+        // const blacklist = loadObj(keyBlacklist) || [];
         // console.debug("blacklist:", blacklist);
         const handlers = [];
         for (let i = index + 1; i < tracks.length; i++) {
@@ -436,9 +467,10 @@ function trimQueue() {
                 continue;
             }
             // console.log(i, track, data);
-            const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
-                || blacklist.some(black => black.title == data.title);
-            const isRecent = isTrackRecent(data)
+            // const blacklisted = titleBlacklist.some(black => data.title.search(black) > -1)
+            //     || blacklist.some(black => black.title == data.title);
+            const blacklisted = isTrackBlacklisted(data);
+            const isRecent = isTrackRecent(data);
             if (blacklisted || isRecent) {
                 if (blacklisted) {
                     console.log(`removing track '${data.title}' because it's blacklisted`, { data, trackQueue });
@@ -526,6 +558,7 @@ function urlChanged() {
     playStarted = beeped = false;
     
     fetchHistory().then(hist => console.debug('fetched history:', hist));
+    fetchBlacklist().then(blk => console.debug('fetched blacklist:', blk));
     
     waitForElem(".content-info-wrapper > yt-formatted-string.title").then(playing => {
         watch(playing, { attributeFilter: ["title"] });
@@ -677,7 +710,7 @@ function urlChanged() {
         waitForElem("#automix-contents ytmusic-player-queue-item", 2000)
         .catch(() => null)
         .then(automix => {
-            // console.log("automix:", automix);
+            console.log("automix:", automix);
             trimQueue();
         });
     });
