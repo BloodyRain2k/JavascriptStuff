@@ -1,0 +1,2545 @@
+{
+    "TrackHistory": [
+        {
+            "date": "2024-01-10T12:51:03.432Z"
+        },
+        {
+            "date": "2024-01-10T12:54:42.966Z"
+        },
+        {
+            "date": "2024-01-10T12:55:01.209Z"
+        },
+        {
+            "date": "2024-01-10T12:55:19.554Z"
+        },
+        {
+            "id": "kkQShmagS5Y",
+            "title": "Leon Bait & Nextec - Monument",
+            "uploader": "Inverse Network",
+            "duration": "5:21",
+            "channel": "UCPmJem1kVMOWAWxjP656cXA",
+            "date": "2024-01-10T12:58:50.527Z"
+        },
+        {
+            "id": "iv7ZJecuu_o",
+            "title": "The Floor Is Lava",
+            "uploader": "NIVIRO",
+            "duration": "3:16",
+            "channel": "UCjRO9W6_wQ2GOpBcdIBd69A",
+            "date": "2024-01-10T13:00:19.683Z"
+        },
+        {
+            "id": "aHOsKE_ss4M",
+            "title": "Wellerman (Electro Swing Mix)",
+            "uploader": "Betty Booom & Ashley Slater",
+            "duration": "2:19",
+            "channel": "UC9yxF18wFoKtxtGZjp2XeWA",
+            "date": "2024-01-10T13:01:33.945Z"
+        },
+        {
+            "id": "WBYeMKIlPEE",
+            "title": "Twitch (feat. Rosie Rascal)",
+            "uploader": "Jamie Berry",
+            "duration": "4:02",
+            "channel": "UCc0ZE8i7KzmnjKVGblJQcMw",
+            "date": "2024-01-10T13:03:53.520Z"
+        },
+        {
+            "id": "LDU_Txk06tM",
+            "title": "Noisestorm - Crab Rave [Monstercat Release]",
+            "uploader": "Noisestorm",
+            "duration": "3:13",
+            "channel": "UCCGQt305S2VauVjcZzzvwVA",
+            "date": "2024-01-10T13:07:58.077Z"
+        },
+        {
+            "id": "W9P_qUnMaFg",
+            "title": "Dynoro & Gigi D’Agostino - In My Mind",
+            "uploader": "Chill Nation",
+            "duration": "3:05",
+            "channel": "UCM9KEEuzacwVlkt9JfJad7g",
+            "date": "2024-01-10T13:09:27.317Z"
+        },
+        {
+            "id": "3AnkfFcYxTw",
+            "title": "Butterfly (Lyrics Video)",
+            "uploader": "Marnik & Hard Lights",
+            "duration": "2:51",
+            "channel": "UCPNOl2MlSyCWfdLCgWT0oFQ",
+            "date": "2024-01-10T13:09:43.779Z"
+        },
+        {
+            "id": "THNUuxQc73k",
+            "title": "Hole in the Roof",
+            "uploader": "AronChupa & Little Sis Nora",
+            "duration": "5:30",
+            "channel": "UCHW9w44XJV_TEgKCga1TB6Q",
+            "date": "2024-01-10T13:12:03.021Z"
+        },
+        {
+            "id": "jIoEaTN7GGo",
+            "title": "Breaking Me (feat. A7S)",
+            "uploader": "A7S",
+            "duration": "2:47",
+            "channel": "UCCYWdNyfAC-nx2XxFvL-T4Q",
+            "date": "2024-01-10T13:12:38.549Z"
+        },
+        {
+            "id": "tqOHiDKPxe0",
+            "title": "Seesaw",
+            "uploader": "Ümmet Özcan",
+            "duration": "3:05",
+            "channel": "UCiEcXaxTBoB_KE_WlXwPppA",
+            "date": "2024-01-10T13:12:47.864Z"
+        },
+        {
+            "date": "2024-01-11T09:56:47.693Z"
+        }
+    ],
+    "TrackBlacklist": [
+        {
+            "title": "Careless Whisper / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "3CMLK7p9j4U",
+            "date": "2023-07-07T13:45:56.806Z"
+        },
+        {
+            "title": "September / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "3RcGCRTD7sA",
+            "date": "2023-07-07T14:15:48.615Z"
+        },
+        {
+            "title": "Chicken Attack - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "EBtwX1Jgopk",
+            "date": "2023-07-10T07:17:39.882Z"
+        },
+        {
+            "title": "Party Rock Apple!! - LMFAO vs. Alstroemeria Records",
+            "uploader": "Triple-Q",
+            "id": "4u2nNWgnXxA",
+            "date": "2023-07-10T10:00:57.885Z"
+        },
+        {
+            "title": "Livin' On A Prayer - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "4EcLMx_n7e0",
+            "date": "2023-07-10T10:09:12.261Z"
+        },
+        {
+            "title": "Pokemon Platinum - Vs Giratina [Remix]",
+            "uploader": "VanilluxePavilion",
+            "id": "Vc2sPdPyyrs",
+            "date": "2023-07-10T10:23:47.412Z"
+        },
+        {
+            "title": "MTC - S3RL feat Jodie",
+            "uploader": "Desuvi Music",
+            "id": "m38g4L1U0rc",
+            "date": "2023-07-10T10:24:56.716Z"
+        },
+        {
+            "title": "Rasputin - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "FfKtD7TkYJo",
+            "date": "2023-07-10T10:33:37.107Z"
+        },
+        {
+            "title": "What Is Love - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "WwjqFMsnY5o",
+            "date": "2023-07-10T11:34:55.744Z"
+        },
+        {
+            "title": "Kiss to kiss - Mako",
+            "uploader": "Redline Music",
+            "id": "jYVg_VKmLdg",
+            "date": "2023-07-10T12:10:50.254Z"
+        },
+        {
+            "title": "Säkkijärven Polkka / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "fxx5p8KnZ3w",
+            "date": "2023-07-10T12:26:15.006Z"
+        },
+        {
+            "title": "Tokyo Drift / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "JE2ixx7DTaw",
+            "date": "2023-07-10T12:47:23.854Z"
+        },
+        {
+            "title": "Fukkireta / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "_tH14esvT9k",
+            "date": "2023-07-10T12:47:33.300Z"
+        },
+        {
+            "title": "Lost Odyssey Soundtrack: Howl of The Departed (Final Boss)",
+            "uploader": "VGWguy",
+            "id": "9vbsI9xFuo8",
+            "date": "2023-07-11T07:57:40.743Z"
+        },
+        {
+            "title": "Ronald McDonald insanity",
+            "uploader": "mrhorseshoe",
+            "id": "Q16KpquGsIc",
+            "date": "2023-07-11T07:57:57.573Z"
+        },
+        {
+            "title": "WE ARE 共産党 (Kyosanto)! - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "68MHvOuD3Zs",
+            "date": "2023-07-11T08:04:42.534Z"
+        },
+        {
+            "title": "I Wanna Muchuu / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "BmIkExtFEaQ",
+            "date": "2023-07-11T09:51:08.131Z"
+        },
+        {
+            "title": "Ain't Nothin' Like A Funky Meme (Instrumental)",
+            "uploader": "Pluffaduff",
+            "id": "1xo-bNtNnAI",
+            "date": "2023-07-11T10:00:56.492Z"
+        },
+        {
+            "title": "Chika Dance / Eurobeat Remix",
+            "uploader": "Keisari Eurobeat",
+            "id": "djyOaxBE37A",
+            "date": "2023-07-11T10:10:07.405Z"
+        },
+        {
+            "title": "Jet Set Radio Future - Funky Dealer",
+            "uploader": "Dave Classique",
+            "id": "HSZIej-ZraE",
+            "date": "2023-07-11T10:33:17.556Z"
+        },
+        {
+            "title": "Master Of Puppets - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "x2gvA-1_-Z4",
+            "date": "2023-07-11T10:40:10.042Z"
+        },
+        {
+            "title": "Rebel Yell / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "noCUDLkjUQ4",
+            "date": "2023-07-11T11:24:42.757Z"
+        },
+        {
+            "title": "[DJMAX TECHNIKA3 super nova (extended)",
+            "uploader": "krrcurte1358",
+            "id": "1oJJD_cZX08",
+            "date": "2023-07-11T11:35:51.476Z"
+        },
+        {
+            "title": "Secret Laboratory - Master Detective Archives: RAIN CODE OST",
+            "uploader": "Beebus",
+            "id": "3rNxUGuZQ2k",
+            "date": "2023-07-12T09:44:01.764Z"
+        },
+        {
+            "title": "Friends",
+            "uploader": "Scooter",
+            "id": "Fh9PFwn6P7I",
+            "date": "2023-07-12T10:35:43.700Z"
+        },
+        {
+            "title": "DEEP ROAR (Extended Mix) [M.S Edit]／NAOKI & Tatsh",
+            "uploader": "Moon Santa - Music",
+            "id": "zNSpLHqvN88",
+            "date": "2023-07-12T10:35:50.027Z"
+        },
+        {
+            "title": "Maniac / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "50BhOnyQ4C4",
+            "date": "2023-07-12T11:23:41.531Z"
+        },
+        {
+            "title": "Pokémon B2/W2 - Colress Battle Music (HQ)",
+            "uploader": "Pokeli",
+            "id": "2FN2EfesYR0",
+            "date": "2023-07-12T11:42:38.956Z"
+        },
+        {
+            "title": "Miku Miku Ni Shiteageru Eurobeat Mix",
+            "uploader": "aquatrickstar",
+            "id": "A94A8wEjjDk",
+            "date": "2023-07-12T12:11:02.644Z"
+        },
+        {
+            "title": "Maneater / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "5QeoE4MAFQU",
+            "date": "2023-07-12T12:28:41.819Z"
+        },
+        {
+            "title": "KAEDO x Monsters Everywhere x Aaron Steel - My Enemy",
+            "uploader": "Mikoryn",
+            "id": "1N99GTBkGlo",
+            "date": "2023-07-12T13:00:50.347Z"
+        },
+        {
+            "title": "DOGU TECHNO 「Dogu Ditty」",
+            "uploader": "TeirusuFX",
+            "id": "6oikUixAJHI",
+            "date": "2023-07-12T13:01:34.139Z"
+        },
+        {
+            "title": "Crazy Train / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "gjCv6hEp_jI",
+            "date": "2023-07-12T13:37:39.397Z"
+        },
+        {
+            "title": "Danger Zone - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "gHU8P4pbvSk",
+            "date": "2023-07-12T13:50:08.298Z"
+        },
+        {
+            "title": "Dude (Looks Like a Lady) / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "H4qWKK1yxIE",
+            "date": "2023-07-13T08:29:29.832Z"
+        },
+        {
+            "title": "Peaches - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "5vBydwnO7lM",
+            "date": "2023-07-13T08:47:56.497Z"
+        },
+        {
+            "title": "When the rune sparkles in September / Eurobeat Remix",
+            "uploader": "Not Deoxide",
+            "id": "5YLrgUeOhGU",
+            "date": "2023-07-13T09:17:12.632Z"
+        },
+        {
+            "title": "Sweet Child Of Mine - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "eGlRwWA9H_k",
+            "date": "2023-07-13T09:52:42.170Z"
+        },
+        {
+            "title": "Camel By Camel - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "Eg506bdCMBg",
+            "date": "2023-07-13T10:19:39.873Z"
+        },
+        {
+            "title": "Thunderstruck (Official Video)",
+            "uploader": "AC/DC",
+            "id": "v2AC41dglnM",
+            "date": "2023-07-13T10:32:38.355Z"
+        },
+        {
+            "title": "Take On Me",
+            "uploader": "A-ha",
+            "id": "djV11Xbc914",
+            "date": "2023-07-13T10:33:18.274Z"
+        },
+        {
+            "title": "What Is Love",
+            "uploader": "Haddaway",
+            "id": "HEXWRTEbj1I",
+            "date": "2023-07-13T10:33:23.873Z"
+        },
+        {
+            "title": "I'm Still Here",
+            "uploader": "Kate Winton",
+            "id": "Kaj1I0F0HnU",
+            "date": "2023-07-13T11:22:45.603Z"
+        },
+        {
+            "title": "Free Bird - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "xTemcPZw8Eo",
+            "date": "2023-07-13T12:35:05.511Z"
+        },
+        {
+            "title": "The Top",
+            "uploader": "Ken Blast",
+            "id": "aPI7ZeOGckQ",
+            "date": "2023-07-13T12:41:12.570Z"
+        },
+        {
+            "title": "Feel Good Inc.",
+            "uploader": "Gorillaz",
+            "id": "HyHNuVaZJ-k",
+            "date": "2023-07-13T13:33:01.343Z"
+        },
+        {
+            "title": "The Devil Went Down To Georgia - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "avGfStltLbc",
+            "date": "2023-07-13T13:46:47.972Z"
+        },
+        {
+            "title": "Can't Hold Us (feat. Ray Dalton)",
+            "uploader": "Macklemore & Ryan Lewis",
+            "id": "2zNSgSzhBfM",
+            "date": "2023-07-13T14:12:59.390Z"
+        },
+        {
+            "title": "Chop Suey! (Official HD Video)",
+            "uploader": "System Of A Down",
+            "id": "CSvFpBOe8eY",
+            "date": "2023-07-13T14:13:56.932Z"
+        },
+        {
+            "title": "Legends Never Die (feat. Against The Current)",
+            "uploader": "League of Legends",
+            "id": "R4hDcd9fzRk",
+            "date": "2023-07-14T08:43:27.672Z"
+        },
+        {
+            "title": "Chop Suey!",
+            "uploader": "System Of A Down",
+            "id": "MlcJQYON2Go",
+            "date": "2023-07-14T08:43:53.015Z"
+        },
+        {
+            "title": "I’m Here (feat. Merry Kirk-Holmes)",
+            "uploader": "SEGA & Tomoya Ohtani",
+            "id": "mUJS9ystZlc",
+            "date": "2023-07-14T11:10:29.642Z"
+        },
+        {
+            "title": "The Rumbling",
+            "uploader": "SiM",
+            "id": "qpHvj5pvvhg",
+            "date": "2023-07-14T13:28:41.056Z"
+        },
+        {
+            "title": "KICK BACK",
+            "uploader": "Kenshi Yonezu",
+            "id": "NMA_isZYsYQ",
+            "date": "2023-07-17T07:58:56.204Z"
+        },
+        {
+            "title": "115",
+            "uploader": "Treyarch Sound",
+            "id": "-B19u9tHnIs",
+            "date": "2023-07-17T08:02:36.619Z"
+        },
+        {
+            "title": "Crushing Thirties (feat. Johnny Gioeli)",
+            "uploader": "The Chalkeaters",
+            "id": "_M-h1fC6EuQ",
+            "date": "2023-07-17T08:05:04.458Z"
+        },
+        {
+            "title": "Animal I Have Become",
+            "uploader": "Three Days Grace",
+            "id": "-T3jhVhNZKE",
+            "date": "2023-07-17T13:05:58.278Z"
+        },
+        {
+            "title": "99.9",
+            "uploader": "MOB CHOIR feat. sajou no hana",
+            "id": "GiwpMw_Up_Y",
+            "date": "2023-07-17T13:06:10.533Z"
+        },
+        {
+            "title": "Undefeatable (Sonic Frontiers Giganto Boss Battle Theme)",
+            "uploader": "LongestSoloEver",
+            "id": "W2ZUXcQoRbI",
+            "date": "2023-07-17T13:34:32.119Z"
+        },
+        {
+            "title": "Before my body is dry",
+            "uploader": "Hiroyuki Sawano",
+            "id": "lw1tagE88v4",
+            "date": "2023-07-17T13:48:59.979Z"
+        },
+        {
+            "title": "Enemy",
+            "uploader": "Our Last Night",
+            "id": "GpzKI-xwlaQ",
+            "date": "2023-07-18T10:47:57.728Z"
+        },
+        {
+            "title": "Crimson Cloud",
+            "uploader": "Jeff Rona",
+            "id": "hAKr5Ew4SU8",
+            "date": "2023-07-18T11:22:59.799Z"
+        },
+        {
+            "title": "Sonic Forces OST - Theme of Infinite",
+            "uploader": "Sonic the Hedgehog",
+            "id": "XKjOJuPjiu4",
+            "date": "2023-07-18T11:27:29.607Z"
+        },
+        {
+            "title": "SHITNO (feat. Saster & Adam McHummus)",
+            "uploader": "TheInnuendo",
+            "id": "zCZgvbvwIBc",
+            "date": "2023-07-18T12:03:14.848Z"
+        },
+        {
+            "title": "Berserk - My Brother (Extended) (Definitive Version)",
+            "uploader": "Unseen Phantom",
+            "id": "lBdnti4_UUg",
+            "date": "2023-07-19T08:10:14.125Z"
+        },
+        {
+            "title": "District 3.0",
+            "uploader": "Exchangeling",
+            "id": "VwozAVQOrPk",
+            "date": "2023-07-19T08:20:55.663Z"
+        },
+        {
+            "title": "Sweet Child O' Mine Version 2 Black And White",
+            "uploader": "Guns N' Roses",
+            "id": "1w7OgIMMRc4",
+            "date": "2023-07-19T08:34:00.551Z"
+        },
+        {
+            "title": "LoFi Hip Hop (Animal Crossing) ~ Dj CUTMAN - Past My Bedtime (ACNL 11PM Remix) - GameChops Spotlight",
+            "uploader": "Dj CUTMAN",
+            "id": "uDA_vBTaq5g",
+            "date": "2023-07-19T08:34:06.854Z"
+        },
+        {
+            "title": "JUST COMMUNICATION",
+            "uploader": "TWO-MIX",
+            "id": "9RwxXS7G_Qc",
+            "date": "2023-07-19T08:41:38.031Z"
+        },
+        {
+            "title": "Another Day",
+            "uploader": "Buckshot LeFonque",
+            "id": "qOeZWjSZC8U",
+            "date": "2023-07-19T10:07:05.650Z"
+        },
+        {
+            "title": "Wasp X Caroline (Tiktok Remix) killa west side killa",
+            "uploader": "GenuineLyrics",
+            "id": "6aE1-EB2UCA",
+            "date": "2023-07-19T10:07:12.606Z"
+        },
+        {
+            "title": "Cody Matthew Johnson - Subhuman (Lyric Video)",
+            "uploader": "Sadwich",
+            "id": "IEu-KB9dRe8",
+            "date": "2023-07-19T11:32:51.837Z"
+        },
+        {
+            "title": "Kiss Me More (Official Video) (feat. SZA)",
+            "uploader": "Doja Cat",
+            "id": "0EVVKs6DQLo",
+            "date": "2023-07-19T13:12:16.085Z"
+        },
+        {
+            "title": "No More Heroes 2 - It's Kill or Be Killed ~ Destroy Resort",
+            "uploader": "Dramacard",
+            "id": "q-V8htEtAYI",
+            "date": "2023-07-19T13:18:50.167Z"
+        },
+        {
+            "title": "Skyrocket",
+            "uploader": "LOLNEIN",
+            "id": "0Gs8uuLpUQs",
+            "date": "2023-07-19T13:55:07.328Z"
+        },
+        {
+            "title": "頭文字Ｄ　Maybe Tonight 佐藤真子　沙雪Ver",
+            "uploader": "いさみんチャンネル",
+            "id": "V8ljzAGUM8E",
+            "date": "2023-07-20T07:59:53.177Z"
+        },
+        {
+            "title": "Initial D - I Wanna be the Night",
+            "uploader": "Pretty ok",
+            "id": "Kqkdzh9rKNI",
+            "date": "2023-07-20T08:48:23.117Z"
+        },
+        {
+            "title": "D6 AA BGM Queen Of Mean",
+            "uploader": "Mr51520",
+            "id": "lCGNFFwdJUw",
+            "date": "2023-07-20T09:45:13.351Z"
+        },
+        {
+            "title": "KICK BACK / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "MjKe-g33mzE",
+            "date": "2023-07-20T12:44:57.428Z"
+        },
+        {
+            "title": "Summer of '99",
+            "uploader": "Turbo",
+            "id": "Dj4OfiTj2XI",
+            "date": "2023-07-20T13:07:45.974Z"
+        },
+        {
+            "title": "Out Of Touch - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "KQJigs9V7VQ",
+            "date": "2023-07-21T10:16:58.682Z"
+        },
+        {
+            "title": "Easy Breezy / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "gEa8S-uv3aU",
+            "date": "2023-07-21T10:54:10.108Z"
+        },
+        {
+            "title": "Kemono Friends Mega Mashup Medley!",
+            "uploader": "Triple-Q",
+            "id": "mRSKEcgH9Ck",
+            "date": "2023-07-21T11:19:52.655Z"
+        },
+        {
+            "title": "Witch Doctor / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "l-Egisu_4AA",
+            "date": "2023-07-21T12:42:27.923Z"
+        },
+        {
+            "title": "gmtn (witch's slave) - furioso melodia",
+            "uploader": "DuckyHCMUT",
+            "id": "5kKnrjeDUqw",
+            "date": "2023-07-21T13:09:53.074Z"
+        },
+        {
+            "title": "Crossing Field / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "n8-wN0lc5qk",
+            "date": "2023-07-24T12:21:53.399Z"
+        },
+        {
+            "title": "a-ha - Take On Me [EUROBEAT REMIX]",
+            "uploader": "MAX VECTOR MUSIC",
+            "id": "2V-qwSWWhmc",
+            "date": "2023-07-24T13:25:12.719Z"
+        },
+        {
+            "title": "Ready to",
+            "uploader": "影森みちる(CV:諸星すみれ)",
+            "id": "zn-ixEGR9Mg",
+            "date": "2023-07-24T13:25:21.022Z"
+        },
+        {
+            "title": "BLOODY STREAM",
+            "uploader": "Coda",
+            "id": "uz9NT98_ulk",
+            "date": "2023-07-24T13:25:32.695Z"
+        },
+        {
+            "title": "DADADADADADADADADADA (打打打打打打打打打打) English subtitles",
+            "uploader": "fluffy chouchou",
+            "id": "RawsoZjbHHY",
+            "date": "2023-07-24T14:07:11.956Z"
+        },
+        {
+            "title": "RED HEART",
+            "uploader": "Akai Haato",
+            "id": "pwW2coYoPQs",
+            "date": "2023-07-25T07:33:31.167Z"
+        },
+        {
+            "title": "Calliope Mori - 失礼しますが、RIP♡ (t+pazolite Remix)",
+            "uploader": "t+pazolite",
+            "id": "SxnFUrGY1eA",
+            "date": "2023-07-25T07:54:08.359Z"
+        },
+        {
+            "title": "Nutty / Secret Love 가사&번역【Lyrics/Initial D/Eurobeat/이니셜D/유로비트】",
+            "uploader": "PROJECT.T",
+            "id": "AQM2S8gXB1E",
+            "date": "2023-07-25T08:50:27.245Z"
+        },
+        {
+            "title": "Marko Polo / Speedy Speed Boy 가사&번역【Lyrics/Initial D/Eurobeat/이니셜D/유로비트】",
+            "uploader": "PROJECT.T",
+            "id": "pLzmIvGumAc",
+            "date": "2023-07-25T08:50:39.822Z"
+        },
+        {
+            "title": "Sara / Burning Up For You 가사&번역【Lyrics/Initial D/Eurobeat/이니셜D/유로비트】",
+            "uploader": "PROJECT.T",
+            "id": "qUIGkbYBW7M",
+            "date": "2023-07-25T08:51:00.830Z"
+        },
+        {
+            "title": "Initial D - Secret Love",
+            "uploader": "Pretty ok",
+            "id": "3_5kIzyCY6o",
+            "date": "2023-07-25T09:41:58.388Z"
+        },
+        {
+            "title": "Akon - Right Now (Na Na Na) (Aidan McCrae Bootleg)",
+            "uploader": "Tunes United",
+            "id": "APxMoOfKCAE",
+            "date": "2023-07-25T09:42:06.486Z"
+        },
+        {
+            "title": "Dynoro, Gigi D'Agostino - In My Mind | Letra Ingles & Español",
+            "uploader": "Cøfi",
+            "id": "3IhLCowQu0w",
+            "date": "2023-07-26T07:33:05.744Z"
+        },
+        {
+            "title": "She Swallowed Burning Coals",
+            "uploader": "El Tigr3",
+            "id": "bZKVuOYg6DY",
+            "date": "2023-07-26T08:07:06.158Z"
+        },
+        {
+            "title": "Miss You",
+            "uploader": "Oliver Tree & Robin Schulz",
+            "id": "BX0lKSa_PTk",
+            "date": "2023-07-26T09:49:22.786Z"
+        },
+        {
+            "title": "Don't You Worry Child (feat. John Martin)",
+            "uploader": "Swedish House Mafia",
+            "id": "r1MN4pR5wXM",
+            "date": "2023-07-26T10:48:20.312Z"
+        },
+        {
+            "title": "My Only Chance (LP edit)",
+            "uploader": "The Toxic Avenger",
+            "id": "SeAAi7jWOl8",
+            "date": "2023-07-26T10:52:55.112Z"
+        },
+        {
+            "title": "Hang'Em All",
+            "uploader": "Carpenter Brut",
+            "id": "JXtujxT9rzA",
+            "date": "2023-07-26T11:12:24.280Z"
+        },
+        {
+            "title": "Dimensions (feat. KØNTAGIØN)",
+            "uploader": "Zakkujo",
+            "id": "9i9cY2y9W8c",
+            "date": "2023-07-26T13:04:38.201Z"
+        },
+        {
+            "title": "Watch The World Burn",
+            "uploader": "Falling In Reverse",
+            "id": "xD6p795ji3U",
+            "date": "2023-07-27T07:41:07.303Z"
+        },
+        {
+            "title": "Welcome to the Black Parade",
+            "uploader": "My Chemical Romance",
+            "id": "v_uncMEJkBc",
+            "date": "2023-07-27T09:25:33.875Z"
+        },
+        {
+            "title": "Recover",
+            "uploader": "Comeback Kid",
+            "id": "OmHVxWbcwYc",
+            "date": "2023-07-27T09:50:00.284Z"
+        },
+        {
+            "title": "チカっとチカ千花っ",
+            "uploader": "小原好美",
+            "id": "Qe46yzEcQOo",
+            "date": "2023-07-27T11:24:38.648Z"
+        },
+        {
+            "title": "FINAL BLENDERMAN APPEARED. (feat. RichaadEB)",
+            "uploader": "Camellia",
+            "id": "Wh3RDBfFlnA",
+            "date": "2023-07-27T11:31:53.984Z"
+        },
+        {
+            "title": "Starlight Spada",
+            "uploader": "A-One",
+            "id": "qeXAq21oOD8",
+            "date": "2023-07-28T07:40:08.119Z"
+        },
+        {
+            "title": "///Under Construxion///",
+            "uploader": "Camellia",
+            "id": "X77UqVbytow",
+            "date": "2023-07-28T07:40:53.230Z"
+        },
+        {
+            "title": "Sparkling Daydream",
+            "uploader": "ZAQ",
+            "id": "ceMVXr9puYk",
+            "date": "2023-07-28T07:48:17.144Z"
+        },
+        {
+            "title": "Battle! World Architect: Cyclone",
+            "uploader": "The Zame",
+            "id": "saoaOZo56yc",
+            "date": "2023-07-28T07:53:56.264Z"
+        },
+        {
+            "title": "SPEED MAN",
+            "uploader": "DAVE SIMON",
+            "id": "NttO6jjka6s",
+            "date": "2023-07-28T08:21:51.792Z"
+        },
+        {
+            "title": "Initial D - Night Trip",
+            "uploader": "Pretty ok",
+            "id": "BXsRaDCszlo",
+            "date": "2023-07-28T08:40:56.864Z"
+        },
+        {
+            "title": "Fortunate Son / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "KtJ79ZjJ3lM",
+            "date": "2023-07-28T08:41:05.728Z"
+        },
+        {
+            "title": "Spitfire (Extended Version)",
+            "uploader": "Go2",
+            "id": "1vwsS6CR4aY",
+            "date": "2023-07-28T08:49:33.872Z"
+        },
+        {
+            "title": "Boom Boom",
+            "uploader": "Paul Lekakis",
+            "id": "RSL0y5B6-I0",
+            "date": "2023-07-31T09:35:36.881Z"
+        },
+        {
+            "title": "Chase / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "jZPMtyvL0fw",
+            "date": "2023-07-31T10:53:40.975Z"
+        },
+        {
+            "title": "Astronomia / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "sR8c3ugaSKM",
+            "date": "2023-07-31T11:01:11.670Z"
+        },
+        {
+            "title": "Hige Driver join. SELEN - 打打打打打打打打打打 [Dadadadadadadadadada]",
+            "uploader": "Rin :3",
+            "id": "7p5tWONPBp0",
+            "date": "2023-07-31T13:09:53.485Z"
+        },
+        {
+            "title": "Boarder 70 (Somethin' Jazzy for Your Mind Mix)",
+            "uploader": "SEGA / Hideki Naganuma",
+            "id": "AjEM9gAOGnM",
+            "date": "2023-08-01T10:52:31.379Z"
+        },
+        {
+            "title": "Brainstab",
+            "uploader": "Epsyle",
+            "id": "uZVLJkBLhEM",
+            "date": "2023-08-01T12:59:17.355Z"
+        },
+        {
+            "title": "microchip",
+            "uploader": "Oliver Buckland",
+            "id": "R5YOY8Jtgnc",
+            "date": "2023-08-01T13:29:24.315Z"
+        },
+        {
+            "title": "You Want Gnomes (feat. Chris Nordgren)",
+            "uploader": "Foreign Gnomes",
+            "id": "icbKvWipQrY",
+            "date": "2023-08-01T13:41:12.651Z"
+        },
+        {
+            "title": "Your Body (Cat Dealers Extended) (feat. Michael Marshall)",
+            "uploader": "Tom Novy",
+            "id": "jRBgZdN1yUw",
+            "date": "2023-08-02T11:34:14.786Z"
+        },
+        {
+            "title": "Dancin (Krono remix) (feat. Luvli)",
+            "uploader": "Aaron Smith",
+            "id": "0XFudmaObLI",
+            "date": "2023-08-02T11:58:01.914Z"
+        },
+        {
+            "title": "Miracle",
+            "uploader": "Calvin Harris & Ellie Goulding",
+            "id": "961v0E3b01g",
+            "date": "2023-08-02T12:00:17.097Z"
+        },
+        {
+            "title": "LADY GAGA X MADONNA - HUNG UP ON MARY (ALTÉGO MIX) | TIKTOK WEDNESDAY ADDAMS SOUND",
+            "uploader": "ALTÉGO",
+            "id": "L-Tq6143i64",
+            "date": "2023-08-02T12:04:44.555Z"
+        },
+        {
+            "title": "Praise The Lord x Push Up | Full Version | Aviral Kapasia",
+            "uploader": "Aviral kapasia",
+            "id": "JPwGz2uAkMQ",
+            "date": "2023-08-02T12:09:47.569Z"
+        },
+        {
+            "title": "Erikootsa - All Around The World (La La La) (Hardstyle Remix) |HQ Videoclip|",
+            "uploader": "Erikootsa",
+            "id": "V_eEo6T9GK8",
+            "date": "2023-08-02T12:18:20.833Z"
+        },
+        {
+            "title": "Hotel California",
+            "uploader": "Eagles",
+            "id": "BciS5krYL80",
+            "date": "2023-08-02T12:27:01.385Z"
+        },
+        {
+            "title": "Dance Monkey",
+            "uploader": "Tones And I",
+            "id": "q0hyYWKXF0Q",
+            "date": "2023-08-02T12:45:50.441Z"
+        },
+        {
+            "title": "Dansið Eða Deyið",
+            "uploader": "Hatari",
+            "id": "KIFAGduZ52M",
+            "date": "2023-08-02T13:11:28.769Z"
+        },
+        {
+            "title": "Bon Voyage",
+            "uploader": "Lo.Flynn",
+            "id": "O3l4ENSOpho",
+            "date": "2023-08-02T13:13:49.056Z"
+        },
+        {
+            "title": "Tool-Assisted Speedcore",
+            "uploader": "Kobaryo",
+            "id": "CB86fytfBZY",
+            "date": "2023-08-02T13:51:00.408Z"
+        },
+        {
+            "title": "Sweet Mistake (Mixed)",
+            "uploader": "RE/BORN",
+            "id": "jZ9FNosHnbg",
+            "date": "2023-08-02T14:13:50.576Z"
+        },
+        {
+            "title": "Makeba (Official Video)",
+            "uploader": "Jain",
+            "id": "59Q_lhgGANc",
+            "date": "2023-08-02T14:31:05.360Z"
+        },
+        {
+            "title": "Neutral",
+            "uploader": "Vetrom",
+            "id": "YEnFhwr6_M4",
+            "date": "2023-08-03T07:56:23.768Z"
+        },
+        {
+            "title": "Foxstep",
+            "uploader": "Avilon",
+            "id": "Q5ZdVR6cfO8",
+            "date": "2023-08-03T08:59:30.512Z"
+        },
+        {
+            "title": "Elder Hymn",
+            "uploader": "Helblinde",
+            "id": "N_SWfKjvlvw",
+            "date": "2023-08-03T10:12:53.224Z"
+        },
+        {
+            "title": "Coldplay - Viva La Vida (M+ike Remix)",
+            "uploader": "MikeMusic",
+            "id": "UyL_a6TiET0",
+            "date": "2023-08-03T13:25:07.027Z"
+        },
+        {
+            "title": "Cuud Neva",
+            "uploader": "Kiy",
+            "id": "HC9lAHQkcaM",
+            "date": "2023-08-03T13:25:25.574Z"
+        },
+        {
+            "title": "♂ VANBEE - GACHI BEE ♂",
+            "uploader": "BBilly BBerrington",
+            "id": "9vdBlJ4Bdm0",
+            "date": "2023-08-04T07:48:24.275Z"
+        },
+        {
+            "title": "The Way I Are Closed Captioned (feat. D.O.E. & Keri Hilson)",
+            "uploader": "Timbaland",
+            "id": "U5rLz5AZBIA",
+            "date": "2023-08-04T08:26:08.892Z"
+        },
+        {
+            "title": "Body (PBH & Jack Shizzle Remix)",
+            "uploader": "Loud Luxury",
+            "id": "NOR3OaMs5mQ",
+            "date": "2023-08-04T09:30:03.002Z"
+        },
+        {
+            "title": "Freed From Desire",
+            "uploader": "Gala",
+            "id": "p3l7fgvrEKM",
+            "date": "2023-08-04T09:38:38.347Z"
+        },
+        {
+            "title": "Infinite",
+            "uploader": "Tyler Smyth & Andy Bane from Dangerkids",
+            "id": "Ki_Nn95hj48",
+            "date": "2023-08-07T07:21:32.038Z"
+        },
+        {
+            "title": "All Things Must Die (From \"RWBY\")",
+            "uploader": "FalKKonE & Rena",
+            "id": "AstuN0SJn_s",
+            "date": "2023-08-07T08:45:38.483Z"
+        },
+        {
+            "title": "Idol",
+            "uploader": "YOASOBI",
+            "id": "ZRtdQ81jPUQ",
+            "date": "2023-08-07T09:55:52.097Z"
+        },
+        {
+            "title": "A Sky Full of Stars - Radio Edit",
+            "uploader": "Coldplay",
+            "id": "VPRjCeoBqrI",
+            "date": "2023-08-07T10:07:55.306Z"
+        },
+        {
+            "title": "Rivers in the Desert - Queen Side (from \"Persona 5\") (Metal Version) (feat. Sapphire)",
+            "uploader": "FamilyJules",
+            "id": "AgsMjn2xxns",
+            "date": "2023-08-10T07:46:34.302Z"
+        },
+        {
+            "title": "Last Surprise - Queen Side (from \"Persona 5\") (Metal Version) (feat. Sapphire)",
+            "uploader": "FamilyJules",
+            "id": "RHd5oxlzfQo",
+            "date": "2023-08-10T07:49:29.657Z"
+        },
+        {
+            "title": "Bury The Light - Personal Remix",
+            "uploader": "TGPD",
+            "id": "rxpPgnCC1ng",
+            "date": "2023-08-11T10:07:26.591Z"
+        },
+        {
+            "title": "SONIC FORCES INFINITE (FULL VERSION) ANIMATED LYRIC (60fps)",
+            "uploader": "yesmen10",
+            "id": "LDu9AY15fQI",
+            "date": "2023-08-11T10:45:39.424Z"
+        },
+        {
+            "title": "Sonic Frontiers OST - I’m Here (Supreme)",
+            "uploader": "Charisma entertainer",
+            "id": "wcfPFLiS28s",
+            "date": "2023-08-11T12:21:32.047Z"
+        },
+        {
+            "title": "DEUTSCHLAND",
+            "uploader": "Rammstein",
+            "id": "vGtaDvhSxaI",
+            "date": "2023-08-14T09:26:04.332Z"
+        },
+        {
+            "title": "Evier Metal",
+            "uploader": "Ultra Vomit",
+            "id": "KIHtQi6-Q8M",
+            "date": "2023-08-14T13:13:02.170Z"
+        },
+        {
+            "title": "Miss Unlimited",
+            "uploader": "Passcode",
+            "id": "X48UZ4j9N04",
+            "date": "2023-08-15T10:36:37.038Z"
+        },
+        {
+            "title": "Night of Nights (Flowering nights remix) By COOL&CREATE/beatMARIO",
+            "uploader": "Algorstorm83",
+            "id": "vS_a8Edde8k",
+            "date": "2023-08-15T12:37:04.282Z"
+        },
+        {
+            "title": "Initial D AMV–When The Sun Goes Down",
+            "uploader": "Extremis Gamerz",
+            "id": "tjOXLYPJ0pg",
+            "date": "2023-08-15T12:51:24.003Z"
+        },
+        {
+            "title": "Initial D - Speed Lover",
+            "uploader": "Pretty ok",
+            "id": "RZHR0CMCRIk",
+            "date": "2023-08-15T12:59:31.621Z"
+        },
+        {
+            "title": "Njet Molotoff / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "018-gOpej0E",
+            "date": "2023-08-15T13:21:21.895Z"
+        },
+        {
+            "title": "Touhou 14.5 ULiL (PS4) OST - Reisen's Theme - Lunatic Eyes ~ Invisible Full Moon",
+            "uploader": "Kafuu Hearn",
+            "id": "uO_f7HC3AxA",
+            "date": "2023-08-15T13:33:59.799Z"
+        },
+        {
+            "title": "Initial D 5th Stage Soundtrack - The Top",
+            "uploader": "MasterCloudius",
+            "id": "up6Nxg17opQ",
+            "date": "2023-08-16T09:32:48.199Z"
+        },
+        {
+            "title": "Pompeii - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "-rzDfYFlMrs",
+            "date": "2023-08-16T10:30:32.856Z"
+        },
+        {
+            "title": "Peggy Gou - (It Goes Like) Nanana [Karaoke Video]",
+            "uploader": "Peggy Gou",
+            "id": "ssKWFlclNFg",
+            "date": "2023-08-16T10:44:25.187Z"
+        },
+        {
+            "title": "W&W, Harris & Ford Feat Special D - Come With Me (iateabee X Nefarious Remix)",
+            "uploader": "iateabee",
+            "id": "0hpj4yz2zvU",
+            "date": "2023-08-16T11:38:18.293Z"
+        },
+        {
+            "title": "Michino Timothy Kimino Kimochi - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "P69VpcdmsDA",
+            "date": "2023-08-16T11:45:57.668Z"
+        },
+        {
+            "title": "We Don't Talk About Bruno - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "mh5_LUO-0kU",
+            "date": "2023-08-16T12:06:28.437Z"
+        },
+        {
+            "title": "[COOL&CREATE] Help me, ERINNNNNN!!",
+            "uploader": "plxtreme",
+            "id": "1PNpvg2dYU4",
+            "date": "2023-08-17T09:33:27.444Z"
+        },
+        {
+            "title": "beatMARIO (COOL&CREATE) - ナイト・オブ・ナイツ (かめりあ’s“ワンス・アポン・ア・ナイト”Remix)",
+            "uploader": "Virkato",
+            "id": "zGVC9_fYAEM",
+            "date": "2023-08-17T09:53:37.823Z"
+        },
+        {
+            "title": "MEGALOVANIA (Camellia Remix)",
+            "uploader": "Camellia Official",
+            "id": "9X7I3bW49S8",
+            "date": "2023-08-17T10:38:44.215Z"
+        },
+        {
+            "title": "Oshama Scramble! (uncut edition)",
+            "uploader": "t+pazolite",
+            "id": "ojQv1TchM_A",
+            "date": "2023-08-17T10:48:23.311Z"
+        },
+        {
+            "title": "Awesome Rainbows",
+            "uploader": "Koo Koo Kanga Roo",
+            "id": "tbPGvZDNoY0",
+            "date": "2023-08-17T11:59:06.934Z"
+        },
+        {
+            "title": "Diga Diga Doo",
+            "uploader": "Big Bad Voodoo Daddy",
+            "id": "ufvmD9s76X0",
+            "date": "2023-08-18T08:49:05.595Z"
+        },
+        {
+            "title": "【MAD】initial D 『The Top』",
+            "uploader": "おさるさん",
+            "id": "nRRRtpOnBgA",
+            "date": "2023-08-22T07:36:30.460Z"
+        },
+        {
+            "title": "99",
+            "uploader": "MOB CHOIR",
+            "id": "aFPGhSkx7eA",
+            "date": "2023-08-22T07:36:31.859Z"
+        },
+        {
+            "title": "We Rush Area 51",
+            "uploader": "Dj Kyle",
+            "id": "62n0ThquwMA",
+            "date": "2023-08-22T09:02:13.629Z"
+        },
+        {
+            "title": "No Mans Land",
+            "uploader": "Marie Johns",
+            "id": "t5bFrLTq1YU",
+            "date": "2023-08-22T09:54:25.085Z"
+        },
+        {
+            "title": "Desert Sun",
+            "uploader": "Professor Kliq",
+            "id": "HcFjE11DPYM",
+            "date": "2023-08-22T10:25:28.012Z"
+        },
+        {
+            "title": "Desert Sun",
+            "uploader": "Professor Kliq",
+            "id": "HcFjE11DPYM",
+            "date": "2023-08-22T10:25:28.630Z"
+        },
+        {
+            "title": "We Want Your Soul (Radio Edit)",
+            "uploader": "Freeland",
+            "id": "3RQpudFcsZg",
+            "date": "2023-08-23T08:35:41.823Z"
+        },
+        {
+            "title": "Lose Yourself (Metal Version)",
+            "uploader": "Leo",
+            "id": "n37w5ZJllmI",
+            "date": "2023-08-23T10:48:21.440Z"
+        },
+        {
+            "title": "Resonance",
+            "uploader": "NateWantsToBattle",
+            "id": "39oFFwVqfEI",
+            "date": "2023-08-23T12:36:23.599Z"
+        },
+        {
+            "title": "Dame Tu Tormento",
+            "uploader": "Carlos Viola",
+            "id": "VAIoPlX_Zpg",
+            "date": "2023-08-24T10:27:53.448Z"
+        },
+        {
+            "title": "Ludwig, the Holy Blade (From \"Bloodborne: The Old Hunters\")",
+            "uploader": "FalKKonE",
+            "id": "g3drz5LNYrU",
+            "date": "2023-08-24T12:01:58.902Z"
+        },
+        {
+            "title": "The Death Of God's Will (Full Mix + Voice Lines)",
+            "uploader": "Lex",
+            "id": "AnLuKx_c7Ds",
+            "date": "2023-08-24T12:11:42.206Z"
+        },
+        {
+            "title": "Test Me",
+            "uploader": "Slushii",
+            "id": "T8B-XD3o0Ew",
+            "date": "2023-08-24T12:38:55.964Z"
+        },
+        {
+            "title": "Overkill",
+            "uploader": "RIOT",
+            "id": "OFbNOOjuYSo",
+            "date": "2023-08-24T13:13:45.612Z"
+        },
+        {
+            "title": "In My Mind",
+            "uploader": "Dynoro & Gigi D'Agostino",
+            "id": "VWQ-e0qXX0M",
+            "date": "2023-08-24T13:15:57.299Z"
+        },
+        {
+            "title": "[Eng Sub] Go To Daitokai / Gumi",
+            "uploader": "meeema | humannumber9",
+            "id": "IPKAAa5Fbtw",
+            "date": "2023-08-28T13:01:54.960Z"
+        },
+        {
+            "title": "Careless Whisper / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "3CMLK7p9j4U",
+            "date": "2023-08-29T09:19:15.852Z"
+        },
+        {
+            "title": "Pepsiman Pepsiman Pepsiman / Pepsiman Remix",
+            "uploader": "Turbo",
+            "id": "3yHL-bb0Z8k",
+            "date": "2023-08-29T09:44:08.788Z"
+        },
+        {
+            "title": "Rush E (Remix)",
+            "uploader": "Whanake",
+            "id": "ji5V9cHYasU",
+            "date": "2023-08-29T10:53:01.808Z"
+        },
+        {
+            "title": "INTERNET YAMERO (feat. KOTOKO)",
+            "uploader": "Aiobahn",
+            "id": "51GIxXFKbzk",
+            "date": "2023-08-29T11:06:03.057Z"
+        },
+        {
+            "title": "Holding Out for a Hero",
+            "uploader": "Helblinde",
+            "id": "eopf8z8kg10",
+            "date": "2023-08-29T11:06:23.087Z"
+        },
+        {
+            "title": "Galaxy Collapse",
+            "uploader": "黒皇帝",
+            "id": "VJFNcHgQ4HM",
+            "date": "2023-08-29T11:45:41.214Z"
+        },
+        {
+            "title": "t+pazolite - Cheatreal #TPZREMAKE",
+            "uploader": "t+pazolite",
+            "id": "3hPfbnCSp3s",
+            "date": "2023-08-29T12:02:01.526Z"
+        },
+        {
+            "title": "Last Brutal Sister Flandre S (U.N.Owen was her REMIX) by COOL&CREATE",
+            "uploader": "FujiWater22",
+            "id": "cDz9X2X3MTc",
+            "date": "2023-08-29T12:21:01.381Z"
+        },
+        {
+            "title": "【ShibayanRecords】 「nachi」 とびだせ！バンキッキ(Casual Killer remix)",
+            "uploader": "UnderGround",
+            "id": "-rSW74L-XMA",
+            "date": "2023-08-29T12:24:38.308Z"
+        },
+        {
+            "title": "Möbius",
+            "uploader": "Camellia & USAO",
+            "id": "2VD1HTfY1jE",
+            "date": "2023-08-29T13:00:44.467Z"
+        },
+        {
+            "title": "Happppy song",
+            "uploader": "SOOOO",
+            "id": "uGZ0I71Yawo",
+            "date": "2023-08-29T13:22:03.282Z"
+        },
+        {
+            "title": "Break My Stride (VIP Rave Mix)",
+            "uploader": "Flip Capella & PAENDA",
+            "id": "A4vWMwOZSXc",
+            "date": "2023-08-29T13:23:37.977Z"
+        },
+        {
+            "title": "Calliope Mori - Excuse My Rudeness, but Could You Please RIP?♡ [ dj-Jo Remix ]",
+            "uploader": "dj-Jo",
+            "id": "0KTmlgGdsH8",
+            "date": "2023-08-30T10:47:14.256Z"
+        },
+        {
+            "title": "🎵 VTUBERS (Vtuber Music Video) 🎵",
+            "uploader": "Constera",
+            "id": "YpUiZJeF1Wg",
+            "date": "2023-08-30T11:30:20.711Z"
+        },
+        {
+            "title": "ETHEREAL VELOCITY",
+            "uploader": "Underscore",
+            "id": "T0k5Lo4plKc",
+            "date": "2023-08-30T11:37:31.758Z"
+        },
+        {
+            "title": "HUG AND KILL",
+            "uploader": "Kobaryo",
+            "id": "NUNr4R-R99c",
+            "date": "2023-08-30T11:38:26.079Z"
+        },
+        {
+            "title": "Touhou 15.5 - Evening Star ~ Night Falls (Yukari Yakumo)",
+            "uploader": "Clownplease",
+            "id": "Oy7EQzN_QCw",
+            "date": "2023-08-30T11:40:54.133Z"
+        },
+        {
+            "title": "User Friendly",
+            "uploader": "Namakopuri & Us Cracks",
+            "id": "BjYNlnAzjxw",
+            "date": "2023-08-30T12:01:03.231Z"
+        },
+        {
+            "title": "TRIPLE PLAY",
+            "uploader": "KASAI HARCORES",
+            "id": "REbFLY_5JVg",
+            "date": "2023-08-30T12:08:39.815Z"
+        },
+        {
+            "title": "Mysterious Destiny (Prototype)",
+            "uploader": "BAYONETTA",
+            "id": "6bkY9ZS-9BA",
+            "date": "2023-08-30T12:14:20.831Z"
+        },
+        {
+            "title": "【東方MV】エンドレス・てゐマパーク【IOSYS】",
+            "uploader": "IOSYS",
+            "id": "fmzuD2bwits",
+            "date": "2023-08-30T12:25:45.926Z"
+        },
+        {
+            "title": "cheatreal",
+            "uploader": "t+pazolite",
+            "id": "wgBZylNg6U0",
+            "date": "2023-08-30T12:30:19.310Z"
+        },
+        {
+            "title": "Good Life",
+            "uploader": "Kelly Gonzalez",
+            "id": "D-QZlhezZrc",
+            "date": "2023-08-30T12:55:32.598Z"
+        },
+        {
+            "title": "This Is What It Feels Like (feat. Phina Asa)",
+            "uploader": "&friends",
+            "id": "xmmaCA_uaIo",
+            "date": "2023-08-31T07:55:18.977Z"
+        },
+        {
+            "title": "Tears in Rain",
+            "uploader": "Exodia",
+            "id": "IvmtRiQUbjA",
+            "date": "2023-08-31T07:56:52.427Z"
+        },
+        {
+            "title": "Roses (Imanbek Remix)",
+            "uploader": "SAINt JHN",
+            "id": "2zToEPpFEN8",
+            "date": "2023-08-31T08:02:50.437Z"
+        },
+        {
+            "title": "More Than You Know",
+            "uploader": "Axwell /\\ Ingrosso",
+            "id": "GsF05B8TFWg",
+            "date": "2023-08-31T08:05:39.893Z"
+        },
+        {
+            "title": "RHYTHM IS A DANCER HYPERTECHNO",
+            "uploader": "HYPERTECHNO",
+            "id": "5Ox9b4rVlwg",
+            "date": "2023-08-31T08:12:30.524Z"
+        },
+        {
+            "title": "John's Battle Arena",
+            "uploader": "GroovyDominoes52",
+            "id": "P-f1bH7r7i4",
+            "date": "2023-08-31T08:14:20.195Z"
+        },
+        {
+            "title": "Praise Cats feat. Andrea Love - Shined On Me",
+            "uploader": "robertybob",
+            "id": "BuHzxk9RysA",
+            "date": "2023-08-31T08:14:52.515Z"
+        },
+        {
+            "title": "Baianá",
+            "uploader": "Bakermat",
+            "id": "iaGjz4dtr3o",
+            "date": "2023-08-31T08:19:52.156Z"
+        },
+        {
+            "title": "Come Inside - GPF x S3RL x DJ Gollum (ear friendly remix)",
+            "uploader": "The KZ2 Racer",
+            "id": "JEF8rq3BafM",
+            "date": "2023-08-31T11:52:24.422Z"
+        },
+        {
+            "title": "RADWIMPS - Suzume (feat. Toaka) [KICKCHEEZE Hardstyle Remix]",
+            "uploader": "KICKCHEEZE",
+            "id": "vI3OBghfAdA",
+            "date": "2023-08-31T11:54:41.518Z"
+        },
+        {
+            "title": "Knight Rider",
+            "uploader": "USAO",
+            "id": "46V4Lh3qYSo",
+            "date": "2023-08-31T12:03:28.765Z"
+        },
+        {
+            "title": "Unlimited Power",
+            "uploader": "USAO",
+            "id": "1emem5w0V7I",
+            "date": "2023-08-31T13:05:29.869Z"
+        },
+        {
+            "title": "Martin Garrix & Dua Lipa - Scared To Be Lonely (BassWar & CaoX Hardstyle Bootleg)",
+            "uploader": "Hardstyle Vibes",
+            "id": "QIarMAML9H0",
+            "date": "2023-09-01T08:30:43.035Z"
+        },
+        {
+            "title": "Pokémon - Battle! Professor Sada & Turo Theme [Mashup]",
+            "uploader": "Red Ramen",
+            "id": "ghO_PeeDe3A",
+            "date": "2023-09-01T08:58:57.755Z"
+        },
+        {
+            "title": "P*Light feat. mow*2 - Hello Happiness (Extend Ver.)",
+            "uploader": "PC011",
+            "id": "YJ913r7Kn-Q",
+            "date": "2023-09-01T09:18:20.876Z"
+        },
+        {
+            "title": "SigSig maras k ver.",
+            "uploader": "Vivid2",
+            "id": "sklbDmZXyho",
+            "date": "2023-09-01T10:43:27.414Z"
+        },
+        {
+            "title": "Number One (Nas-T Mix)",
+            "uploader": "Shiro SAGISU",
+            "id": "ze_alklxQtA",
+            "date": "2023-09-12T07:40:48.898Z"
+        },
+        {
+            "title": "Sonic Frontiers OST - I’m Here",
+            "uploader": "Charisma entertainer",
+            "id": "nllAFlf2BZ0",
+            "date": "2023-09-13T11:19:46.794Z"
+        },
+        {
+            "title": "BassHunter - All I Ever Wanted Remix",
+            "uploader": "BlasterGamesBG",
+            "id": "GHtDoALm3qI",
+            "date": "2023-09-14T10:51:18.707Z"
+        },
+        {
+            "title": "Ameno - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "Nps-Zcp-VwY",
+            "date": "2023-09-14T12:08:54.744Z"
+        },
+        {
+            "title": "Re-Style & Vertex - Shadow World (Official Videoclip)",
+            "uploader": "Re-Style",
+            "id": "Pk8-QeIRVSo",
+            "date": "2023-09-14T12:28:53.367Z"
+        },
+        {
+            "title": "The Bass & the Melody",
+            "uploader": "S3RL",
+            "id": "OF-thWTJcu0",
+            "date": "2023-09-14T13:31:34.629Z"
+        },
+        {
+            "title": "Geçmiş Değişmez (feat. Jabbar)",
+            "uploader": "Deeperise",
+            "id": "UTf1plUU6AQ",
+            "date": "2023-09-15T08:10:15.438Z"
+        },
+        {
+            "title": "Renai Circulation / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "xZ2GTJCxXbM",
+            "date": "2023-09-15T11:40:13.211Z"
+        },
+        {
+            "title": "Spin Eternally",
+            "uploader": "Camellia",
+            "id": "IuRwqB9NwVQ",
+            "date": "2023-09-18T09:03:43.626Z"
+        },
+        {
+            "title": "Just Can't Wait",
+            "uploader": "Sharaz",
+            "id": "56dUnuuzbCw",
+            "date": "2023-09-19T12:16:47.276Z"
+        },
+        {
+            "title": "The Police - Every Breath You Take (STEREO in)",
+            "uploader": "STEREO in",
+            "id": "YcATEptrV1I",
+            "date": "2023-09-19T12:23:22.693Z"
+        },
+        {
+            "title": "ATC - All Around The World (Halfbaked902) Remix",
+            "uploader": "Bobby White",
+            "id": "SEmy6iywV8g",
+            "date": "2023-09-19T14:18:21.957Z"
+        },
+        {
+            "title": "Roses (Imanbek Remix)",
+            "uploader": "SAINt JHN",
+            "id": "2zToEPpFEN8",
+            "date": "2023-09-20T09:40:38.896Z"
+        },
+        {
+            "title": "Holy Roller (feat. Ryo Kinoshita)",
+            "uploader": "Spiritbox",
+            "id": "qFisjyDcQDs",
+            "date": "2023-09-21T12:06:38.439Z"
+        },
+        {
+            "title": "AntIPositive",
+            "uploader": "Little Big",
+            "id": "WTRldz7aUos",
+            "date": "2023-09-21T12:59:43.230Z"
+        },
+        {
+            "title": "Welcome to the Cum Zone",
+            "uploader": "Disterio",
+            "id": "MZzF1ESxe3g",
+            "date": "2023-09-21T13:44:50.109Z"
+        },
+        {
+            "title": "Poker Face",
+            "uploader": "Lady Gaga",
+            "id": "oG-4Uvhm4lI",
+            "date": "2023-09-22T09:56:32.520Z"
+        },
+        {
+            "title": "Off With Their Heads",
+            "uploader": "Mori Calliope",
+            "id": "i61sX30l-_I",
+            "date": "2023-10-06T11:44:33.660Z"
+        },
+        {
+            "title": "Cynthia Battle Theme (Remix) - Pokémon Diamond and Pearl",
+            "uploader": "GlitchxCity",
+            "id": "tuADSGLjLB8",
+            "date": "2023-10-09T13:02:28.353Z"
+        },
+        {
+            "title": "The Devil Went Down To Georgia - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "avGfStltLbc",
+            "date": "2023-10-11T08:47:40.837Z"
+        },
+        {
+            "title": "I'm Here (feat. Cori Adkins & Billy Qvarnström)",
+            "uploader": "Victor McKnight",
+            "id": "FPJdvvNMB_s",
+            "date": "2023-10-13T07:58:50.641Z"
+        },
+        {
+            "title": "Deja Vu - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "-l3hLdqdnVw",
+            "date": "2023-10-13T11:16:52.579Z"
+        },
+        {
+            "title": "Hampsterdance / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "BPtAdJItri4",
+            "date": "2023-10-13T13:07:54.790Z"
+        },
+        {
+            "title": "Neuro-sama V3 Sings \"Bury the Light\" - Vergil's battle theme DMC 5 Special Edition",
+            "uploader": "Innsomenya",
+            "id": "X3pUEaFtgB4",
+            "date": "2023-10-13T13:38:33.118Z"
+        },
+        {
+            "title": "【MV】Shinigami / Covered by Noir Vesper【歌ってみた】",
+            "uploader": "Noir Vesper Ch. HOLOSTARS-EN",
+            "id": "BVlHfSbU0lk",
+            "date": "2023-10-13T13:46:17.015Z"
+        },
+        {
+            "title": "1.2.3.4. FIRE! (PARAPARA EDIT)",
+            "uploader": "Dejo",
+            "id": "101J4cKbyE0",
+            "date": "2023-10-16T12:19:41.676Z"
+        },
+        {
+            "title": "Skan x Dreamer - Sabertooth",
+            "uploader": "Diversity",
+            "id": "ne-G0wQIq1I",
+            "date": "2023-10-18T09:48:46.160Z"
+        },
+        {
+            "title": "Gym Leader Battle Music",
+            "uploader": "The Musical Ghost",
+            "id": "4fiAstkS27k",
+            "date": "2023-10-18T12:40:22.291Z"
+        },
+        {
+            "title": "Nightcore - Bassjump ✕",
+            "uploader": "NightcoreLounge",
+            "id": "J1EfAICh5CA",
+            "date": "2023-10-19T09:28:00.493Z"
+        },
+        {
+            "title": "The Fall",
+            "uploader": "Jvliah",
+            "id": "mGC7n7_DxkY",
+            "date": "2023-10-19T09:33:44.381Z"
+        },
+        {
+            "title": "PEW PEW",
+            "uploader": "Slushii & Tokyo Machine",
+            "id": "YeO4mwLATNw",
+            "date": "2023-10-20T10:46:45.984Z"
+        },
+        {
+            "title": "BEWM",
+            "uploader": "Slushii",
+            "id": "uKcmsXA9xjc",
+            "date": "2023-10-20T12:13:53.983Z"
+        },
+        {
+            "title": "Phone (VIP Mix) (feat. Sam Tompkins & Em Beihold)",
+            "uploader": "MEDUZA",
+            "id": "lRWT3mK3dCw",
+            "date": "2023-10-23T10:04:17.974Z"
+        },
+        {
+            "title": "【METAL COVER】Requiem (Kanaria)【Futakuchi Mana 二口魔菜 & Nana Asteria】",
+            "uploader": "二口魔菜 Futakuchi Mana",
+            "id": "wHnoG_issqc",
+            "date": "2023-10-23T10:17:52.863Z"
+        },
+        {
+            "title": "Chitty Chitty Bang! (Doci Remix)",
+            "uploader": "Whisnu Santika",
+            "id": "cHQv6p_mxSc",
+            "date": "2023-10-24T13:22:10.273Z"
+        },
+        {
+            "title": "Bemax - SugarCrash! 2 (Notice Me Senpai) extended [Lyrics]",
+            "uploader": "Miku Risue",
+            "id": "Qlso5f9mzSg",
+            "date": "2023-10-24T14:08:28.467Z"
+        },
+        {
+            "title": "Wingless (feat. RANASOL)",
+            "uploader": "rejection",
+            "id": "l3-Lvfhr1mY",
+            "date": "2023-10-25T13:03:06.045Z"
+        },
+        {
+            "title": "\"Zekk - Tomoyo\"",
+            "uploader": "Skyez Neko",
+            "id": "BCkRcu_uCDI",
+            "date": "2023-10-25T13:29:36.950Z"
+        },
+        {
+            "title": "No No No",
+            "uploader": "TheFatRat",
+            "id": "bbpCoO5a7wA",
+            "date": "2023-10-26T07:16:18.896Z"
+        },
+        {
+            "title": "Fly Away (feat. Anjulie)",
+            "uploader": "TheFatRat",
+            "id": "HdNnJdd9ljY",
+            "date": "2023-10-26T07:19:06.896Z"
+        },
+        {
+            "title": "Stronger",
+            "uploader": "TheFatRat, Anjulie, & Slaydit",
+            "id": "Y04-kt0WJfE",
+            "date": "2023-10-26T07:42:35.345Z"
+        },
+        {
+            "title": "MAYDAY (feat. Laura Brehm)",
+            "uploader": "TheFatRat",
+            "id": "szDsuIRCPn0",
+            "date": "2023-10-26T07:55:00.241Z"
+        },
+        {
+            "title": "Warbringer (feat. Lindsey Stirling)",
+            "uploader": "TheFatRat & Everen Maxwell",
+            "id": "cNtX1Bgn-xI",
+            "date": "2023-10-26T08:00:41.540Z"
+        },
+        {
+            "title": "Infinite Power",
+            "uploader": "TheFatRat",
+            "id": "twCzH75C_WE",
+            "date": "2023-10-26T08:39:14.392Z"
+        },
+        {
+            "title": "TheFatRat - Mayday (feat. Laura Brehm) (Lyrics Video)",
+            "uploader": "BipolarBear",
+            "id": "p1nefK6-GiA",
+            "date": "2023-10-26T11:33:13.023Z"
+        },
+        {
+            "title": "Royalty",
+            "uploader": "Egzod, Maestro Chives, & Neoni",
+            "id": "7CNHJLh8omE",
+            "date": "2023-10-26T11:36:32.464Z"
+        },
+        {
+            "title": "Nightcore - Cradles (Lyrics)",
+            "uploader": "Sub Urban",
+            "id": "P6V0m1DWv3s",
+            "date": "2023-10-26T13:26:08.148Z"
+        },
+        {
+            "title": "The Top 2022 By Ken Blast",
+            "uploader": "Dave Rodgers",
+            "id": "IXFwQw5tv3w",
+            "date": "2023-10-27T08:36:12.680Z"
+        },
+        {
+            "title": "WHEN I CLOSE MY EYES / CHERRY(remix)",
+            "uploader": "EuroLabo jp",
+            "id": "OxT4Ri2yjMk",
+            "date": "2023-10-27T14:16:15.524Z"
+        },
+        {
+            "title": "Ken Blast / The Top 가사&번역【Lyrics/Initial D/Eurobeat/이니셜D/유로비트】",
+            "uploader": "PROJECT.T",
+            "id": "Vt36JPS1s7s",
+            "date": "2023-10-27T14:34:52.474Z"
+        },
+        {
+            "title": "Ken Blast - The Top Lyrics Video [Eurobeat/Initial D] [REUPLOAD]",
+            "uploader": "nutheaded",
+            "id": "HiF18CF9cEo",
+            "date": "2023-10-30T08:23:05.578Z"
+        },
+        {
+            "title": "You & DIE",
+            "uploader": "USAO",
+            "id": "ZkMG-XqSlYA",
+            "date": "2023-10-30T12:01:18.431Z"
+        },
+        {
+            "title": "The Top (2022)",
+            "uploader": "Ken Blast",
+            "id": "XsmLmuN8mpU",
+            "date": "2023-10-30T12:27:33.721Z"
+        },
+        {
+            "title": "Ornstein & Smough (From \"Dark Souls\")",
+            "uploader": "FalKKonE",
+            "id": "mVLQnQ4FYjc",
+            "date": "2023-10-31T13:12:35.667Z"
+        },
+        {
+            "title": "PADORU / PADORU",
+            "uploader": "Turbo",
+            "id": "u3kRzdSnsTA",
+            "date": "2023-11-01T09:26:17.523Z"
+        },
+        {
+            "title": "Can I friend you on Bassbook? lol",
+            "uploader": "Nanahira & Camellia",
+            "id": "1x2izJEN9p0",
+            "date": "2023-11-01T12:31:47.898Z"
+        },
+        {
+            "title": "USAO - Dynamite (Camellia's MACHO TNT Remix)",
+            "uploader": "Vivid2",
+            "id": "fHIwuK5RlH0",
+            "date": "2023-11-01T13:38:57.273Z"
+        },
+        {
+            "title": "Camellia feat. Nanahira - べィスドロップ・フリークス (2018 Redrop ver.)",
+            "uploader": "Le Quack",
+            "id": "Z784Ads0fsI",
+            "date": "2023-11-01T13:43:40.320Z"
+        },
+        {
+            "title": "Yooh - Crazy Shuffle (Extended Mix)",
+            "uploader": "Bruhtanium Onii-san",
+            "id": "FTdjl_MnK9I",
+            "date": "2023-11-01T13:54:58.353Z"
+        },
+        {
+            "title": "Energy Laser",
+            "uploader": "Kobaryo",
+            "id": "8SuehGDVHH8",
+            "date": "2023-11-01T15:17:06.668Z"
+        },
+        {
+            "title": "KOKUSHIMUSOU",
+            "uploader": "LAUR",
+            "id": "EnLFt-nTmQo",
+            "date": "2023-11-02T08:26:31.939Z"
+        },
+        {
+            "title": "Sailor Moon - Moonlight / Luz De Luna (Eiden Bootleg)",
+            "uploader": "Eiden 33N",
+            "id": "WxYr3qG7xv0",
+            "date": "2023-11-02T08:41:51.167Z"
+        },
+        {
+            "title": "Lab Pe Atti X DMA ILLAN (Trap Remix)",
+            "uploader": "CRoCs-ThE-SMS-ArCoNa -1902",
+            "id": "M1i3wfiVdZc",
+            "date": "2023-11-02T09:42:11.547Z"
+        },
+        {
+            "title": "Doja Cat - So High (San Holo Remix)",
+            "uploader": "Chill Nation",
+            "id": "K08a2DrSX4Y",
+            "date": "2023-11-02T09:47:38.714Z"
+        },
+        {
+            "title": "THE CHORDETTES - MR. SANDMAN (OFFICIAL TRAP REMIX)",
+            "uploader": "Trap Music Now",
+            "id": "WsiiVixyXsk",
+            "date": "2023-11-02T09:49:33.020Z"
+        },
+        {
+            "title": "Donuts",
+            "uploader": "2SCOOPS",
+            "id": "lc4Tt-CU-i0",
+            "date": "2023-11-02T10:09:21.626Z"
+        },
+        {
+            "title": "NARUTO WIND (OFFICIAL TRAP REMIX) - RICO VERTEZ",
+            "uploader": "Trap Music Now",
+            "id": "BRKJoD4BIRg",
+            "date": "2023-11-02T10:34:26.372Z"
+        },
+        {
+            "title": "My Hero Academia - Stop them with Full Power (Red Riot Theme) Hip Hop / Trap REMIX",
+            "uploader": "Rifti Beats",
+            "id": "B-wyxw-WaxY",
+            "date": "2023-11-02T11:11:46.586Z"
+        },
+        {
+            "title": "ONIKEMODANCE -PandaBoYremix-",
+            "uploader": "AyaFubuMi",
+            "id": "ZKT8nvvlAs4",
+            "date": "2023-11-03T09:02:59.486Z"
+        },
+        {
+            "title": "【#holo_remix】Nekoze Party!!【Aki Rosentahl voice sampling】",
+            "uploader": "はこいり",
+            "id": "9wYSXYf00ac",
+            "date": "2023-11-03T09:21:37.676Z"
+        },
+        {
+            "title": "マイネームイズエリート☆",
+            "uploader": "さくらみこ",
+            "id": "LB-BiUb4Z3U",
+            "date": "2023-11-03T09:26:11.877Z"
+        },
+        {
+            "title": "POISON",
+            "uploader": "YUC'e",
+            "id": "6Z0nrjNZ6Kw",
+            "date": "2023-11-03T09:44:58.507Z"
+        },
+        {
+            "title": "無意識レクイエム (Cosmobsp rmx)",
+            "uploader": "cosMo, Shinra-Bansho, & ayo",
+            "id": "hCgAiV-MYYw",
+            "date": "2023-11-03T10:02:53.220Z"
+        },
+        {
+            "title": "SICK",
+            "uploader": "二口魔菜 Futakuchi Mana",
+            "id": "v-mgDgCCrIU",
+            "date": "2023-11-03T10:21:15.026Z"
+        },
+        {
+            "title": "[RAP COVER] Jumpnyan Jumpnyan Jumpnyan",
+            "uploader": "Nyanners",
+            "id": "WavnA9cte5I",
+            "date": "2023-11-03T12:29:58.986Z"
+        },
+        {
+            "title": "[COVER]☆ STARSHIPS ☆",
+            "uploader": "Nyanners",
+            "id": "9ZvLFLKsxyM",
+            "date": "2023-11-03T12:58:07.849Z"
+        },
+        {
+            "title": "【Hatsune Miku】The Name of the Sin 罪の名前 PV【English Subtitles】",
+            "uploader": "thisendlessforest",
+            "id": "70XCUw1kkGU",
+            "date": "2023-11-06T10:06:52.740Z"
+        },
+        {
+            "title": "Apocalypse teller",
+            "uploader": "Noah",
+            "id": "C9VlAcEc85M",
+            "date": "2023-11-06T12:30:47.430Z"
+        },
+        {
+            "title": "Revenge / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "blaJc14IkaI",
+            "date": "2023-11-06T13:20:52.134Z"
+        },
+        {
+            "title": "Nightcore - Naughty Naughty - (Lyrics)",
+            "uploader": "Syrex",
+            "id": "lXnw5hrc1bs",
+            "date": "2023-11-07T10:29:55.545Z"
+        },
+        {
+            "title": "Nightcore - Tetris",
+            "uploader": "Shiko Nightcore",
+            "id": "FHVkBZHaKQA",
+            "date": "2023-11-07T10:32:17.938Z"
+        },
+        {
+            "title": "Pokémon Red and Blue- Pokémon Tower Remix v.II",
+            "uploader": "GlitchxCity",
+            "id": "exwguP4LdB0",
+            "date": "2023-11-07T11:16:09.460Z"
+        },
+        {
+            "title": "【東方 Metalcore】Shallow - wasi ft. seafoam & Xandu【Takamachi Walk】",
+            "uploader": "wasi",
+            "id": "xxzWS9a3fQ4",
+            "date": "2023-11-08T11:23:33.330Z"
+        },
+        {
+            "title": "After Ascension (tpz Overheat Remix)",
+            "uploader": "Srav3R & t+pazolite",
+            "id": "_S1-ovkLG-U",
+            "date": "2023-11-08T12:56:52.539Z"
+        },
+        {
+            "title": "SPOOKY",
+            "uploader": "Tokyo Machine",
+            "id": "fIGgd-JKHe0",
+            "date": "2023-11-08T13:07:59.236Z"
+        },
+        {
+            "title": "Invisible Frenzy",
+            "uploader": "Kobaryo",
+            "id": "rtqMLFfBGak",
+            "date": "2023-11-08T13:57:15.227Z"
+        },
+        {
+            "title": "Can I friend you on Bassbook? lol (feat. Nanahira)",
+            "uploader": "Camellia",
+            "id": "D00hlkW0u3U",
+            "date": "2023-11-08T13:57:23.051Z"
+        },
+        {
+            "title": "Kickstart My Heart Edited",
+            "uploader": "Mötley Crüe",
+            "id": "CmXWkMlKFkI",
+            "date": "2023-11-08T14:38:22.849Z"
+        },
+        {
+            "title": "Toxic",
+            "uploader": "RichaadEB",
+            "id": "d7wGLs-rw0c",
+            "date": "2023-11-09T09:17:44.964Z"
+        },
+        {
+            "title": "Cristina Vee - Wolf In Sheep's Clothing",
+            "uploader": "Cristina Vee",
+            "id": "kJW7NoURDrg",
+            "date": "2023-11-09T11:54:33.214Z"
+        },
+        {
+            "title": "Tempestissimo (Uncut Edition)",
+            "uploader": "t+pazolite",
+            "id": "Tp6ot4ts6HU",
+            "date": "2023-11-09T13:25:47.891Z"
+        },
+        {
+            "title": "Necessary Discrepancy",
+            "uploader": "AISHA, NAOKI, & Arc System Works",
+            "id": "Hze8a6OyVzk",
+            "date": "2023-11-13T12:59:06.118Z"
+        },
+        {
+            "title": "Girls, Girls, Girls",
+            "uploader": "Mötley Crüe",
+            "id": "XZU5XyqnuyM",
+            "date": "2023-11-13T13:00:06.098Z"
+        },
+        {
+            "title": "Pokémon Sun and Moon - Team Skull Leader Guzma (Remix)",
+            "uploader": "GlitchxCity",
+            "id": "-X0KRhyBfaU",
+            "date": "2023-11-14T10:04:56.769Z"
+        },
+        {
+            "title": "[REMASTERED] The Stains Of Time Final Mix",
+            "uploader": "Toxicherpanzer",
+            "id": "ZkfdboCdAYk",
+            "date": "2023-11-15T11:33:35.029Z"
+        },
+        {
+            "title": "I’m Here - Revisited (feat. Kellin Quinn)",
+            "uploader": "SEGA & Tomoya Ohtani",
+            "id": "bKxf0NQyb0c",
+            "date": "2023-11-15T11:36:43.571Z"
+        },
+        {
+            "title": "Smell of the Game ( [New Guilty Gear] Promotion Music)",
+            "uploader": "Arc System Works, Daisuke Ishiwatari, & Naoki Hashimoto",
+            "id": "tUfU1gKln6M",
+            "date": "2023-11-15T12:30:59.728Z"
+        },
+        {
+            "title": "Blue (Da Ba Dee) (feat. Jack Fliegler & Travis Carte)",
+            "uploader": "Jonathan Young",
+            "id": "g7hPtc1WIIg",
+            "date": "2023-11-15T13:37:40.469Z"
+        },
+        {
+            "title": "🎵 Sonic Forces OST - Theme of Infinite (Extended Version)",
+            "uploader": "RealSonicVideos",
+            "id": "0NKXgpXgY0o",
+            "date": "2023-11-15T14:16:46.388Z"
+        },
+        {
+            "title": "Looking Like This",
+            "uploader": "Lyre le temps",
+            "id": "-OuZBD9r2a4",
+            "date": "2023-11-16T08:58:48.017Z"
+        },
+        {
+            "title": "Danger",
+            "uploader": "Odd Chap",
+            "id": "yIV40jKzYcc",
+            "date": "2023-11-17T09:13:57.770Z"
+        },
+        {
+            "title": "【東方】例大祭15『Scream out! 〜Tribute Party〜』 XFD【 A-One公式】",
+            "uploader": "A-One",
+            "id": "PCqLKePSssU",
+            "date": "2023-11-17T09:21:47.095Z"
+        },
+        {
+            "title": "Seven Rings In Hand",
+            "uploader": "Steve Conte & SEGA",
+            "id": "QKqgroUYvPU",
+            "date": "2023-11-17T10:43:17.906Z"
+        },
+        {
+            "title": "I'm Here but it's the True Finale│Sonic Frontiers - I'm Here Remix",
+            "uploader": "Astromorphic",
+            "id": "cPS9uR3l8j0",
+            "date": "2023-11-17T10:50:01.048Z"
+        },
+        {
+            "title": "HELLO HUMAN",
+            "uploader": "LSDREAM, COM3T",
+            "id": "UEi0xphp8Wg",
+            "date": "2023-11-17T13:55:44.363Z"
+        },
+        {
+            "title": "Omnidirectional",
+            "uploader": "Subtronics",
+            "id": "9JOcdTd2d3I",
+            "date": "2023-11-17T13:57:33.663Z"
+        },
+        {
+            "title": "The Machines",
+            "uploader": "Zeds Dead & Blanke",
+            "id": "l1aojy_G-Nw",
+            "date": "2023-11-17T14:18:55.042Z"
+        },
+        {
+            "title": "Misguided Freshman",
+            "uploader": "Mord Fustang",
+            "id": "QRZSUTS4Zu0",
+            "date": "2023-11-17T14:20:21.544Z"
+        },
+        {
+            "title": "GALACTICAL",
+            "uploader": "Tokyo Machine",
+            "id": "7_r-G1a_FG0",
+            "date": "2023-11-17T14:26:09.168Z"
+        },
+        {
+            "title": "OBLIVION",
+            "uploader": "LSDREAM",
+            "id": "wqthKaG3VQY",
+            "date": "2023-11-17T14:42:25.910Z"
+        },
+        {
+            "title": "Nine",
+            "uploader": "No Mana",
+            "id": "aiMyVgMY0DI",
+            "date": "2023-11-20T09:13:17.008Z"
+        },
+        {
+            "title": "Smell of the Game",
+            "uploader": "Daisuke Ishiwatari, Naoki Hashimoto, & Arc System Works",
+            "id": "ikQHkhL8YMM",
+            "date": "2023-11-21T11:12:25.291Z"
+        },
+        {
+            "title": "Let Me Hear",
+            "uploader": "Fear, and Loathing in Las Vegas",
+            "id": "4dOw3TpoHtk",
+            "date": "2023-11-21T11:28:20.969Z"
+        },
+        {
+            "title": "ProStreet OST 20 - Plan B - More is Enough feat. Epic Mac",
+            "uploader": "Kisiel14",
+            "id": "a6_Yc7NAjvY",
+            "date": "2023-11-22T09:22:58.705Z"
+        },
+        {
+            "title": "She Wants Me Dead",
+            "uploader": "Cazzette & AronChupa",
+            "id": "FHccClTAdzc",
+            "date": "2023-11-23T12:59:43.941Z"
+        },
+        {
+            "title": "Mick Gordon - Cultist Base but it's WEEEEEEEEEE WEEE WOOO WEEE WOOO",
+            "uploader": "Primal Xenolith",
+            "id": "3saIjFDY3X4",
+            "date": "2023-11-27T11:23:28.802Z"
+        },
+        {
+            "title": "PROJEKT MELODY",
+            "uploader": "GHOST DATA",
+            "id": "HD9aB--Uu7U",
+            "date": "2023-11-28T14:52:20.759Z"
+        },
+        {
+            "title": "Beastie Boys X RR-DDD - \"The Intergalatic Anthem!\" NITRO Remix/Edit + Lyrics",
+            "uploader": "Philly Cheese Steak",
+            "id": "ZqtVr_r_DIg",
+            "date": "2023-11-29T09:30:23.354Z"
+        },
+        {
+            "title": "[2015 Archive] Nick Nitro - \"Untitled #5\" [My First Album]",
+            "uploader": "Philly Cheese Steak",
+            "id": "2bseJofC66I",
+            "date": "2023-11-29T10:03:34.021Z"
+        },
+        {
+            "title": "[2014 Archive] Buckethead - \"White Wash\" Early NITRO Cover",
+            "uploader": "Philly Cheese Steak",
+            "id": "3P2cgbjHEwI",
+            "date": "2023-11-29T10:17:24.477Z"
+        },
+        {
+            "title": "[2014 Archive] Buckethead - \"Jump man\" Early NITRO Cover",
+            "uploader": "Philly Cheese Steak",
+            "id": "eVEdcdOKh64",
+            "date": "2023-11-29T10:19:50.447Z"
+        },
+        {
+            "title": "[2016 Archive] Mafiatale - \"Home\" Early NITRO Remix",
+            "uploader": "Philly Cheese Steak",
+            "id": "VLD2iLIueKQ",
+            "date": "2023-11-29T10:23:13.187Z"
+        },
+        {
+            "title": "Underfresh - \"That Song That Might Play When You Donk\" Remix [Re-upload]",
+            "uploader": "Philly Cheese Steak",
+            "id": "YuWLoY_chyg",
+            "date": "2023-11-29T11:11:58.107Z"
+        },
+        {
+            "title": "NOW'S YOUR CHANCE TO BE A (From \"Deltarune\")",
+            "uploader": "VGR",
+            "id": "0OEk4QMqMjg",
+            "date": "2023-12-01T14:36:22.799Z"
+        },
+        {
+            "title": "Caravan Spaceship - Lone Impostor",
+            "uploader": "maki ligon",
+            "id": "QbIckU4sXBM",
+            "date": "2023-12-01T14:42:12.944Z"
+        },
+        {
+            "title": "MTC2 (DJ Edit) (feat. Sonika Vocaloid)",
+            "uploader": "S3RL",
+            "id": "4hVOAOTfg-g",
+            "date": "2023-12-01T14:46:30.349Z"
+        },
+        {
+            "title": "MERA MERA",
+            "uploader": "Mori Calliope",
+            "id": "DOzpsXZS-j0",
+            "date": "2023-12-06T14:11:16.141Z"
+        },
+        {
+            "title": "Fever Night",
+            "uploader": "Takanashi Kiara",
+            "id": "SF4rteXN57w",
+            "date": "2023-12-06T14:12:59.552Z"
+        },
+        {
+            "title": "Nightmares",
+            "uploader": "LilyPichu & Static-P",
+            "id": "8aBpkHv-KK8",
+            "date": "2023-12-06T14:14:59.808Z"
+        },
+        {
+            "title": "The Neuro sisters sing Daft Punk - Get Lucky together",
+            "uploader": "ChrisGamingNL333",
+            "id": "SecG2REXoU8",
+            "date": "2023-12-06T14:23:57.939Z"
+        },
+        {
+            "title": "Maakit Stop!",
+            "uploader": "General Mumble",
+            "id": "OQ_GiRTapeQ",
+            "date": "2023-12-07T10:17:43.535Z"
+        },
+        {
+            "title": "Hearts Strong As Horses (Sim Gretina Remix)",
+            "uploader": "Sim Gretina",
+            "id": "yWlQOgH2i28",
+            "date": "2023-12-07T10:34:35.158Z"
+        },
+        {
+            "title": "EmoCosine - Love Kills U【Official MV / From WACCA】※流血表現注意",
+            "uploader": "cosine",
+            "id": "nkY-rVumNR8",
+            "date": "2023-12-07T13:32:45.318Z"
+        },
+        {
+            "title": "U",
+            "uploader": "Jarico",
+            "id": "uOzPqiRpumc",
+            "date": "2023-12-08T09:28:15.903Z"
+        },
+        {
+            "title": "Older Grand x KBN & NoOne - Say Yea",
+            "uploader": "Diversity",
+            "id": "xSUQcQYgQCY",
+            "date": "2023-12-08T09:39:40.410Z"
+        },
+        {
+            "title": "Imagine Dragons - Believer (Fairlane Remix)",
+            "uploader": "Bass Boosted City",
+            "id": "xKVZ6MCoSSo",
+            "date": "2023-12-08T14:09:59.253Z"
+        }
+    ],
+    "TrackFavorites": [
+        {
+            "title": "【東方Eurobeat ENG SUBS】MELO☆MELO MELTDOWN !! (Tsukasa Revival Mix)【A-One】",
+            "uploader": "Shoop Touhou Eurobeat",
+            "id": "gYGqcORGqIw",
+            "date": "2023-08-17T09:43:52.147Z"
+        },
+        {
+            "title": "【東方ボーカルENG SUBS】Time Will Tell【A-ONE】",
+            "uploader": "Shoop Touhou Eurobeat",
+            "id": "PXbmD43_E64",
+            "date": "2023-08-17T08:27:09.526Z"
+        },
+        {
+            "title": "【東方Eurobeat ENG SUB】SPIDER'S BLOOD【A-ONE】",
+            "uploader": "Shoop Touhou Eurobeat",
+            "id": "tsCzh4Y1k3Y",
+            "date": "2023-08-17T07:42:30.866Z"
+        },
+        {
+            "title": "Hearts on Fire [Eurobeat cover]",
+            "uploader": "Anthony McBazooka",
+            "id": "3rvNH5LCuio",
+            "date": "2023-08-17T11:37:21.879Z"
+        },
+        {
+            "title": "99.9 / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "e7YSAzdrJLE",
+            "date": "2023-08-18T13:58:09.832Z"
+        },
+        {
+            "title": "【Touhou Arrange】[ A-ONE ] Spider's Blood",
+            "uploader": "Twinstails",
+            "id": "x1mH-YBwgEs",
+            "date": "2023-08-30T10:35:31.996Z"
+        },
+        {
+            "title": "Chitty Chitty Bang Bang (Ya Boy Kongming OP) - Eurobeat Remix (TV Size)",
+            "uploader": "Vikas Music",
+            "id": "_dXHL2jf62Y",
+            "date": "2023-09-01T13:10:29.526Z"
+        },
+        {
+            "title": "Gacha (Instrumental)",
+            "uploader": "Turbo",
+            "id": "XfBzWHsaXdk",
+            "date": "2023-09-14T08:12:48.724Z"
+        },
+        {
+            "title": "Camellia - Can I Friend You On Bassbook? (But Nanahira only sings when necessary)",
+            "uploader": "Chico",
+            "id": "NoOltN6P2T8",
+            "date": "2023-09-15T11:18:11.678Z"
+        },
+        {
+            "title": "Good F**King Music",
+            "uploader": "Solence",
+            "id": "EerVnleQN9o",
+            "date": "2023-09-21T11:54:02.169Z"
+        },
+        {
+            "title": "Diggy Diggy Hole (Dance Remix)",
+            "uploader": "Wind Rose",
+            "id": "Qd0EGzCTTaI",
+            "date": "2023-09-22T07:46:41.701Z"
+        },
+        {
+            "title": "Reflect / Eurobeat Remix (w/@tiannya)",
+            "uploader": "Turbo",
+            "id": "ghSedPM6i5Y",
+            "date": "2023-09-22T13:43:59.808Z"
+        },
+        {
+            "title": "Wellerman (Daniel Spirek Bootleg)",
+            "uploader": "Daniel Spirek",
+            "id": "G61xT5L66tU",
+            "date": "2023-10-06T09:37:45.153Z"
+        },
+        {
+            "title": "Kaibutsu [怪物] (Beastars Season 2 OP) - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "Cd3dbBgzEfg",
+            "date": "2023-10-06T10:18:09.671Z"
+        },
+        {
+            "title": "Excuse my Rudeness, but Could You Please RIP? / Desumetal Remix",
+            "uploader": "Turbo",
+            "id": "hzhmXICuahs",
+            "date": "2023-10-06T10:33:19.834Z"
+        },
+        {
+            "title": "Spicy Noodles",
+            "uploader": "Boom Kitty",
+            "id": "Mh3aBsxjILU",
+            "date": "2023-10-06T10:35:46.809Z"
+        },
+        {
+            "title": "4BLOOD - Takanashi Kiara (SONG COVER)",
+            "uploader": "Takanashi Kiara",
+            "id": "Fwc-LH8IGj8",
+            "date": "2023-10-06T10:51:24.880Z"
+        },
+        {
+            "title": "Nightcore - Don't Stop",
+            "uploader": "NightcoreCrazily",
+            "id": "iQI0zJd_cK4",
+            "date": "2023-10-06T11:57:44.726Z"
+        },
+        {
+            "title": "Chainsaw Blood / Eurobeat Instrumental",
+            "uploader": "TurboAlt",
+            "id": "IL8ZcV4NPzA",
+            "date": "2023-10-06T13:21:19.438Z"
+        },
+        {
+            "title": "CHAINSAW BLOOD / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "fB8GAWqB_RY",
+            "date": "2023-10-09T07:45:37.986Z"
+        },
+        {
+            "title": "BERSERKER / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "U0IvfwsH9Vk",
+            "date": "2023-10-09T07:51:07.581Z"
+        },
+        {
+            "title": "Life Will Change (Persona 5) - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "85Zd8cbdQ6M",
+            "date": "2023-10-09T12:20:38.518Z"
+        },
+        {
+            "title": "STONEOCEAN / Eurobeat Remix",
+            "uploader": "Turbo",
+            "id": "pUX1vOjLEE0",
+            "date": "2023-10-09T12:31:16.097Z"
+        },
+        {
+            "title": "Nightcore - We Don't Sleep At Night",
+            "uploader": "Zero.Miz-Kun",
+            "id": "hk_tbOzt5fs",
+            "date": "2023-10-11T11:28:35.378Z"
+        },
+        {
+            "title": "Valhalla Calling [Eurobeat]",
+            "uploader": "Anthony McBazooka",
+            "id": "64bU4ZMoqlk",
+            "date": "2023-10-12T08:20:55.076Z"
+        },
+        {
+            "title": "Nightcore - We Don't Sleep At Night - (Lyrics)",
+            "uploader": "Syrex",
+            "id": "o_j0tc0njUY",
+            "date": "2023-10-13T08:31:49.202Z"
+        },
+        {
+            "title": "1 (Mob Psycho 100 Season 3 OP) - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "SBcOf33RAjk",
+            "date": "2023-10-16T10:10:58.753Z"
+        },
+        {
+            "title": "Suspect (Bouquet ver.)",
+            "uploader": "hololive IDOL PROJECT",
+            "id": "Wgu5I77OW4U",
+            "date": "2023-10-19T11:45:48.354Z"
+        },
+        {
+            "title": "Gurenge (From \"Demon Slayer\") [REMIX]",
+            "uploader": "AmaLee",
+            "id": "IMqhGocGRRQ",
+            "date": "2023-10-26T13:30:45.908Z"
+        },
+        {
+            "title": "Night of Fire (Extended mix)",
+            "uploader": "N.I.K.O.",
+            "id": "YdHO0R4FeyQ",
+            "date": "2023-10-27T13:17:27.035Z"
+        },
+        {
+            "title": "Brain Power",
+            "uploader": "NOMA",
+            "id": "YMy5uugeEis",
+            "date": "2023-10-27T14:28:03.195Z"
+        },
+        {
+            "title": "Halloween Night, Tonight! (English ver.) - hololive English -Advent- Cover",
+            "uploader": "hololive English",
+            "id": "FqXrBy_FIU0",
+            "date": "2023-11-03T09:04:22.667Z"
+        },
+        {
+            "title": "Forces (Berserk) - Eurobeat Remix",
+            "uploader": "Vikas Music",
+            "id": "0cX2SvmfUiQ",
+            "date": "2023-11-06T12:57:21.685Z"
+        },
+        {
+            "title": "We Don’t Sleep at Night",
+            "uploader": "Cashcash",
+            "id": "oCaQyeX2_uU",
+            "date": "2023-11-07T10:36:38.402Z"
+        },
+        {
+            "title": "Last of Eurobeat (Factory Eurobeat Version)",
+            "uploader": "Mark Farina",
+            "id": "b7OgQj29tLU",
+            "date": "2023-11-07T11:08:23.715Z"
+        },
+        {
+            "title": "SayMaxWell - Shantae - Rottytops Theme [Remix]",
+            "uploader": "SayMaxWell",
+            "id": "HZT39TVV32M",
+            "date": "2023-11-09T10:15:15.381Z"
+        },
+        {
+            "title": "Red Like Roses - Part II (From \"RWBY\") (Instrumental)",
+            "uploader": "FalKKonE",
+            "id": "GeYqC5JlJXY",
+            "date": "2023-11-09T10:53:40.881Z"
+        },
+        {
+            "title": "HoloCure OST - Suspect (Extended Loop)",
+            "uploader": "eufrik",
+            "id": "r_GAxGs88jQ",
+            "date": "2023-11-21T11:29:04.794Z"
+        },
+        {
+            "title": "Initial D - \"Gas Gas Gas!!! [2020 Remastered]\" Edit (Bootleg Release)",
+            "uploader": "Philly Cheese Steak",
+            "id": "94SWJE674vs",
+            "date": "2023-11-29T09:10:32.625Z"
+        },
+        {
+            "title": "Cha Cha Cha / GUMI",
+            "uploader": "Turbo",
+            "id": "fC_WbVzvKzw",
+            "date": "2023-12-01T12:27:36.355Z"
+        }
+    ]
+}
