@@ -99,6 +99,7 @@ const titleBlacklist = [
     /\[live\]$/i,
 ];
 
+const debug = false;
 const keyBlacklist = "TrackBlacklist", keyFavorites = "TrackFavorites";
 const keyHistory = "TrackHistory", historyLimitHours = 48;
 const historyDiffLimit = historyLimitHours * (3600 * 1000);
@@ -593,7 +594,6 @@ function handleClick(evt) {
                 }, blacklistDelay);
             }
         });
-        
         return false;
     }
 
@@ -624,9 +624,18 @@ function urlChanged() {
     wlh = window.location.href;
     playStarted = beeped = false;
     
-    fetchHistory().then(hist => console.debug('fetched history:', hist));
-    fetchBlacklist().then(blk => console.debug('fetched blacklist:', blk));
-    fetchFavorites().then(favs => console.debug('fetched favorites:', favs));
+    fetchHistory().then(hist => {
+        if (!debug) { return; }
+        console.debug('fetched history:', hist);
+    });
+    fetchBlacklist().then(blk => {
+        if (!debug) { return; }
+        console.debug('fetched blacklist:', blk);
+    });
+    fetchFavorites().then(favs => {
+        if (!debug) { return; }
+        console.debug('fetched favorites:', favs);
+    });
     
     waitForElem(".content-info-wrapper > yt-formatted-string.title").then(playing => {
         watch(playing, { attributeFilter: ["title"] });
