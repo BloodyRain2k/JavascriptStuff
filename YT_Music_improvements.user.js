@@ -106,7 +106,8 @@ const historyDiffLimit = historyLimitHours * (3600 * 1000);
 const maxPastQueue = 3, blacklistDelay = 750;
 
 const xpSelTrack = ".//ytmusic-player-queue-item[@selected]";
-const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state!='default']|.//ytmusic-player-queue-item[1]";
+const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state!='default']";
+const xpPlayingOrFirstTrack = ".//ytmusic-player-queue-item[@play-button-state!='default']|.//ytmusic-player-queue-item[1]";
 const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='items']";
 const xpTrackQueue = "ancestor::*[{class='ytmusic-player-queue'}]";
 
