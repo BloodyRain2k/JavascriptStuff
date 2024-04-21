@@ -106,7 +106,7 @@ const historyDiffLimit = historyLimitHours * (3600 * 1000);
 const maxPastQueue = 3, blacklistDelay = 750;
 
 const xpSelTrack = ".//ytmusic-player-queue-item[@selected]";
-const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state!='default']";
+const xpPlayingTrack = ".//ytmusic-player-queue-item[@play-button-state!='default']|.//ytmusic-player-queue-item[1]";
 const xpMenu = "//*[@id='contentWrapper']/ytmusic-menu-popup-renderer/*[@id='items']";
 const xpTrackQueue = "ancestor::*[{class='ytmusic-player-queue'}]";
 
@@ -209,7 +209,7 @@ async function fetchBlacklist() {
                 //     // console.debug(`known blacklist entry:`, res);
                 // }
             }
-            if (!queue) {
+            if (!queue && wlh.indexOf("/watch?") == -1) {
                 const legacy = loadObj(keyBlacklist);
                 if (legacy?.length > 0) {
                     console.debug(`migrating legacy blacklist data:`, legacy);
@@ -245,7 +245,7 @@ async function fetchFavorites() {
                 //     // console.debug(`known blacklist entry:`, res);
                 // }
             }
-            if (!queue) {
+            if (!queue && wlh.indexOf("/watch?") == -1) {
                 const legacy = loadObj(keyFavorites);
                 if (legacy?.length > 0) {
                     console.debug(`migrating legacy favorites data:`, legacy);
@@ -336,7 +336,7 @@ function getTracks() {
 }
 function getAllTracks() { return xp("//ytmusic-player-queue-item"); }
 function getSelectedTrack() { return queue?.xp?.(xpSelTrack)?.[0]; }
-function getPlayingTrack() { return queue?.xp?.(xpPlayingTrack)?.[0]; }
+function getPlayingTrack() { return queue?.xp?.(xpPlayingTrack)?.at(-1); }
 /** @returns {TrackData} */
 function getTrackData(queuedTrack) {
     if (!queuedTrack) {
@@ -586,8 +586,8 @@ function handleClick(evt) {
         // );
         track.style.backgroundColor = "#422";
         addTrackToBlacklist(data).then(success => {
-            // don't remove the track from the playlist when logged in
-            if (evt.loggedIn == false) {
+            // don't remove the track from the playlist when logged in | ???
+            if (success) { // evt.loggedIn == false) {
                 wait(() => {
                     track.style.backgroundColor = null;
                     removeTrack(track);
