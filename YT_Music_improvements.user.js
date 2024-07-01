@@ -364,7 +364,7 @@ async function removeTrack(queuedTrack) {
         const menu = await waitForElem(xpMenu);
         
         // console.log("menu:", menu);
-        const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//yt-formatted-string[text()='Remove from queue']]", menu);
+        const remove = await waitForElem("//ytmusic-menu-service-item-renderer[.//*[text()='Remove from queue']]", menu);
         const remData = (remove.__data || remove.inst.__data).data;
         console.warn("remove:", { title: queuedTrack.qs("[title]").title, queuedTrack, data: remove.__data, remove });
         if (remData.serviceEndpoint.removeFromQueueEndpoint.videoId == trkData.id) {
@@ -505,6 +505,7 @@ function trimQueue() {
     trimPromise = waitForElem(xpPlayingTrack, queue)
     .then(playing => {
         // const history = loadObj(keyHistory) || [];
+        playing = getPlayingTrack();
         const tracks = getTracks();
         const index = tracks.indexOf(playing);
         console.log("trim:", index + 1, "/", tracks.length);
@@ -608,14 +609,14 @@ function handleClick(evt) {
 
 function newSteering() {
     waitForElem("#chips > ytmusic-chip-cloud-chip-renderer[is-selected]:not([should-show-loading-chip])")
-    .then(() => trimQueue());
+    .then(() => wait(() => trimQueue(), 5000));
 };
 
-function xpToastByMessage(/**@type {string|[string]}*/ messages) {
+function xpToastByMessage(/**@type {string|string[]}*/ messages) {
     if (typeof(messages) == "string") {
         messages = [messages];
     }
-    return `//tp-yt-paper-toast[not(@aria-hidden='true') and .//yt-formatted-string[${messages.map(msg => `contains(text(),'${msg}')`).join(" or ")}]]`;
+    return `//tp-yt-paper-toast[not(@aria-hidden='true') and .//*[${messages.map(msg => `contains(text(),'${msg}')`).join(" or ")}]]`;
 }
 const xpToastWatchingLiked = xpToastByMessage(["Still watching?", "Saved to liked music"]);
 const xpToastLiked = xpToastByMessage("Saved to liked music");
@@ -670,7 +671,7 @@ function urlChanged() {
         });
     });
     
-    // waitForElem("//tp-yt-paper-toast[.//yt-formatted-string[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]")
+    // waitForElem("//tp-yt-paper-toast[.//*[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]")
     waitForElem(xpToastWatchingLiked, 3000)
     .catch(err => { console.log("no 'toasts' found", err); })
     .then(() => {
