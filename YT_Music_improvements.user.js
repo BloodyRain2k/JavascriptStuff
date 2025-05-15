@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.3.7.20
+// @version      0.3.7.21
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -644,7 +644,7 @@ function urlChanged() {
         playingTitle = playing;
     });
     
-    waitForElem('tp-yt-paper-icon-button#play-pause-button').then(button => {
+    waitForElem('#play-pause-button').then(button => {
         watch(button, { attributeFilter: ['title'] });
         playButton = button;
         // if (!playButton.onclick) {
@@ -801,6 +801,10 @@ function urlChanged() {
             trimQueue();
         });
     });
+    
+    waitForElem("yt-button-renderer.ytmusic-you-there-renderer button.yt-spec-button-shape-next", 3000)
+    // .catch(err => { return; })
+    .then(button => button?.click());
 }
 
 function check() {
@@ -811,4 +815,8 @@ function check() {
     if (curTime) {
         curTime = timeToSeconds(curTime.split('/')[0]);
     }
+    
+    qs(' tp-yt-paper-dialog:not([aria-hidden="true"]) '
+     + ' yt-button-renderer.ytmusic-you-there-renderer '
+     + ' button.yt-spec-button-shape-next ')?.click();
 }
