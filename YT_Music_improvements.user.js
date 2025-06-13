@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.4.0.1
+// @version      0.4.0.2
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -870,8 +870,6 @@ function urlChanged() {
                     addTrackToLiked(trkData);
                     return;
                 }
-                const like_track = getSelectedTrack();
-                const trkData = getTrackData(like_track);
                 console.log("logged in:", { loggedIn, button: evt.button, like_track, trkData, likeBtn });
 
                 if (likeBtn.getAttribute("aria-pressed")?.toLowerCase() == "true" && evt.button == 0) {
