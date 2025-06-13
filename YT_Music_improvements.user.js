@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.4.0.0
+// @version      0.4.0.1
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -50,7 +50,11 @@ add to favorites:                             Click "Like"    (MMB when logged i
  */
 // #endregion types //
 
-GM_addStyle(`[id].fav-added > button { color: #8f2; }`);
+GM_addStyle(`[id].fav-added > button { color: #8f2; }
+[id].blacklisted > button { color: #f40; }
+#help-tooltip { position:absolute; top:0px; left:0px; z-index:10; border-radius:5px;
+                padding:5px; background-color:antiquewhite; font-size:115%; }
+#help-tooltip:not(.show) { display:none; }`);
 
 // variables //
 
@@ -121,6 +125,27 @@ const beep = new Audio(
 beep.volume = 0.001;
 
 // functions //
+
+const helpTooltip = create('pre');
+helpTooltip.id = 'help-tooltip';
+helpTooltip.innerText = (''
+    + 'remove from queue:       Ctrl + Click Track\n'
+    + 'add to history:           Alt + Click Track\n'
+    + 'add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike" (MMB when logged in)\n'
+    + 'add to favorites:                             Click "Like"    (MMB when logged in)\n'
+);
+function showHelpTip(evt) {
+    helpTooltip.classList.add('show');
+}
+function hideHelpTip() { helpTooltip.classList.remove('show'); }
+function addHelpTip() {
+    document.body.appendChild(helpTooltip);
+    waitForElems('ytmusic-menu-renderer.ytmusic-player-bar #button-shape:not([title]) > button')
+    .then(elems => elems.forEach(elem => {
+        elem.onmouseenter = showHelpTip;
+        elem.onmouseleave = hideHelpTip;
+    }));
+}
 
 /** @deprecated Use `fetchInfo()` instead. */
 function sendData(type, data) {
@@ -223,7 +248,7 @@ function fetchInfo() {
             return resp.json;
         }
         
-        return resp;
+        throw { error: `Could not fetch /tracks/info: ${resp.status}`, resp };
     })
 }
 
@@ -468,6 +493,14 @@ function addTrackToHistory(/**@type {TrackData}*/ trkData) {
     });
 }
 
+function isTrackRecent(/**@type {TrackData}*/ trkData) {
+    const trkTime = cache.history[trkData.id];
+    if (!trkTime) {
+        return false;
+    }
+    return new Date().getTime() - historyDiffLimit <= trkTime.getTime();
+}
+
 function isTrackFavorite(/**@type {TrackData}*/ trkData, likeBtn = null) {
     // const favorites = loadObj(keyFavorites) || [];
     // console.debug("favorites:", [...favorites]);
@@ -520,14 +553,22 @@ async function addTrackToFavorites(/**@type {TrackData}*/ trkData, likeBtn = nul
         if (likeBtn) {
             isTrackFavorite(trkData, likeBtn);
         }
+    }
+    if ([200, 202].indexOf(resp.status) > -1) {
         return true;
     }
     console.debug(`failed to add "${trkData.id}" to favorites:`, resp, trkData);
     return false;
 }
 
-function isTrackBlacklisted(/**@type {TrackData}*/ trkData) {
-    return cache.blacklist[trkData.id] || titleBlacklist.some(tb => trkData.title.search(tb) > -1);
+function isTrackBlacklisted(/**@type {TrackData}*/ trkData, dislikeBtn = null) {
+    if (cache.blacklist[trkData.id] || titleBlacklist.some(tb => trkData.title.search(tb) > -1)) {
+        dislikeBtn?.classList.add("blacklisted");
+        return true;
+    }
+    
+    dislikeBtn?.classList.remove("blacklisted");
+    return false;
 }
 
 async function addTrackToBlacklist(/**@type {TrackData}*/ trkData) {
@@ -541,18 +582,42 @@ async function addTrackToBlacklist(/**@type {TrackData}*/ trkData) {
     if (resp.status == 202) {
         console.debug(`added "${resp.json.id}" to blacklist:`, resp, trkData);
         cache.blacklist[resp.json.id] = new Date();
+    }
+    if ([200, 202].indexOf(resp.status) > -1) {
         return true;
     }
     console.debug(`failed to add "${trkData.id}" to blacklist:`, resp, trkData);
     return false;
 }
 
-function isTrackRecent(/**@type {TrackData}*/ trkData) {
-    const trkTime = cache.history[trkData.id];
-    if (!trkTime) {
-        return false;
+async function addTrackToLiked(/**@type {TrackData}*/ trkData) {
+    /**@type {GM_Response<TrackData>}*/
+    const resp = await GM_fetch(apiServer + `tracks/${trkData.id}/like`, { method: 'PUT' }, `liking "${trkData.id}"`);
+    if ([200, 202].indexOf(resp.status) > -1) {
+        return true;
     }
-    return new Date().getTime() - historyDiffLimit <= trkTime.getTime();
+    console.debug(`failed to add "${trkData.id}" to liked:`, resp, trkData);
+    return false;
+}
+
+async function addTrackToDisliked(/**@type {TrackData}*/ trkData) {
+    /**@type {GM_Response<TrackData>}*/
+    const resp = await GM_fetch(apiServer + `tracks/${trkData.id}/dislike`, { method: 'PUT' }, `disliking "${trkData.id}"`);
+    if ([200, 202].indexOf(resp.status) > -1) {
+        return true;
+    }
+    console.debug(`failed to add "${trkData.id}" to disliked:`, resp, trkData);
+    return false;
+}
+
+function isTrackLiked() {
+    return qs(".middle-controls-buttons #button-shape-like > [aria-pressed]")
+        .getAttribute("aria-pressed")?.toLowerCase() == "true";
+}
+
+function isTrackDisliked() {
+    return qs(".middle-controls-buttons #button-shape-dislike > [aria-pressed]")
+        .getAttribute("aria-pressed")?.toLowerCase() == "true";
 }
 
 function trimQueue() {
@@ -631,7 +696,7 @@ function handleClick(evt) {
     const track = xp("ancestor-or-self::ytmusic-player-queue-item", evt.target)[0];
     console.log("handleClick:", { alt, ctrl, track, evt });
     if (!alt && !ctrl || !track) { return; }
-
+    
     const data = getTrackData(track);
     if (!data || !data.title || !data.uploader) {
         throw { message: "Couldn't fetch track data", data };
@@ -658,13 +723,15 @@ function handleClick(evt) {
         });
         return false;
     }
-
+    
     // either Ctrl + Click or Alt + Click were done
     removeTrack(track).then((removed) => {
         if (!removed || !alt) { return; }
         data.skipped = true;
         addTrackToHistory(data);
     });
+    
+    return false;
 }
 
 function newSteering() {
@@ -686,6 +753,8 @@ console.log([xpToastWatchingLiked, xpToastLiked]);
 function urlChanged() {
     wlh = window.location.href;
     playStarted = beeped = false;
+    
+    addHelpTip();
     
     fetchHistory().then(hist => {
         if (!debug) { return; }
@@ -788,6 +857,8 @@ function urlChanged() {
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
         if (!likeBtn.onmousedown) {
             likeBtn.onmousedown = (evt) => {
+                const like_track = getSelectedTrack();
+                const trkData = getTrackData(like_track);
                 if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
                     if (loggedIn) {
                         console.debug("discarding 'Liked' notification");
@@ -796,6 +867,7 @@ function urlChanged() {
                             buttons.forEach(button => button.click());
                         });
                     }
+                    addTrackToLiked(trkData);
                     return;
                 }
                 const like_track = getSelectedTrack();
@@ -829,6 +901,11 @@ function urlChanged() {
             };
         }
         console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
+        asyncWait(2000).then(() => {
+            if (isTrackLiked()) {
+                addTrackToLiked(trackData);
+            }
+        });
 
         const dislikeBtn = qs(".middle-controls-buttons #button-shape-dislike");
         if (!dislikeBtn.onmousedown) {
@@ -859,6 +936,10 @@ function urlChanged() {
                 }
             };
         }
+        // disabled because it can trigger for the next track after disliking the previous
+        // if (isTrackDisliked()) {
+        //     addTrackToDisliked(trackData);
+        // }
 
         // const button = selected.xp(".//button")[0];
         // button.click();
