@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.4.0.2
+// @version      0.4.0.3
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -646,8 +646,8 @@ function trimQueue() {
             const track = tracks[i];
             const data = getTrackData(track);
             const trackQueue = track.xp(xpTrackQueue)[0];
-            if (!track.onclick) {
-                track.onclick = handleClick;
+            if (!track.onmousedown) {
+                track.onmousedown = handleClick;
                 handlers.push({ idx: i, title: data.title, track });
             }
             if (track.openPopupBehavior && !track.openPopupBehavior.openPopup) {
@@ -871,7 +871,7 @@ function urlChanged() {
                     return;
                 }
                 console.log("logged in:", { loggedIn, button: evt.button, like_track, trkData, likeBtn });
-
+                
                 if (likeBtn.getAttribute("aria-pressed")?.toLowerCase() == "true" && evt.button == 0) {
                     return;
                 }
@@ -900,6 +900,8 @@ function urlChanged() {
         }
         console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
         asyncWait(2000).then(() => {
+            // TODO: sync update with UI finishing loading
+            console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
             if (isTrackLiked()) {
                 addTrackToLiked(trackData);
             }
