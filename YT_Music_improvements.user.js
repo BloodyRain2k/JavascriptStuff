@@ -424,12 +424,18 @@ async function removeTrack(queuedTrack) {
         // const menu = (await waitForElems(xpMenu))[0];
         
         // console.log("menu:", menu);
-        let remove = (await waitForElems(
-            '//ytmusic-menu-popup-renderer' //[not(contains(@style,"outline: none;"))]'
-            + '//ytmusic-menu-service-item-renderer[.//*[text()="Remove from queue"]]'
-        ))[0];
-        if (!remove) {
-            debugger;
+        let remove;
+        for (let i = 0; i < 2; i++) {
+            remove = (await waitForElems(
+                '//ytmusic-menu-popup-renderer' //[not(contains(@style,"outline: none;"))]'
+                + '//ytmusic-menu-service-item-renderer[.//*[text()="Remove from queue"]]'
+            ))[0];
+            if (!remove) {
+                debugger;
+            }
+            if (remove.isConnected) {
+                break;
+            }
         }
         const remData = (remove.__data || remove.inst.__data).data;
         console.warn("remove:", { title: queuedTrack.qs("[title]").title, queuedTrack, data: remove.__data, remove });
@@ -898,7 +904,7 @@ function urlChanged() {
                 }
             };
         }
-        console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
+
         asyncWait(2000).then(() => {
             // TODO: sync update with UI finishing loading
             console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
