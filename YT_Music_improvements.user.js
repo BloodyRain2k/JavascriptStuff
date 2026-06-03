@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         YT Music improvements
-// @version      0.4.0.4
+// @version      0.4.0.5
 // @namespace    http://tampermonkey.net/
 // @description
 // @author       BloodyRain2k
@@ -9,7 +9,7 @@
 // @grant        GM_setValue
 // @grant        GM_getValue
 // @grant        GM_xmlhttpRequest
-// @require      https://EnermaxDebian:2443/flask/static/download_integration_shared.js
+// @require      https://EnermaxDebian:2443/fastapi/static/download_integration_shared.js
 // @connect      enermaxdebian
 // @noframes
 // ==/UserScript==
@@ -71,7 +71,7 @@ const titleBlacklist = [
 ];
 
 const keyBlacklist = "TrackBlacklist", keyFavorites = "TrackFavorites";
-const keyHistory = "TrackHistory", historyLimitHours = 48;
+const keyHistory = "TrackHistory", historyLimitHours = 20, historyLimitHoursFaved = 2;
 const historyDiffLimit = historyLimitHours * (3600 * 1000);
 const maxPastQueue = 3, blacklistDelay = 750;
 
@@ -134,13 +134,12 @@ helpTooltip.innerText = (''
     + 'add to blacklist:  Ctrl + Alt + Click Track | Click "Dislike" (MMB when logged in)\n'
     + 'add to favorites:                             Click "Like"    (MMB when logged in)\n'
 );
-function showHelpTip(evt) {
-    helpTooltip.classList.add('show');
-}
-function hideHelpTip() { helpTooltip.classList.remove('show'); }
+function showHelpTip(evt) { helpTooltip.classList.add('show'); }
+function hideHelpTip()    { helpTooltip.classList.remove('show'); }
 function addHelpTip() {
     document.body.appendChild(helpTooltip);
-    waitForElems('ytmusic-menu-renderer.ytmusic-player-bar #button-shape:not([title]) > button')
+    // waitForElems('ytmusic-menu-renderer.ytmusic-player-bar #button-shape:not([title]) > button')
+    waitForElems('.middle-controls button[aria-label="Action menu"]')
     .then(elems => elems.forEach(elem => {
         elem.onmouseenter = showHelpTip;
         elem.onmouseleave = hideHelpTip;
@@ -189,7 +188,7 @@ function sendData(type, data) {
 // });
 
 function fetchHistory() {
-    return GM_fetch(apiServer + `history/${historyLimitHours}h`)
+    return GM_fetch(apiServer + `history/${historyLimitHours}h?faved_hours=${historyLimitHoursFaved}`)
     .then((/**@type {GM_Response<HistoryResponse[]>}*/resp) => {
         if ([200, 201, 202].indexOf(resp.status) == -1) {
             console.error('Failed to fetch history:', resp);
@@ -217,11 +216,20 @@ function fetchHistory() {
     });
 }
 function sendHistory(track_id, /**@type {?number}*/skipped_at = null) {
-    return GM_fetch(apiServer + `history/${track_id}`,
-        { method: 'PUT', query: { skipped_at: skipped_at || undefined } }, `sendHistory("${track_id}", ${skipped_at})`)
+    return GM_fetch(
+        apiServer + `history/${track_id}`,
+        {
+            method: 'PUT',
+            query: {
+                skipped_at: skipped_at || undefined,
+                datetime: new Date().toJSON(),
+            }
+        },
+        `sendHistory("${track_id}", ${skipped_at})`
+    )
     .then((/**@type {GM_Response<HistoryResponse>}*/resp) => {
         if ([200, 201, 202].indexOf(resp.status) == -1) {
-            console.error('Failed to fetch history:', resp);
+            console.error('Failed to send history:', resp);
             return /**@type {GM_Response}*/(resp);
         }
         return cache.history[resp.json.track_id] = new Date(resp.json.datetime);
@@ -370,13 +378,22 @@ function onPlayPause(evt) {
             if (waitingForTrack) {
                 window.clearTimeout(waitingForTrack);
             }
-            waitingForTrack = waitForElems(xpPlayingTrack).then(() => {
-                console.debug(`sending awaited track data`);
-                addTrackToHistory(getTrackData(getPlayingTrack()));
-            });
-            return;
+            if (isPlaying()) {
+                waitingForTrack = waitForElems(xpPlayingTrack).then(() => {
+                    console.debug(`sending awaited track data`);
+                    addTrackToHistory(getTrackData(getPlayingTrack()));
+                });
+                playStarted = true;
+                return;
+            }
         }
+        playStarted = true;
         addTrackToHistory(trackData);
+    }
+    else if (!isPlaying()) {
+        waitForElems(`.ytmusic-you-there-renderer :is(button.yt-spec-button-shape-next, button.ytSpecButtonShapeNextText)`, 3000)
+        // .catch(err => { return; })
+        .then(button => button[0]?.click());
     }
 }
 function getTracks() {
@@ -420,7 +437,10 @@ async function removeTrack(queuedTrack) {
     console.debug("removing:", trkData);
     
     try {
-        qs("button", queuedTrack).click();
+        let btn = qs("button", queuedTrack)
+        if (!btn)
+            return;
+        btn.click();
         // const menu = (await waitForElems(xpMenu))[0];
         
         // console.log("menu:", menu);
@@ -596,9 +616,13 @@ async function addTrackToBlacklist(/**@type {TrackData}*/ trkData) {
     return false;
 }
 
-async function addTrackToLiked(/**@type {TrackData}*/ trkData) {
+async function addTrackToLiked(/**@type {TrackData}*/ trkData, undo = false) {
     /**@type {GM_Response<TrackData>}*/
-    const resp = await GM_fetch(apiServer + `tracks/${trkData.id}/like`, { method: 'PUT' }, `liking "${trkData.id}"`);
+    const resp = await GM_fetch(
+        apiServer + `tracks/${trkData.id}/${undo ? 'dis' : ''}like`,
+        { method: 'PUT' },
+        `${undo ? 'dis' : ''}liking "${trkData.id}"`
+    );
     if ([200, 202].indexOf(resp.status) > -1) {
         return true;
     }
@@ -653,6 +677,7 @@ function trimQueue() {
             const data = getTrackData(track);
             const trackQueue = track.xp(xpTrackQueue)[0];
             if (!track.onmousedown) {
+                // track.onclick = handleClick;
                 track.onmousedown = handleClick;
                 handlers.push({ idx: i, title: data.title, track });
             }
@@ -752,7 +777,7 @@ function xpToastByMessage(/**@type {string|string[]}*/ messages) {
     }
     return `//tp-yt-paper-toast[not(@aria-hidden='true') and .//*[${messages.map(msg => `contains(text(),'${msg}')`).join(" or ")}]]`;
 }
-const xpToastWatchingLiked = xpToastByMessage(["Still watching?", "Saved to liked music"]);
+const xpToastWatchingLiked = xpToastByMessage(["Still watching?", "Saved to liked music", "Continue watching?"]);
 const xpToastLiked = xpToastByMessage("Saved to liked music");
 console.log([xpToastWatchingLiked, xpToastLiked]);
 
@@ -815,7 +840,7 @@ function urlChanged() {
     .catch(err => { console.log("no unaltered `#chips` found", err); })
     
     // waitForElems("//tp-yt-paper-toast[.//*[contains(text(),'Still watching?') or contains(text(),'Saved to liked music')]]")
-    waitForElems(xpToastWatchingLiked + "//*[@id='close-button']", 3000)
+    waitForElems(xpToastWatchingLiked + "//*[@id='close-button']", 1000 * 60 * 5)
     .then((buttons) => {
         // xp(xpToastWatchingLiked + "//*[@id='close-button']")
         buttons.forEach(button => button.click());
@@ -863,9 +888,15 @@ function urlChanged() {
         const likeBtn = qs(".middle-controls-buttons #button-shape-like");
         if (!likeBtn.onmousedown) {
             likeBtn.onmousedown = (evt) => {
+                const isUndo = likeBtn.xp('./button')[0]?.ariaPressed?.toLocaleLowerCase() == 'true';
                 const like_track = getSelectedTrack();
                 const trkData = getTrackData(like_track);
-                if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
+                if (
+                    !isUndo && (
+                        loggedIn && evt.button != 1
+                        || !loggedIn && evt.button != 0 && evt.button != 1
+                    )
+                ) {
                     if (loggedIn) {
                         console.debug("discarding 'Liked' notification");
                         waitForElems(xpToastLiked + "//*[@id='close-button']")
@@ -873,12 +904,12 @@ function urlChanged() {
                             buttons.forEach(button => button.click());
                         });
                     }
-                    addTrackToLiked(trkData);
+                    addTrackToLiked(trkData, isUndo);
                     return;
                 }
                 console.log("logged in:", { loggedIn, button: evt.button, like_track, trkData, likeBtn });
                 
-                if (likeBtn.getAttribute("aria-pressed")?.toLowerCase() == "true" && evt.button == 0) {
+                if (likeBtn?.ariaPressed?.toLowerCase() == "true" && evt.button == 0) {
                     return;
                 }
                 
@@ -904,7 +935,6 @@ function urlChanged() {
                 }
             };
         }
-
         asyncWait(2000).then(() => {
             // TODO: sync update with UI finishing loading
             console.log("fav:", isTrackFavorite(trackData, likeBtn), loadObj(keyFavorites));
@@ -919,6 +949,7 @@ function urlChanged() {
                 // if (loggedIn && evt.button != 1 || !loggedIn && evt.button != 0 && evt.button != 1) {
                 //     return;
                 // }
+                const isUndo = dislikeBtn.xp('./button')[0]?.ariaPressed?.toLocaleLowerCase() == 'true';
                 const dis_track = getSelectedTrack();
                 const trkData = getTrackData(dis_track);
                 console.log("dislike:", { loggedIn, dis_track, trkData });
@@ -963,7 +994,7 @@ function urlChanged() {
         });
     });
     
-    waitForElems("yt-button-renderer.ytmusic-you-there-renderer button.yt-spec-button-shape-next", 3000)
+    waitForElems(`.ytmusic-you-there-renderer :is(button.yt-spec-button-shape-next, button.ytSpecButtonShapeNextText)`, 3000)
     // .catch(err => { return; })
     .then(button => button[0]?.click());
 }
